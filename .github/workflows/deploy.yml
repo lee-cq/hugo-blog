@@ -43,7 +43,7 @@ jobs:
                   extended: true
 
             - name: Build
-              run: hugo --minify --gc
+              run: hugo --minify --gc -b https://lee-cq.github.io/hugo-blog/
 
             - name: Deploy 🚀
               uses: JamesIves/github-pages-deploy-action@4.1.4
