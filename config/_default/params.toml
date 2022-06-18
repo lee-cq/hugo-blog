@@ -1,4 +1,7 @@
 # Pages placed under these sections will be shown on homepage and archive page.
+# params - 站点全局设置
+# https://docs.stack.jimmycai.com/zh/configuration/#params
+
 mainSections = ["post"]
 # Output page's full content in RSS.
 rssFullContent = true
@@ -36,7 +39,7 @@ type = "search"
 type = "archives"
 
 [widgets.homepage.params]
-limit = 5
+limit = 10
 
 [[widgets.homepage]]
 type = "categories"
@@ -75,7 +78,7 @@ enabled = true
 ## Comments
 [comments]
 enabled = true
-provider = "disqus"
+provider = "waline"
 
 [comments.disqusjs]
 shortname = ""
@@ -103,7 +106,7 @@ clientSecret = ""
 autoCreateIssue = false
 
 [comments.waline]
-serverURL = ""
+serverURL = "https://weline-7gbe4ruw4e6d9334-1259132595.ap-shanghai.app.tcloudbase.com/waline/"
 lang = ""
 visitor = ""
 avatar = ""

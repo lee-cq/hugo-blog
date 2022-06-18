@@ -1,16 +1,24 @@
 # Configure main menu and social menu
-#[[main]]
-#identifier = "home"
-#name = "Home"
-#url = "/"
-#[main.params]
-#icon = "home"
-#newtab = true
+[[main]]
+identifier = "home"
+name = "home"
+url = "/"
+[main.params]
+icon = "home"
+newtab = true
+
+[[main]]
+identifier = "home2"
+name = "home2"
+url = "/"
+[main.params]
+icon = "home"
+newtab = true
 
 [[social]]
 identifier = "github"
 name = "GitHub"
-url = "https://github.com/CaiJimmy/hugo-theme-stack"
+url = "https://github.com/Lee-CQ/hugo-blog"
 
 [social.params]
 icon = "brand-github"
