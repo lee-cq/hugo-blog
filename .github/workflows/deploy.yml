@@ -10,6 +10,9 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        environment: 
+            name: hugo-page
+            url: http://blog-g.leecq.cn
 
         steps:
             - uses: actions/checkout@v2
@@ -45,7 +48,7 @@ jobs:
 
             - name: Build
               run: | 
-                hugo --minify --gc --baseURL https://lee-cq.github.io/hugo-blog/ --destination public-gh-page;
+                hugo --minify --gc  --destination public-gh-page;
                 hugo --minify --gc  --destination public-cf-page;
                 hugo --minify --gc --baseURL https://blog.leecq.cn/ --destination public-blog;
 
