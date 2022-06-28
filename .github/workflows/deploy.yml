@@ -1,5 +1,6 @@
 name: Deploy to Github Pages
 
+
 on:
     push:
         branches: [master]
@@ -43,12 +44,25 @@ jobs:
                   extended: true
 
             - name: Build
-              run: hugo --minify --gc -b https://lee-cq.github.io/hugo-blog/
+              run: | 
+                hugo --minify --gc --baseURL https://lee-cq.github.io/hugo-blog/ --destination public-gh-page;
+                hugo --minify --gc  --destination public-cf-page;
+                hugo --minify --gc --baseURL https://blog.leecq.cn/ --destination public-blog;
 
-            - name: Deploy 🚀
+            - name: Deploy Github Page 🚀
               uses: JamesIves/github-pages-deploy-action@4.1.4
               with:
-                  branch: gh-pages
-                  folder: public
+                  branch: public-gh-page
+                  folder: public-gh-page
                   clean: true
                   single-commit: true
+            
+            - name: Deploy Cloudflare Pages 🚀
+              uses: cloudflare/pages-action@1.0.0
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN_PAGES_ALL }}
+                  accountId: 4c0d482d9563546189367a54fe77a3df
+                  projectName: hugo-blog
+                  directory: public-cf-page
+                  gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
