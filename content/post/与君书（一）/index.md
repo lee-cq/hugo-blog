@@ -1,7 +1,7 @@
 ---
 title: 与君书（二）
 description: 给世界别一个我
-slug: 
+slug: yujunshu-2
 date: 2022-06-26 00:00:00+0000
 image: _cover.jpg
 categories:
