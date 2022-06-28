@@ -1,4 +1,4 @@
-name: Deploy to Github Pages
+name: Deploy to Github Pages And Cloudflare Pages 
 
 
 on:
@@ -48,7 +48,7 @@ jobs:
 
             - name: Build
               run: | 
-                hugo --minify --gc  --destination public-gh-page;
+                hugo --minify --gc --baseURL https://blog-g.leecq.cn/ --destination public-gh-page;
                 hugo --minify --gc  --destination public-cf-page;
                 hugo --minify --gc --baseURL https://blog.leecq.cn/ --destination public-blog;
 
