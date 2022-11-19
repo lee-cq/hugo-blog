@@ -364,9 +364,6 @@ Options:
 ```
 
 
-
-
-
 ### 从容器内拷贝文件到主机上
 
 ```bash
@@ -394,6 +391,3 @@ docker cp a12:/applog/root.log /root
 
 
 ```
-
-
-
