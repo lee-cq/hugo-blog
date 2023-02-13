@@ -1,7 +1,7 @@
 ---
 title: "Linux 小技巧"
 author: "Li, Caleb Chaoqun"
-date: "2022-11-17"
+date: "2022-12-17"
 description: "Linxu实用的一下小命令"
 typora-copy-images-to: ""
 tags:
