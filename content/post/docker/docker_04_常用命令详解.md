@@ -2,8 +2,8 @@
 title= "Docker常用命令详解"
 date= "2021-06-23"
 description = "Docker系列文章"
-draft=true
-tags= ["Docker", "常用命令", "CLI命令"] 
+draft=false
+tags= ["Docker", "常用命令", "CLI命令"]
 categories = ["技术"]
 series= ["Container"]
 type="new"
@@ -53,8 +53,6 @@ Commands:
 Run 'docker image COMMAND --help' for more information on a command.
 ```
 
-
-
 ### `docker images` Docker 镜像查询
 
 ```bash
@@ -73,15 +71,13 @@ REPOSITORY        TAG              IMAGE ID       CREATED         SIZE
 postgres          latest           26c8bcd8b719   2 months ago    314MB
 
 # REPOSITORY  
-# 仓库源      
-# TAG 标签              
-# IMAGE ID 镜像ID        
-# CREATED  创建时间      
+# 仓库源    
+# TAG 标签            
+# IMAGE ID 镜像ID      
+# CREATED  创建时间    
 # SIZE 大小
 
 ```
-
-
 
 ### `docker search ` 搜索Docker镜像
 
@@ -99,8 +95,6 @@ Options:
 # 示例1： 搜索stars>300 的Tomcat镜像: 
 $ docker search -f=STARS=300 tomcat
 ```
-
-
 
 ### `docker pull` 下载镜像
 
@@ -161,8 +155,6 @@ docker.io/library/mysql:5.7
 
 ```
 
-
-
 ### 删除镜像 `docker rmi` && `docker image rm `
 
 ```bash
@@ -182,13 +174,9 @@ Options:
 
 ```
 
-
-
 ## 容器命令
 
 > 有镜像才能创建容器
-
-
 
 ### `docker run` 运行一个容器
 
@@ -225,16 +213,10 @@ docker run -p 80:80 -v /data:/data -d nginx
 
 ```
 
-
-
-
-
 ### 退出容器
 
 1. 执行 `exit`
 2. 按 `Ctrl-P-Q`
-
-
 
 ### `docker rm ` 删除容器
 
@@ -256,8 +238,6 @@ docker ps -aq |xargs docker rm
 
 ```
 
-
-
 ### 启动和停止容器
 
 ```BASH
@@ -268,11 +248,7 @@ docker kill   # 强制停止正在运行的容器
 
 ```
 
-
-
 ## 常用的其他命名
-
-
 
 ### 进入一个正在运行的容器 `exec|attach  `
 
@@ -312,8 +288,6 @@ Options:
 
 ```
 
-
-
 ### 查看日志命令  `docker logs`
 
 > 实际上输出的是容器的标准输出和标准错误、
@@ -337,15 +311,11 @@ Options:
 docker logs -tf --tail 10 ID
 ```
 
-
-
 ### 查看容器中的进程
 
 `Usage:  docker top CONTAINER [ps OPTIONS]`
 
 显示容器的运行进程; 相当于在容器中运行ps 命令；
-
-
 
 ### 查看镜像的元数据 `docker instect`
 
@@ -362,7 +332,6 @@ Options:
       --type string     返回指定类型的JSON
 
 ```
-
 
 ### 从容器内拷贝文件到主机上
 
