@@ -140,8 +140,16 @@ Options:
 
 ## 查看指定网络的详细信息 inspect
 
+`docker network inspect host`
+
 ## 列出当前Docker服务的全部网路 list
 
-## 删除为使用的网络 prune
+`docker network list`
+
+## 删除未使用的网络 prune
+
+`docker network prune`
 
 ## 删除置顶网络 rm
+
+`docker network rm test-network`

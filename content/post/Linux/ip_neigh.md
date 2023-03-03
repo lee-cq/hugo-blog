@@ -7,8 +7,9 @@ typora-copy-images-to: ""
 tags:
   - "Linux"
   - "ipv6"
-  - ""
-
+  - "iproute2"
+  - "ip"
+series:
+  - "iproute2"
 ---
-
 使用命令 `ip -6 neigh`
