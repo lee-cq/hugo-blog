@@ -2,7 +2,7 @@
 title: "Hugo 快速开始"
 date: 2021-05-29T00:33:55+08:00
 description: Hugo是最流行的开源静态站点生成器之一, 简单的介绍它的使用方式。
-image: img/hugo-hone-page.png
+image: image/hugo-hone-page.png
 draft: false
 tags: 
   - 建站
@@ -70,7 +70,7 @@ Hugo是最流行的开源静态站点生成器之一。凭借其惊人的速度�
 
 ​		快速的建立一个hugo构建的blog.
 
-### 1. **初始化:  **
+### 1. 初始化:  
 `hugo new site <BlogName>`
     执行此步骤后会在工作目录中创建一个名为 `BlogName`的目录, 其中包含了站点的基本元素;
 
@@ -88,7 +88,7 @@ Hugo是最流行的开源静态站点生成器之一。凭借其惊人的速度�
 
     
 
-### 2. **添加主题:**
+### 2. 添加主题:
 
     > 推荐的主题:  [Next](https://leecq.lanzoui.com/ijqbUpki8vc )
 
@@ -100,7 +100,7 @@ Hugo是最流行的开源静态站点生成器之一。凭借其惊人的速度�
 
     
 
-### 3. **添加内容: **
+### 3. 添加内容: 
 `hugo new posts/my-first-post.md`
 
     > 注意: 他需要当前工作目录是你的项目目录, 否则会报错. 找不到config.toml
@@ -109,9 +109,8 @@ Hugo是最流行的开源静态站点生成器之一。凭借其惊人的速度�
 
     使用`MarkDown`标记语法构建.
 
-    
 
-### 4. **编辑和修改你的文章**
+### 4. 编辑和修改你的文章
 
     如果你想编辑新创建的内容文件，它会像这样开始:
 
@@ -125,7 +124,7 @@ draft: true
 # 草稿不会被部署;一旦你完成了一篇文章，更新文章标题，写上draft: false
 ```
 
-### 5. **启动Hugo服务器 **
+### 5. 启动Hugo服务器 
 
     `hugo server -D`
     现在，启动Hugo服务器并启用草稿:
@@ -155,7 +154,7 @@ theme = "ananke"
 
     
 
-### 7. **构建静态页面 `hugo -D`** 
+### 7. 构建静态页面 `hugo -D`
 
     默认情况下输出将在`./public/ `目录下.
 
