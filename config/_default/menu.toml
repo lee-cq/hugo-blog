@@ -26,9 +26,9 @@ url = "https://github.com/Lee-CQ/hugo-blog"
 icon = "brand-github"
 
 [[social]]
-identifier = "twitter"
-name = "Twitter"
-url = "https://twitter.com"
+identifier = "home"
+name = "Home"
+url = "https://leecq.cn"
 
-[social.params]
-icon = "brand-twitter"
+# [social.params]
+# icon = "tabler-home"
