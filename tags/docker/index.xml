@@ -1,0 +1,1510 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/docker/</link><description>Recent content in Docker on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 26 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker网络详解</title><link>https://blog-g.leecq.cn/p/docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3/</link><pubDate>Sun, 26 Feb 2023 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3/</guid><description>&lt;h1 id="docker-网络">docker 网络&lt;/h1>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">root@debian:~# docker network --help
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Usage: docker network COMMAND
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Manage networks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Commands:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> connect Connect a container to a network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> create Create a network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> disconnect Disconnect a container from a network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> inspect Display detailed information on one or more networks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ls List networks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> prune Remove all unused networks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> rm Remove one or more networks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Run &lt;span class="s1">&amp;#39;docker network COMMAND --help&amp;#39;&lt;/span> &lt;span class="k">for&lt;/span> more information on a command.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="docker-网络类型">docker 网络类型&lt;/h2>
+&lt;h3 id="1-bridge----网桥">1. bridge &amp;ndash; 网桥&lt;/h3>
+&lt;p>是一个SNET, 将会创建一个子网&lt;/p>
+&lt;ol>
+&lt;li>在此网络中的容器将会分配一个子网地址；&lt;/li>
+&lt;li>并通过NET端口映射访问服务；&lt;/li>
+&lt;li>主机网络中的其他机器无法直接访问容器中的IP地址&lt;/li>
+&lt;/ol>
+&lt;h3 id="2-host----主机网络">2. host &amp;ndash; 主机网络&lt;/h3>
+&lt;p>使用主机的IP地址。此网络类型智能被创建一个，特征如下：&lt;/p>
+&lt;ol>
+&lt;li>没有自己的IP地址，&lt;/li>
+&lt;li>所有的网络信息复用主机（使用主机的命名空间）&lt;/li>
+&lt;li>可以轻松与主机网络中的其他服务通信；&lt;/li>
+&lt;li>由于没有独立的命名空间，容器和主机之间很容易产生端口冲突。&lt;/li>
+&lt;/ol>
+&lt;h3 id="4-container----容器附加网络">4. container &amp;ndash; 容器附加网络&lt;/h3>
+&lt;p>相似于 &lt;strong>host&lt;/strong> 网络，区别在于Host网络附加的是主机的IP地址，而 &lt;strong>container&lt;/strong> 附加的是制定容器所拥有的IP地址；&lt;/p>
+&lt;h3 id="3-none----空网络">3. none &amp;ndash; 空网络&lt;/h3>
+&lt;p>不向容器分配网络，使用此模式的network容器无法联网，也无法使用网络通信（可以使用socket文件管道通信）&lt;/p>
+&lt;ol>
+&lt;li>容器中没有IP地址，无法与其他容器和主机直接通信；&lt;/li>
+&lt;/ol>
+&lt;h3 id="4-macvlan----桥接网络">4. macvlan &amp;ndash; 桥接网络&lt;/h3>
+&lt;p>macvlan是另一种网桥，相当于交换网络中的交换机功能，容器会被分配一个和主机在同一个网断中的IP地址，拥有自己的IP，同样的主机网络中的其他机器也能直接轻松的直接访问到容器内部。&lt;/p>
+&lt;ol>
+&lt;li>拥有一个和主机IP在同一个网段的IP地址&lt;/li>
+&lt;li>主机网络中的其他机器能够轻松的链接到容器&lt;/li>
+&lt;/ol>
+&lt;h2 id="容器连接到网络">容器连接到网络&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">lcq@iMac ~ % docker network connect --help
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Usage: docker network connect &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> NETWORK CONTAINER
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Connect a container to a network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --alias strings Add network-scoped &lt;span class="nb">alias&lt;/span> &lt;span class="k">for&lt;/span> the container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --driver-opt strings driver options &lt;span class="k">for&lt;/span> the network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --ip string IPv4 address &lt;span class="o">(&lt;/span>e.g., 172.30.100.104&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --ip6 string IPv6 address &lt;span class="o">(&lt;/span>e.g., 2001:db8::33&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --link list Add link to another container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --link-local-ip strings Add a link-local address &lt;span class="k">for&lt;/span> the container
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="将一个容器从指定网络中断开-disconnect">将一个容器从指定网络中断开 disconnect&lt;/h2>
+&lt;h2 id="创建一个网络">创建一个网络&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">lcq@LCQ-MacdeiMac ~ % docker network create --help
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Usage: docker network create &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> NETWORK
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Create a network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --attachable Enable manual container attachment.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 启用手动容器附件
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --aux-address map Auxiliary IPv4 or IPv6 addresses used by Network driver &lt;span class="o">(&lt;/span>default map&lt;span class="o">[])&lt;/span>.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 网络驱动程序使用的辅助IPv4或IPv6地址&lt;span class="o">(&lt;/span>默认map&lt;span class="o">[])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --config-from string The network from which to copy the configuration.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 要从中复制配置的网络
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --config-only Create a configuration only network.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 创建一个只配置的网络
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -d, --driver string Driver to manage the Network &lt;span class="o">(&lt;/span>default &lt;span class="s2">&amp;#34;bridge&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 驱动程序来管理网络&lt;span class="o">(&lt;/span>默认的“桥”&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --gateway strings IPv4 or IPv6 Gateway &lt;span class="k">for&lt;/span> the master subnet.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> IPv4或IPv6主子网的网关
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --ingress Create swarm routing-mesh network.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 创建群集路由网状网络
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --internal Restrict external access to the network.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 限制外部对网络的访问
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --ip-range strings Allocate container ip from a sub-range.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 从子范围分配容器ip
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --ipam-driver string IP Address Management Driver &lt;span class="o">(&lt;/span>default &lt;span class="s2">&amp;#34;default&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> IP地址管理驱动程序&lt;span class="o">(&lt;/span>默认为default&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --ipam-opt map Set IPAM driver specific options &lt;span class="o">(&lt;/span>default map&lt;span class="o">[])&lt;/span>.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 设置IPAM驱动程序特定选项&lt;span class="o">(&lt;/span>默认map&lt;span class="o">[])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --ipv6 Enable IPv6 networking.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 启用IPv6组网
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --label list Set metadata on a network.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 设置网络元数据
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -o, --opt map Set driver specific options &lt;span class="o">(&lt;/span>default map&lt;span class="o">[])&lt;/span>.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 设置驱动程序特定的选项&lt;span class="o">(&lt;/span>默认map&lt;span class="o">[])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --scope string Control the network&lt;span class="err">&amp;#39;&lt;/span>s scope.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 控制网络范围
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --subnet strings Subnet in CIDR format that represents a network segment.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> CIDR格式的子网，表示一个网段
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol>
+&lt;li>创建一个简单docker网络
+&lt;code>docker network create &amp;lt;name&amp;gt;&lt;/code>&lt;/li>
+&lt;li>创建一个macvlan网络
+&lt;code>docker network create -d macvlan --subnet=192.168.0.0/24 --gateway=172.16.10.1 -o parent=en1 mac1&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;h2 id="查看指定网络的详细信息-inspect">查看指定网络的详细信息 inspect&lt;/h2>
+&lt;p>&lt;code>docker network inspect host&lt;/code>&lt;/p>
+&lt;h2 id="列出当前docker服务的全部网路-list">列出当前Docker服务的全部网路 list&lt;/h2>
+&lt;p>&lt;code>docker network list&lt;/code>&lt;/p>
+&lt;h2 id="删除未使用的网络-prune">删除未使用的网络 prune&lt;/h2>
+&lt;p>&lt;code>docker network prune&lt;/code>&lt;/p>
+&lt;h2 id="删除置顶网络-rm">删除置顶网络 rm&lt;/h2>
+&lt;p>&lt;code>docker network rm test-network&lt;/code>&lt;/p></description></item><item><title>pip 更换国内源</title><link>https://blog-g.leecq.cn/p/pip-%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90/</link><pubDate>Sat, 25 Feb 2023 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/pip-%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90/</guid><description>&lt;h2 id="配置方法">配置方法&lt;/h2>
+&lt;p>a. 找到下列文件&lt;/p>
+&lt;p>&lt;code>~/.pip/pip.conf&lt;/code>
+b. 在上述文件中添加或修改:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[global]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">index-url = https://mirrors.aliyun.com/pypi/simple/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[install]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">trusted-host=mirrors.aliyun.com
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="新版pip配置方法">新版pip配置方法&lt;/h2>
+&lt;p>直接使用 &lt;code>pip config&lt;/code>命令；&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pip config &lt;span class="nb">set&lt;/span> global.index-url https://mirrors.aliyun.com/pypi/simple/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pip config &lt;span class="nb">set&lt;/span> install.trusted-host mirrors.aliyun.com
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Docker常用命令详解</title><link>https://blog-g.leecq.cn/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/</link><pubDate>Wed, 23 Jun 2021 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/</guid><description>&lt;h2 id="帮助命令">帮助命令&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">docker version &lt;span class="c1"># 查看docker版本；&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker info &lt;span class="c1"># 显示Docker的系统信息，详细；&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker &lt;span class="o">[&lt;/span>command&lt;span class="o">]&lt;/span> &lt;span class="nb">help&lt;/span> &lt;span class="c1"># 万能帮助命令，不会就查&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>想要更深入的了解Docker-CLI命令，参见官方文档：&lt;/p>
+&lt;p>&lt;a class="link" href="https://docs.docker.com/engine/reference/commandline/cli/" target="_blank" rel="noopener"
+>Use the Docker command line | Docker Documentation&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="镜像命令">镜像命令&lt;/h2>
+&lt;blockquote>
+&lt;p>镜像相关命令都是 &lt;code>docker image &lt;/code> 的子命令；&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="docker-image--镜像管理">&lt;code>docker image &lt;/code> 镜像管理&lt;/h3>
+&lt;blockquote>
+&lt;p>下面介绍的命令全部是这些子命令的别名；&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Usage: docker image COMMAND
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Manage images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Commands:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> build 从Dockerfile构建一个映像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">history&lt;/span> 显示镜像的历史
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> import 从tar包中导入内容以创建文件系统映像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> inspect 在一个或多个镜像的显示详细信息
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> load 从tar归档文件或STDIN加载映像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ls 列出镜像 &lt;span class="o">(&lt;/span>docker images&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> prune 移除不再使用的镜像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> pull 从一个注册表中拉取一个镜像或仓库
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> push 向一个注册表中推送一个镜像或仓库
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> rm 移除一个或多个镜像 &lt;span class="o">(&lt;/span>docker rmi&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> save 将一个或多个映像保存到tar归档文件中 &lt;span class="o">(&lt;/span>默认输出到STDOUT&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> tag 创建一个指向SOURCE_IMAGE的标记TARGET_IMAGE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Run &lt;span class="s1">&amp;#39;docker image COMMAND --help&amp;#39;&lt;/span> &lt;span class="k">for&lt;/span> more information on a command.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="docker-images-docker-镜像查询">&lt;code>docker images&lt;/code> Docker 镜像查询&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">$ docker images &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>REPOSITORY&lt;span class="o">[&lt;/span>:TAG&lt;span class="o">]]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -a, --all 展示全部的镜像（默认忽略中间镜像）
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --digests 展示摘要信息
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -f, --filter filter 根据所提供的条件过滤输出
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --format string 使用Go模板打印漂亮的镜像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --no-trunc 不截断输出
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -q, --quiet 只显示图像ID
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">REPOSITORY TAG IMAGE ID CREATED SIZE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">postgres latest 26c8bcd8b719 &lt;span class="m">2&lt;/span> months ago 314MB
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># REPOSITORY &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 仓库源 &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># TAG 标签 &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># IMAGE ID 镜像ID &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># CREATED 创建时间 &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># SIZE 大小&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="docker-search--搜索docker镜像">&lt;code>docker search &lt;/code> 搜索Docker镜像&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">用法: docker search &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> TERM
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">在Docker Hub中搜索图像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -f, --filter filter 根据所提供的条件过滤输出
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --format string 使用Go模板美化打印搜索
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --limit int 最大搜索结果数目&lt;span class="o">(&lt;/span>默认25个&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --no-trunc 不截断输出
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 示例1： 搜索stars&amp;gt;300 的Tomcat镜像: &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ docker search -f&lt;span class="o">=&lt;/span>&lt;span class="nv">STARS&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">300&lt;/span> tomcat
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="docker-pull-下载镜像">&lt;code>docker pull&lt;/code> 下载镜像&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Usage: docker pull &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> NAME&lt;span class="o">[&lt;/span>:TAG&lt;span class="p">|&lt;/span>@DIGEST&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Pull an image or a repository from a registry
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -a, --all-tags 下载存储库中所有Tag的镜像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --disable-content-trust 跳过镜像验证 &lt;span class="o">(&lt;/span>default &lt;span class="nb">true&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --platform string 如果服务器具有多平台功能，则设置平台（Windows&lt;span class="p">|&lt;/span>Linux&lt;span class="p">|&lt;/span>Mac）
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -q, --quiet 抑制详细输出，静默下载
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 示例： 下载MySQL&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ docker pull mysql
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Using default tag: latest &lt;span class="c1"># 使用默认的latest版本&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">latest: Pulling from library/mysql
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">69692152171a: Pull &lt;span class="nb">complete&lt;/span> &lt;span class="c1"># 分层下载镜像&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">1651b0be3df3: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">951da7386bc8: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">0f86c95aa242: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">37ba2d8bd4fe: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">6d278bb05e94: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">497efbd93a3e: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">f7fddf10c2c2: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">16415d159dfb: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">0e530ffc6b73: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">b0a4a1a77178: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cd90f92aa9ef: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Digest: sha256:d50098d7fcb25b1fcb24e2d3247cae3fc55815d64fec640dc395840f8fa80969 &lt;span class="c1"># 签名&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Status: Downloaded newer image &lt;span class="k">for&lt;/span> mysql:latest
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker.io/library/mysql:latest &lt;span class="c1"># 真实地址&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 示例2： 指定5.7版本的MySQL镜像&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ docker pull mysql:5.7
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">5.7: Pulling from library/mysql
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">69692152171a: Already exists &lt;span class="c1"># 不再下载已经存在的层&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">1651b0be3df3: Already exists
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">951da7386bc8: Already exists
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">0f86c95aa242: Already exists
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">37ba2d8bd4fe: Already exists
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">6d278bb05e94: Already exists
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">497efbd93a3e: Already exists
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">a023ae82eef5: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">e76c35f20ee7: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">e887524d2ef9: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ccb65627e1c3: Pull &lt;span class="nb">complete&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Digest: sha256:a682e3c78fc5bd941e9db080b4796c75f69a28a8cad65677c23f7a9f18ba21fa
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Status: Downloaded newer image &lt;span class="k">for&lt;/span> mysql:5.7
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker.io/library/mysql:5.7
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="删除镜像-docker-rmi--docker-image-rm-">删除镜像 &lt;code>docker rmi&lt;/code> &amp;amp;&amp;amp; &lt;code>docker image rm &lt;/code>&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 实际上 rmi 是 docker image rm 的一个别名&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Usage: docker image rm &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> IMAGE &lt;span class="o">[&lt;/span>IMAGE...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Remove one or more images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Aliases:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> rm, rmi, remove
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -f, --force Force removal of the image
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --no-prune Do not delete untagged parents
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="容器命令">容器命令&lt;/h2>
+&lt;blockquote>
+&lt;p>有镜像才能创建容器&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="docker-run-运行一个容器">&lt;code>docker run&lt;/code> 运行一个容器&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Usage: docker run &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> IMAGE &lt;span class="o">[&lt;/span>COMMAND&lt;span class="o">]&lt;/span> &lt;span class="o">[&lt;/span>ARG...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Run a &lt;span class="nb">command&lt;/span> in a new container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options: &lt;span class="c1">## 由于太多选择些常用的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --name 创建的容器的名字
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -it 以交互式启动容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -d 后台启动容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -p 指定容器的端口
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -p 主机端口:容器端口
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -p 容器端口
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -p ip:主机端口:容器端口
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -P 随机指定端口
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -v 挂载数据卷
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -h 指定容器的主机名
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -e &lt;span class="nv">username&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;ritchie&amp;#34;&lt;/span>: 设置环境变量；
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --env-file&lt;span class="o">=[]&lt;/span>: 从指定文件读入环境变量；
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --rm 容器退出是自动移除容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 示例1： 交互式启动CentOS&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker run -it centos
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 示例2： 后台启动Nginx并绑定实际端口&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker run -P -d nginx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 示例3：使用镜像 nginx:，以后台模式启动一个容器,将容器的 80 端口映射到主机的 80 端口,主机的目录 /data 映射到容器的 /data。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker run -p 80:80 -v /data:/data -d nginx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="退出容器">退出容器&lt;/h3>
+&lt;ol>
+&lt;li>执行 &lt;code>exit&lt;/code>&lt;/li>
+&lt;li>按 &lt;code>Ctrl-P-Q&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;h3 id="docker-rm--删除容器">&lt;code>docker rm &lt;/code> 删除容器&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Usage: docker rm &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> CONTAINER &lt;span class="o">[&lt;/span>CONTAINER...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Remove one or more containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -f, --force 强制删除正在运行中的容器 &lt;span class="o">(&lt;/span>使用SIGKILL信号&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -l, --link 删除指定的链接
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -v, --volumes 删除与容器关联的匿名卷
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker rm 容器ID
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker rm -f
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker rm -f &lt;span class="k">$(&lt;/span>docker ps -aq&lt;span class="k">)&lt;/span> &lt;span class="c1"># 删除全部的容器&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker ps -aq &lt;span class="p">|&lt;/span>xargs docker rm
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="启动和停止容器">启动和停止容器&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-BASH" data-lang="BASH">&lt;span class="line">&lt;span class="cl">docker start 容器ID
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker restart
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker stop &lt;span class="c1"># 停止当前正在运行的容器&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker &lt;span class="nb">kill&lt;/span> &lt;span class="c1"># 强制停止正在运行的容器&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="常用的其他命名">常用的其他命名&lt;/h2>
+&lt;h3 id="进入一个正在运行的容器-execattach--">进入一个正在运行的容器 &lt;code>exec|attach &lt;/code>&lt;/h3>
+&lt;blockquote>
+&lt;p>exec: 创建一个新的终端并进入。&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Usage: docker &lt;span class="nb">exec&lt;/span> &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> CONTAINER COMMAND &lt;span class="o">[&lt;/span>ARG...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Run a &lt;span class="nb">command&lt;/span> in a running container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">在正在运行的容器中运行命令
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -d, --detach 分离模式:在后台执行命令
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --detach-keys string 覆盖分离容器的键序列
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -e, --env list 设置环境变量
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --env-file list 读入一个环境变量文件
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -i, --interactive Keep STDIN open even &lt;span class="k">if&lt;/span> not attached
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --privileged Give extended privileges to the &lt;span class="nb">command&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -t, --tty Allocate a pseudo-TTY
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -u, --user string Username or UID &lt;span class="o">(&lt;/span>format: &amp;lt;name&lt;span class="p">|&lt;/span>uid&amp;gt;&lt;span class="o">[&lt;/span>:&amp;lt;group&lt;span class="p">|&lt;/span>gid&amp;gt;&lt;span class="o">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -w, --workdir string Working directory inside the container
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>attach： 进入一个现有的终端！容器当前正在运行的终端；相当于附加了一块屏幕&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Usage: docker attach &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> CONTAINER
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Attach &lt;span class="nb">local&lt;/span> standard input, output, and error streams to a running container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">将本地标准输入、输出和错误流附加到正在运行的容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --detach-keys string 覆盖分离容器的键序列
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --no-stdin 不附加标准din
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --sig-proxy 代理进程接收到的所有信号 &lt;span class="o">(&lt;/span>default &lt;span class="nb">true&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="查看日志命令--docker-logs">查看日志命令 &lt;code>docker logs&lt;/code>&lt;/h3>
+&lt;blockquote>
+&lt;p>实际上输出的是容器的标准输出和标准错误、&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Usage: docker logs &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> CONTAINER
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Fetch the logs of a container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --details 显示提供给日志的额外详细信息
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -f, --follow 跟踪日志输出
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --since string 显示时间戳后的日志 &lt;span class="o">(&lt;/span>e.g. 2013-01-02T13:23:37Z&lt;span class="o">)&lt;/span> or
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> relative &lt;span class="o">(&lt;/span>e.g. 42m &lt;span class="k">for&lt;/span> &lt;span class="m">42&lt;/span> minutes&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -n, --tail string 从日志末尾开始显示的行数 &lt;span class="o">(&lt;/span>default &lt;span class="s2">&amp;#34;all&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -t, --timestamps 显示时间戳
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --until string 显示时间戳之前的日志 &lt;span class="o">(&lt;/span>e.g. 2013-01-02T13:23:37Z&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> or relative &lt;span class="o">(&lt;/span>e.g. 42m &lt;span class="k">for&lt;/span> &lt;span class="m">42&lt;/span> minutes&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 示例1： 显示ID的10条日志并持续输出，显示时间戳&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker logs -tf --tail &lt;span class="m">10&lt;/span> ID
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="查看容器中的进程">查看容器中的进程&lt;/h3>
+&lt;p>&lt;code>Usage: docker top CONTAINER [ps OPTIONS]&lt;/code>&lt;/p>
+&lt;p>显示容器的运行进程; 相当于在容器中运行ps 命令；&lt;/p>
+&lt;h3 id="查看镜像的元数据-docker-instect">查看镜像的元数据 &lt;code>docker instect&lt;/code>&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Usage: docker inspect &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> NAME&lt;span class="p">|&lt;/span>ID &lt;span class="o">[&lt;/span>NAME&lt;span class="p">|&lt;/span>ID...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Return low-level information on Docker objects
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">返回Docker对象的底层信息
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -f, --format string 使用给定的Go格式化输出template
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -s, --size 如果类型是容器，则显示总文件大小
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --type string 返回指定类型的JSON
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="从容器内拷贝文件到主机上">从容器内拷贝文件到主机上&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Usage: docker cp &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> CONTAINER:SRC_PATH DEST_PATH&lt;span class="p">|&lt;/span>-
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker cp &lt;span class="o">[&lt;/span>OPTIONS&lt;span class="o">]&lt;/span> SRC_PATH&lt;span class="p">|&lt;/span>- CONTAINER:DEST_PATH
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Copy files/folders between a container and the &lt;span class="nb">local&lt;/span> filesystem
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">在容器和本地文件系统之间复制文件/文件夹
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Use &lt;span class="s1">&amp;#39;-&amp;#39;&lt;/span> as the &lt;span class="nb">source&lt;/span> to &lt;span class="nb">read&lt;/span> a tar archive from stdin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">and extract it to a directory destination in a container.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">使用&lt;span class="s1">&amp;#39;-&amp;#39;&lt;/span>作为源，从stdin读取tar归档文件，并将其解压缩到容器中的目录目标。
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Use &lt;span class="s1">&amp;#39;-&amp;#39;&lt;/span> as the destination to stream a tar archive of a
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">container &lt;span class="nb">source&lt;/span> to stdout.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">使用&lt;span class="s1">&amp;#39;-&amp;#39;&lt;/span>作为目标，将容器源的tar压缩包流到标准输出。
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -a, --archive 归档模式&lt;span class="o">(&lt;/span>复制所有uid/gid信息&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -L, --follow-link 始终遵循SRC_PATH中的符号链接
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 示例1：复制容器a12中的文件 /applog/root.log 复制到 主机的/root 目录&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker cp a12:/applog/root.log /root
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Docker基本命令</title><link>https://blog-g.leecq.cn/p/docker%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/</link><pubDate>Tue, 22 Jun 2021 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/docker%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/</guid><description>&lt;h1 id="docker基本命令">Docker基本命令&lt;/h1>
+&lt;blockquote>
+&lt;p>详细信息参见： &lt;a class="link" href="https://docs.docker.com/engine/reference/commandline/cli/" target="_blank" rel="noopener"
+>Use the Docker command line | Docker Documentation&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="docker-全局选项---options">Docker 全局选项 - OPTIONS&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-tex" data-lang="tex">&lt;span class="line">&lt;span class="cl">Usage: docker [OPTIONS] COMMAND
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">A self-sufficient runtime for containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">容器自给自足的运行时
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --config string Location of client config files (default &amp;#34;/root/.docker&amp;#34;)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 客户端配置文件的位置(默认“/root/.docker”)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -c, --context string Name of the context to use to connect to the daemon
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> (overrides DOCKER&lt;span class="nb">_&lt;/span>HOST env var and default context set with
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &amp;#34;docker context use&amp;#34;)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 用于连接守护进程的上下文的名称
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> (用&amp;#34;docker context use&amp;#34;重写DOCKER&lt;span class="nb">_&lt;/span>HOST环境变量的值)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -D, --debug Enable debug mode
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 启用debug模式
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -H, --host list Daemon socket(s) to connect to
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 需要连接的守护socket
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -l, --log-level string Set the logging level
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> (&amp;#34;debug&amp;#34;|&amp;#34;info&amp;#34;|&amp;#34;warn&amp;#34;|&amp;#34;error&amp;#34;|&amp;#34;fatal&amp;#34;) (default &amp;#34;info&amp;#34;)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 设置日志级别(默认INFO)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --tls Use TLS; implied by --tlsverify
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 使用TLS；
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --tlscacert string Trust certs signed only by this CA
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> (default &amp;#34;/root/.docker/ca.pem&amp;#34;)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 仅信任由此CA签署的证书
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --tlscert string Path to TLS certificate file (default &amp;#34;/root/.docker/cert.pem&amp;#34;)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> TLS证书文件路径
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --tlskey string Path to TLS key file (default &amp;#34;/root/.docker/key.pem&amp;#34;)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> TLS证书key路径
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --tlsverify Use TLS and verify the remote
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 使用TLS并验证远程证书
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -v, --version Print version information and quit
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 打印版本信息并退出
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="docker管理指令">Docker管理指令&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-tex" data-lang="tex">&lt;span class="line">&lt;span class="cl">Management Commands: 管理指令
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> app* Docker App (Docker Inc., v0.9.1-beta3)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> builder Manage builds
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> buildx* Build with BuildKit (Docker Inc., v0.5.1-docker)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config Manage Docker configs
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> container Manage containers 管理容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> context Manage contexts 管理上下文
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> image Manage images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> manifest Manage Docker image manifests and manifest lists 》》 ？？？？ 《《
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> network Manage networks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> node Manage Swarm nodes 管理集群节点
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> plugin Manage plugins 管理插件
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> secret Manage Docker secrets
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> service Manage services
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> stack Manage Docker stacks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> swarm Manage Swarm
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> system Manage Docker
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> trust Manage trust on Docker images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> volume Manage volumes
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="docker普通指令">Docker普通指令&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-tex" data-lang="tex">&lt;span class="line">&lt;span class="cl">Commands:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> attach Attach local standard input, output, and error streams to a running container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 将本地标准输入、输出和错误流附加到正在运行的容器中
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> build Build an image from a Dockerfile
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 从Dockerfile构建一个镜像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> commit Create a new image from a container&amp;#39;s changes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 根据容器的更改创建一个新映像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> cp Copy files/folders between a container and the local filesystem
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 在容器和本地文件系统之间复制文件/文件夹
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> create Create a new container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 创建一个新的容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> diff Inspect changes to files or directories on a container&amp;#39;s filesystem
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 检查容器文件系统中文件或目录的更改
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> events Get real time events from the server
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 从服务器获取实时事件
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> exec Run a command in a running container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 在正在运行的容器中运行命令
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> export Export a container&amp;#39;s filesystem as a tar archive
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 导出容器的文件系统作为tar存档
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> history Show the history of an image
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 展示一个镜像的历史版本
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> images List images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> import Import the contents from a tarball to create a filesystem image
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 从tar存档导入内容以创建文件系统映像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> info Display system-wide information
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 显示全系统信息
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> inspect Return low-level information on Docker objects
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 返回Docker对象的低级信息
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> kill Kill one or more running containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 杀死一个或多个正在运行的容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> load Load an image from a tar archive or STDIN
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 从tar或者STDIN加载镜像
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> login Log in to a Docker registry
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 登录到Docker注册表
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> logout Log out from a Docker registry
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> logs Fetch the logs of a container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 收集容器的日志
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> pause Pause all processes within one or more containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 暂停一个或多个容器内的所有过程
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> port List port mappings or a specific mapping for the container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 列出容器的端口映射或特定映射
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ps List containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> pull Pull an image or a repository from a registry
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> push Push an image or a repository to a registry
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 将图像或存储库推送到注册表
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> rename Rename a container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 重命名一个容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> restart Restart one or more containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> rm Remove one or more containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> rmi Remove one or more images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> run Run a command in a new container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> save Save one or more images to a tar archive (streamed to STDOUT by default)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 将一个或多个镜像保存到tar存档(默认情况下流至STDOUT)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> search Search the Docker Hub for images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> start Start one or more stopped containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 启动一个或多个停止的容器
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> stats Display a live stream of container(s) resource usage statistics
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> stop Stop one or more running containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> tag Create a tag TARGET&lt;span class="nb">_&lt;/span>IMAGE that refers to SOURCE&lt;span class="nb">_&lt;/span>IMAGE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 创建一个引用SOURCE&lt;span class="nb">_&lt;/span>IMAGE的标记TARGET&lt;span class="nb">_&lt;/span>IMAGE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> top Display the running processes of a container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 显示容器的运行过程
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> unpause Unpause all processes within one or more containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 取消暂停一个或多个容器内的所有进程
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> update Update configuration of one or more containers
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 更新一个或多个容器的配置
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> version Show the Docker version information
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 显示Docker版本信息
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> wait Block until one or more containers stop, then print their exit codes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 阻塞直到一个或多个容器停止，然后打印它们的退出代码
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Run &amp;#39;docker COMMAND --help&amp;#39; for more information on a command.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">运行“docker COMMAND --help”获得更多关于命令的信息。
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">To get more help with docker, check out our guides at https://docs.docker.com/go/guides/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">为了得到更多的帮助码头，看看我们的指南在https://docs.docker.com/go/guides/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Docker配置镜像加速</title><link>https://blog-g.leecq.cn/p/docker%E9%85%8D%E7%BD%AE%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F/</link><pubDate>Tue, 22 Jun 2021 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/docker%E9%85%8D%E7%BD%AE%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F/</guid><description>&lt;h2 id="阿里云镜像加速">阿里云镜像加速&lt;/h2>
+&lt;ol>
+&lt;li>打开地址： &lt;a class="link" href="https://cr.console.aliyun.com/cn-shanghai/instances/mirrors" target="_blank" rel="noopener"
+>容器镜像服务 (aliyun.com)&lt;/a>&lt;/li>
+&lt;li>开通容器镜像服务；&lt;/li>
+&lt;li>点击镜像加速器；&lt;/li>
+&lt;li>根据指引添加相应的配置文件。&lt;/li>
+&lt;/ol>
+&lt;p>Linux 执行以下命令：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-gdscript3" data-lang="gdscript3">&lt;span class="line">&lt;span class="cl">&lt;span class="n">sudo&lt;/span> &lt;span class="n">mkdir&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">p&lt;/span> &lt;span class="o">/&lt;/span>&lt;span class="n">etc&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">docker&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">sudo&lt;/span> &lt;span class="n">tee&lt;/span> &lt;span class="o">/&lt;/span>&lt;span class="n">etc&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">docker&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">daemon&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">json&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;-&lt;/span>&lt;span class="s1">&amp;#39;EOF&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;registry-mirrors&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;https://eyu4btqs.mirror.aliyuncs.com&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">EOF&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">sudo&lt;/span> &lt;span class="n">systemctl&lt;/span> &lt;span class="n">daemon&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">reload&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">sudo&lt;/span> &lt;span class="n">systemctl&lt;/span> &lt;span class="n">restart&lt;/span> &lt;span class="n">docker&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="腾讯云镜像加速">腾讯云镜像加速&lt;/h2>
+&lt;p>无&lt;/p></description></item><item><title>Docker 安装</title><link>https://blog-g.leecq.cn/p/docker-%E5%AE%89%E8%A3%85/</link><pubDate>Tue, 15 Jun 2021 17:23:47 +0800</pubDate><guid>https://blog-g.leecq.cn/p/docker-%E5%AE%89%E8%A3%85/</guid><description>&lt;h2 id="windows">Windows：&lt;/h2>
+&lt;ol>
+&lt;li>下载并安装： &lt;a class="link" href="http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/beta/InstallDocker.msi" target="_blank" rel="noopener"
+>DockerInister.msi&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;h3 id="linux下使用官方docker安装脚本">Linux下使用官方Docker安装脚本:&lt;/h3>
+&lt;p>&lt;code>curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun&lt;/code>&lt;/p>
+&lt;h3 id="debianubuntu-用户">Debian/Ubuntu 用户&lt;/h3>
+&lt;p>以下内容根据 &lt;a class="link" href="https://docs.docker.com/engine/installation/linux/docker-ce/debian/" target="_blank" rel="noopener"
+>官方文档&lt;/a> 修改而来。&lt;/p>
+&lt;p>如果你过去安装过 docker，先删掉:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo apt-get remove docker docker-engine docker.io
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>首先安装依赖:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>根据你的发行版，下面的内容有所不同。你使用的发行版： Debian Ubuntu&lt;/p>
+&lt;p>信任 Docker 的 GPG 公钥:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-gdscript3" data-lang="gdscript3">&lt;span class="line">&lt;span class="cl">&lt;span class="n">curl&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">fsSL&lt;/span> &lt;span class="n">https&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="o">//&lt;/span>&lt;span class="n">download&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">docker&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">com&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">linux&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">debian&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">gpg&lt;/span> &lt;span class="o">|&lt;/span> &lt;span class="n">sudo&lt;/span> &lt;span class="n">apt&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">key&lt;/span> &lt;span class="n">add&lt;/span> &lt;span class="o">-&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>对于 amd64 架构的计算机，添加软件仓库:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo add-apt-repository &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> &lt;span class="s2">&amp;#34;deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian \
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> &lt;/span>&lt;span class="k">$(&lt;/span>lsb_release -cs&lt;span class="k">)&lt;/span>&lt;span class="s2"> \
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> stable&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果你是树莓派或其它ARM架构计算机，请运行:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">echo &amp;#34;deb [arch=armhf] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> $(lsb_release -cs) stable&amp;#34; | \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sudo tee /etc/apt/sources.list.d/docker.list
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>最后安装&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo apt-get update
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo apt-get install docker-ce
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="fedoracentosrhel">Fedora/CentOS/RHEL&lt;/h3>
+&lt;p>以下内容根据 &lt;a class="link" href="https://docs.docker.com/engine/installation/linux/docker-ce/centos/" target="_blank" rel="noopener"
+>官方文档&lt;/a> 修改而来。&lt;/p>
+&lt;p>如果你之前安装过 docker，请先删掉&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo yum remove docker docker-common docker-selinux docker-engine
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>安装一些依赖&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>根据你的发行版下载repo文件: CentOS/RHEL Fedora&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-gdscript3" data-lang="gdscript3">&lt;span class="line">&lt;span class="cl">&lt;span class="n">wget&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">O&lt;/span> &lt;span class="o">/&lt;/span>&lt;span class="n">etc&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">yum&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">repos&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">docker&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">ce&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">repo&lt;/span> &lt;span class="n">https&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="o">//&lt;/span>&lt;span class="n">download&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">docker&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">com&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">linux&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">centos&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">docker&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">ce&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">repo&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>把软件仓库地址替换为 TUNA:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-gdscript3" data-lang="gdscript3">&lt;span class="line">&lt;span class="cl">&lt;span class="n">sudo&lt;/span> &lt;span class="n">sed&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="s1">&amp;#39;s+download.docker.com+mirrors.tuna.tsinghua.edu.cn/docker-ce+&amp;#39;&lt;/span> &lt;span class="o">/&lt;/span>&lt;span class="n">etc&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">yum&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">repos&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">docker&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">ce&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">repo&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>最后安装:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo yum makecache fast
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo yum install docker-ce
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="验证">验证&lt;/h2>
+&lt;p>输入&lt;code>docker version&lt;/code>返回如下结果：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-tex" data-lang="tex">&lt;span class="line">&lt;span class="cl">Client: Docker Engine - Community
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Version: 20.10.5
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> API version: 1.41
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Go version: go1.13.15
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Git commit: 55c4c88
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Built: Tue Mar 2 20:18:20 2021
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> OS/Arch: linux/amd64
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Context: default
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Experimental: true
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Server: Docker Engine - Community
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Engine:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Version: 20.10.5
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> API version: 1.41 (minimum version 1.12)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Go version: go1.13.15
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Git commit: 363e9a8
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Built: Tue Mar 2 20:16:15 2021
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> OS/Arch: linux/amd64
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Experimental: false
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> containerd:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Version: 1.4.4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> GitCommit: 05f951a3781f4f2c1911b05e61c160e9c30eaa8e
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> runc:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Version: 1.0.0-rc93
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> GitCommit: 12644e614e25b05da6fd08a38ffa0cfe1903fdec
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker-init:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Version: 0.19.0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> GitCommit: de40ad0
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="启动">启动&lt;/h2>
+&lt;p>&lt;code>systemctl enable docker&lt;/code>&lt;/p>
+&lt;blockquote>
+&lt;p>根据您的Docker系统配置，您可能需要在每个Docker命令前使用sudo。&lt;/p>
+&lt;p>为了避免在使用docker命令时使用sudo，系统管理员可以创建一个名为docker的Unix组，并向其添加用户。&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">groupadd docker
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">usermod -G &amp;lt;UserName&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>容器技术 -Docker</title><link>https://blog-g.leecq.cn/p/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF-docker/</link><pubDate>Tue, 15 Jun 2021 17:23:47 +0800</pubDate><guid>https://blog-g.leecq.cn/p/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF-docker/</guid><description>&lt;a href="https://www.docker.com" style='text-decoration:none;' target="_blank">
+&lt;svg id="logoHorizontal" viewBox="-5.724 -43.601 2000 600">
+&lt;path d="M934.957,149.221c-10.479-0.345-19.253,7.869-19.599,18.348c-0.014,0.417-0.014,0.834,0,1.251v94.24
+c-45.47-36.517-111.933-29.258-148.449,16.211c-15.064,18.758-23.271,42.096-23.264,66.153
+c-0.996,58.292,45.451,106.354,103.744,107.351c58.292,0.996,106.354-45.451,107.351-103.743c0.021-1.203,0.021-2.405,0-3.607
+V168.913c0.157-5.29-1.933-10.399-5.753-14.061c-3.741-3.658-8.799-5.655-14.03-5.538 M910.158,370.839
+c-6.741,15.855-19.321,28.513-35.136,35.352c-16.569,7.015-35.274,7.015-51.844,0c-15.782-6.775-28.314-19.418-34.951-35.26
+c-6.935-16.383-6.935-34.876,0-51.258c6.651-15.789,19.187-28.368,34.951-35.075c16.569-7.015,35.274-7.015,51.844,0
+c15.814,6.839,28.395,19.495,35.136,35.352c6.933,16.319,6.933,34.755,0,51.074">&lt;/path>
+&lt;path d="M1155.344,270.69c-41.243-41.206-108.082-41.176-149.288,0.067c-19.769,19.785-30.876,46.606-30.886,74.574
+c-0.996,58.293,45.451,106.355,103.744,107.352c58.292,0.996,106.354-45.452,107.351-103.744c0.021-1.202,0.021-2.404,0-3.607
+c0.009-13.882-2.645-27.637-7.815-40.521C1173.124,291.998,1165.265,280.393,1155.344,270.69 M1141.714,370.746
+c-3.371,7.823-8.17,14.95-14.153,21.015c-6.036,6.063-13.166,10.929-21.015,14.337c-16.558,7.017-35.254,7.017-51.812,0
+c-15.8-6.76-28.347-19.406-34.982-35.259c-6.935-16.383-6.935-34.876,0-51.259c6.67-15.765,19.218-28.312,34.982-34.982
+c16.558-7.017,35.254-7.017,51.812,0c7.849,3.408,14.979,8.273,21.015,14.338c5.983,6.063,10.782,13.19,14.153,21.014
+c6.893,16.327,6.893,34.747,0,51.074">&lt;/path>
+&lt;path d="M1591.747,259.368c0.013-2.595-0.521-5.163-1.568-7.538c-1.066-2.279-2.513-4.36-4.277-6.154
+c-1.742-1.816-3.836-3.261-6.153-4.246c-2.448-1.01-5.073-1.522-7.723-1.508c-3.742-0.025-7.411,1.044-10.554,3.077l-112.7,73.319
+V169.097c0.1-5.27-1.982-10.347-5.753-14.03c-3.626-3.81-8.68-5.929-13.938-5.846c-10.857-0.068-19.715,8.679-19.783,19.537
+c0,0.083,0,0.165,0,0.247v261.983c-0.063,5.236,2.016,10.271,5.754,13.938c3.653,3.823,8.741,5.943,14.029,5.846
+c5.241,0.085,10.276-2.037,13.876-5.846c3.738-3.667,5.817-8.702,5.754-13.938v-67.934l22.983-15.076l87.103,97.81
+c3.528,3.393,8.275,5.223,13.168,5.076c2.65,0.03,5.278-0.483,7.723-1.508c2.322-0.962,4.418-2.397,6.153-4.215
+c1.792-1.841,3.241-3.987,4.276-6.338c1.048-2.375,1.582-4.943,1.57-7.538c0.012-5.112-1.938-10.035-5.446-13.753l-80.979-91.226
+l78.949-51.258C1589.31,271.505,1592.174,265.553,1591.747,259.368">&lt;/path>
+&lt;path d="M1264.752,298.505c6.085-6.016,13.258-10.818,21.138-14.153c8.16-3.472,16.945-5.23,25.813-5.169
+c7.851-0.072,15.646,1.326,22.983,4.123c7.353,2.957,14.163,7.116,20.152,12.307c3.641,2.9,8.176,4.445,12.83,4.369
+c5.304,0.223,10.459-1.786,14.215-5.538c3.697-3.768,5.707-8.876,5.568-14.153c0.065-5.729-2.428-11.188-6.8-14.892
+c-18.885-16.903-43.454-26.056-68.796-25.629c-58.301,0-105.562,47.262-105.562,105.562
+c-0.146,58.216,46.929,105.527,105.145,105.674c25.412,0.063,49.992-9.056,69.214-25.679c3.965-3.773,6.192-9.019,6.153-14.491
+c0.346-10.479-7.868-19.253-18.347-19.599c-0.417-0.014-0.835-0.014-1.252,0c-4.485,0.02-8.849,1.463-12.461,4.123
+c-5.892,5.189-12.65,9.304-19.968,12.152c-7.345,2.762-15.137,4.139-22.983,4.062c-8.867,0.062-17.653-1.697-25.813-5.169
+c-7.873-3.346-15.045-8.147-21.137-14.152c-25.862-25.708-25.988-67.514-0.281-93.376c0.094-0.094,0.188-0.187,0.281-0.28">&lt;/path>
+&lt;path d="M1983.262,252.969c-3.813-3.578-8.345-6.304-13.292-8c-5.657-2.031-11.532-3.394-17.506-4.061
+c-5.91-0.726-11.859-1.096-17.814-1.108c-12.084-0.037-24.08,2.045-35.443,6.154c-11.137,4.061-21.531,9.923-30.768,17.353v-3.938
+c-0.431-10.883-9.603-19.357-20.486-18.927c-10.279,0.406-18.521,8.647-18.927,18.927v171.897
+c0.43,10.884,9.602,19.357,20.485,18.928c10.28-0.406,18.521-8.647,18.928-18.928v-85.934c-0.059-8.877,1.699-17.673,5.168-25.844
+c3.318-7.836,8.113-14.96,14.123-20.983c6.047-6.003,13.178-10.806,21.014-14.153c8.172-3.472,16.967-5.23,25.845-5.169
+c8.825-0.087,17.587,1.511,25.813,4.707c2.599,1.251,5.427,1.953,8.308,2.062c2.649,0.024,5.276-0.489,7.723-1.508
+c2.319-0.98,4.413-2.425,6.153-4.245c1.758-1.793,3.194-3.874,4.246-6.153c1.068-2.434,1.614-5.065,1.6-7.723
+c0.191-4.952-1.732-9.751-5.291-13.2">&lt;/path>
+&lt;path d="M1800.104,304.966c-16.765-39.188-55.187-64.69-97.81-64.919c-58.283-0.017-105.545,47.217-105.562,105.501
+c0,0.01,0,0.021,0,0.03c-0.011,58.318,47.256,105.604,105.573,105.614c25.317,0.005,49.795-9.087,68.97-25.619
+c0.277-0.276,0.708-0.646,0.77-0.738c1.719-1.392,3.222-3.029,4.461-4.861c6.336-9.125,4.076-21.658-5.045-27.998
+c-7.646-4.967-17.698-4.065-24.338,2.185c-0.646,0.585-2.492,2.308-2.799,2.554l-0.277,0.246
+c-5.617,4.777-12.033,8.526-18.953,11.076c-7.32,2.58-15.037,3.851-22.798,3.754c-7.153,0.035-14.264-1.108-21.046-3.385
+c-6.603-2.207-12.828-5.413-18.46-9.507c-5.612-4.105-10.544-9.068-14.614-14.707c-4.158-5.757-7.34-12.16-9.415-18.952h149.253
+c5.237,0.119,10.299-1.891,14.029-5.569c3.839-3.637,5.934-8.745,5.754-14.03c0.12-13.913-2.504-27.714-7.723-40.612
+M1638.729,326.041c1.972-6.798,5.094-13.208,9.229-18.952c4.095-5.648,9.059-10.612,14.707-14.707
+c5.712-4.09,12.008-7.295,18.676-9.507c6.747-2.247,13.812-3.39,20.922-3.385c7.07-0.008,14.095,1.136,20.799,3.385
+c13.307,4.422,24.901,12.887,33.167,24.214c4.221,5.737,7.445,12.145,9.538,18.952H1638.729z">&lt;/path>
+&lt;path d="M1915.942,422.343c-7.543,0.119-13.562,6.331-13.443,13.875s6.332,13.562,13.875,13.443
+c7.495-0.118,13.494-6.254,13.445-13.75c-0.085-7.578-6.297-13.652-13.875-13.568
+C1915.944,422.343,1915.943,422.343,1915.942,422.343 M1915.942,446.741c-5.975,0.272-11.039-4.352-11.311-10.326
+c-0.271-5.976,4.352-11.04,10.327-11.312c5.975-0.271,11.039,4.352,11.311,10.327c0.009,0.19,0.013,0.382,0.011,0.573
+c0.204,5.723-4.27,10.527-9.992,10.731C1916.173,446.739,1916.058,446.741,1915.942,446.741">&lt;/path>
+&lt;path d="M1919.081,436.342v-0.185c1.512-0.292,2.65-1.544,2.8-3.076c0.057-1.175-0.432-2.311-1.323-3.077
+c-1.445-0.765-3.076-1.106-4.707-0.984c-1.743-0.024-3.484,0.12-5.2,0.431v13.538h3.077v-5.446h1.477
+c1.754,0,2.554,0.646,2.83,2.154c0.184,1.143,0.536,2.252,1.047,3.292h3.415c-0.53-1.062-0.873-2.207-1.016-3.385
+c-0.138-1.473-1.088-2.744-2.462-3.292 M1915.296,435.327h-1.508v-3.908c0.583-0.069,1.172-0.069,1.754,0
+c1.97,0,2.893,0.831,2.893,2.062s-1.415,2-3.076,2">&lt;/path>
+&lt;path d="M707.494,193.557c-1.938-1.539-20.029-15.199-58.181-15.199c-10.074,0.044-20.127,0.908-30.061,2.584
+c-7.384-50.612-49.228-75.288-51.104-76.395l-10.245-5.908l-6.738,9.723c-8.438,13.061-14.598,27.459-18.214,42.582
+c-6.831,28.891-2.677,56.027,11.999,79.226c-17.722,9.876-46.151,12.307-51.904,12.522H22.367
+c-12.294,0.017-22.27,9.952-22.337,22.245c-0.549,41.234,6.437,82.222,20.614,120.946c16.214,42.521,40.336,73.842,71.719,93.01
+c35.167,21.537,92.302,33.844,157.067,33.844c29.258,0.092,58.461-2.556,87.226-7.907c39.986-7.342,78.463-21.318,113.839-41.352
+c29.149-16.88,55.383-38.354,77.688-63.596c37.29-42.213,59.505-89.226,76.026-131.007c2.215,0,4.431,0,6.584,0
+c40.828,0,65.935-16.338,79.78-30.029c9.201-8.732,16.384-19.369,21.045-31.167l2.923-8.553L707.494,193.557z">&lt;/path>
+&lt;path d="M65.995,228.909h63.073c3.042,0,5.507-2.466,5.507-5.507l0,0V167.22c0.017-3.042-2.435-5.521-5.476-5.538
+c-0.01,0-0.021,0-0.031,0H65.995c-3.042,0-5.507,2.466-5.507,5.507c0,0.01,0,0.021,0,0.031v56.181
+C60.488,226.443,62.953,228.909,65.995,228.909L65.995,228.909">&lt;/path>
+&lt;path d="M152.913,228.909h63.073c3.042,0,5.507-2.466,5.507-5.507l0,0V167.22c0.017-3.042-2.435-5.521-5.477-5.538
+c-0.01,0-0.021,0-0.031,0h-63.073c-3.059,0-5.538,2.479-5.538,5.538v56.181C147.392,226.448,149.866,228.909,152.913,228.909">&lt;/path>
+&lt;path d="M241.153,228.909h63.073c3.042,0,5.507-2.466,5.507-5.507l0,0V167.22c0.017-3.042-2.435-5.521-5.477-5.538
+c-0.01,0-0.021,0-0.031,0h-63.073c-3.042,0-5.507,2.466-5.507,5.507c0,0.01,0,0.021,0,0.031v56.181
+C235.646,226.443,238.112,228.909,241.153,228.909L241.153,228.909">&lt;/path>
+&lt;path d="M328.348,228.909h63.073c3.047,0,5.521-2.46,5.538-5.507V167.22c0-3.059-2.479-5.538-5.538-5.538l0,0h-63.073
+c-3.042,0-5.507,2.466-5.507,5.507c0,0.01,0,0.021,0,0.031v56.181C322.841,226.443,325.307,228.909,328.348,228.909L328.348,228.909
+">&lt;/path>
+&lt;path d="M152.913,148.083h63.073c3.046-0.017,5.507-2.492,5.507-5.538V86.364c0-3.042-2.466-5.507-5.507-5.507l0,0h-63.073
+c-3.046,0-5.521,2.46-5.538,5.507v56.181C147.392,145.597,149.861,148.066,152.913,148.083">&lt;/path>
+&lt;path d="M241.153,148.083h63.073c3.046-0.017,5.507-2.492,5.507-5.538V86.364c0-3.042-2.466-5.507-5.507-5.507l0,0h-63.073
+c-3.042,0-5.507,2.466-5.507,5.507l0,0v56.181C235.646,145.591,238.107,148.066,241.153,148.083">&lt;/path>
+&lt;path d="M328.348,148.083h63.073c3.052-0.017,5.521-2.486,5.538-5.538V86.364c-0.017-3.047-2.491-5.507-5.538-5.507h-63.073
+c-3.042,0-5.507,2.466-5.507,5.507l0,0v56.181C322.841,145.591,325.302,148.066,328.348,148.083">&lt;/path>
+&lt;path d="M328.348,67.227h63.073c3.047,0,5.521-2.461,5.538-5.507V5.507C396.942,2.46,394.468,0,391.421,0h-63.073
+c-3.042,0-5.507,2.465-5.507,5.507l0,0v56.212C322.841,64.761,325.307,67.227,328.348,67.227">&lt;/path>
+&lt;path d="M416.312,228.909h63.073c3.047,0,5.521-2.46,5.538-5.507V167.22c0-3.059-2.479-5.538-5.538-5.538l0,0h-63.073
+c-3.041,0-5.507,2.466-5.507,5.507c0,0.01,0,0.021,0,0.031v56.181C410.805,226.443,413.271,228.909,416.312,228.909">&lt;/path>
+&lt;/svg>
+&lt;/a>
+&lt;hr>
+&lt;h1 id="docker概述">Docker概述&lt;/h1>
+&lt;p>Docker 是一个开源的应用容器引擎，基于 &lt;a class="link" href="https://www.runoob.com/go/go-tutorial.html" target="_blank" rel="noopener"
+>Go 语言&lt;/a> 并遵从 Apache2.0 协议开源。&lt;/p>
+&lt;p>Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。&lt;/p>
+&lt;p>容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。&lt;/p>
+&lt;h2 id="docker主要解决的问题">Docker主要解决的问题&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>环境管理复杂 - 从各种OS到各种中间件到各种app, 一款产品能够成功作为开发者需要关心的东西太多，且难于管理，这个问题几乎在所有现代IT相关行业都需要面对。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>云计算时代的到来 - AWS的成功, 引导开发者将应用转移到 cloud 上, 解决了硬件管理的问题，然而中间件相关的问题依然存在 (所以openstack HEAT和 AWS cloudformation 都着力解决这个问题)。开发者思路变化提供了可能性。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>虚拟化手段的变化 - cloud 时代采用标配硬件来降低成本，采用虚拟化手段来满足用户按需使用的需求以及保证可用性和隔离性。然而无论是KVM还是Xen在 docker 看来,都在浪费资源，因为用户需要的是高效运行环境而非OS, GuestOS既浪费资源又难于管理, 更加轻量级的LXC更加灵活和快速&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>LXC的移动性 - LXC在 linux 2.6 的 kernel 里就已经存在了，但是其设计之初并非为云计算考虑的，缺少标准化的描述手段和容器的可迁移性，决定其构建出的环境难于迁移和标准化管理(相对于KVM之类image和snapshot的概念)。docker 就在这个问题上做出实质性的革新。这是docker最独特的地方。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="docker-的历史">Docker 的历史&lt;/h2>
+&lt;ul>
+&lt;li>2010年，几个搞IT的年轻人，在美国成立了一个名为 &lt;code>DotCloud&lt;/code> 公司；做一些PaaS的云计算服务！开发进行LXC有关的容器技术。他们将自己的容器化技术命名为Docker。&lt;/li>
+&lt;li>由于使用的人太少，迫于生存压力，在2013年将Docker开源；之后一鸣惊人，逐渐成为了企业级容器的首选方案；&lt;/li>
+&lt;li>2014年4月9日：docker 1.0发布；&lt;/li>
+&lt;/ul>
+&lt;h2 id="为什么使用docker">为什么使用Docker&lt;/h2>
+&lt;ul>
+&lt;li>轻巧，在基本没有额外否消耗；&lt;/li>
+&lt;li>隔离，与主机空间，容器 - 容器之间相互隔离，互不影响；&lt;/li>
+&lt;li>灵活，根据自己的需要自由构建镜像包；&lt;/li>
+&lt;li>分布式分发，使用相同的镜像能够快速的生成多个实例，适用于分布式应用；&lt;/li>
+&lt;li>等 。。。&lt;/li>
+&lt;/ul>
+&lt;h2 id="docker名词概念">Docker名词概念&lt;/h2>
+&lt;ul>
+&lt;li>&lt;strong>容器(container)&lt;/strong>：容器是利用虚拟化技术在计算机上隔离出来的一个相对封闭的Linux运行时环境，在其上可以运行预先包含基本Linux（Unix）操作系统的镜像。也可以是自己构建的镜像。&lt;/li>
+&lt;li>&lt;strong>镜像(image)&lt;/strong>： Docker镜像是一个模板，我们通过一个镜像来创建容器服务。镜像与容器的关系就类似于类和实例的关系或者说Windows系统镜像和Windows电脑的关系，同一个Windows镜像可以安装在许许多多的电脑上，这些电脑直接互不影响。&lt;/li>
+&lt;li>&lt;strong>仓库(Repository)：&lt;/strong> Docker仓库是集中存放并分发镜像的地方~！这个仓库可以是官方创建的，也可以是根据自己的需要创建自己的私有仓库&lt;/li>
+&lt;/ul>
+&lt;h2 id="docker-信息图">Docker 信息图&lt;/h2>
+&lt;p>&lt;img src="https://blog-g.leecq.cn/images/image-20210623224335751.png"
+loading="lazy"
+alt="image-20210623224335751"
+>&lt;/p></description></item></channel></rss>

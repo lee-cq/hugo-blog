@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>测试 on LeeCQ小空间</title><link>https://blog-g.leecq.cn/categories/%E6%B5%8B%E8%AF%95/</link><description>Recent content in 测试 on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 31 Jul 2021 00:33:55 +0800</lastBuildDate><atom:link href="https://blog-g.leecq.cn/categories/%E6%B5%8B%E8%AF%95/index.xml" rel="self" type="application/rss+xml"/><item><title>video-test</title><link>https://blog-g.leecq.cn/p/video-test/</link><pubDate>Sat, 31 Jul 2021 00:33:55 +0800</pubDate><guid>https://blog-g.leecq.cn/p/video-test/</guid><description>&lt;img src="https://one.p.leecq.cn/E5Drive/imgs/1.jpg" alt="Featured image of post video-test" />&lt;h1 id="video-test">video test&lt;/h1>
+&lt;p>支持的 Shortcodes 详见: &lt;a class="link" href="https://docs.stack.jimmycai.com/zh/writing/shortcodes" target="_blank" rel="noopener"
+>https://docs.stack.jimmycai.com/zh/writing/shortcodes&lt;/a>&lt;/p>
+&lt;h2 id="html-code">HTML Code&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">video&lt;/span> &lt;span class="na">src&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://alist.leecq.cn/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4&amp;#34;&lt;/span> &lt;span class="na">controls&lt;/span> &lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">video&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://blog-g.leecq.cn/static/img/test.jpg"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="html-video-测试1">HTML video 测试1&lt;/h2>
+&lt;video controls="controls" preload controls width=100%>
+&lt;source src="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4" type="video/mp4" />
+Your browser does not support the video tag.
+&lt;/video>
+&lt;h2 id="html-video-测试2">HTML video 测试2&lt;/h2>
+&lt;p>&lt;video src="https://alist.leecq.cn/d/onedrive/%E4%B8%AD%E5%9B%BD%E6%9C%BA%E9%95%BF1080P.mp4?sign=dc625e8ea4bb25a8" controls preload width=100% > &lt;/video>&lt;/p>
+&lt;h2 id="shortcodes-bilibili-测试">Shortcodes bilibili 测试&lt;/h2>
+&lt;div class="video-wrapper">
+&lt;iframe src="https://player.bilibili.com/player.html?as_wide=1&amp;amp;high_quality=1&amp;amp;page=1&amp;bvid=BV1Ht4y1p7aA"
+scrolling="no"
+frameborder="no"
+framespacing="0"
+allowfullscreen="true"
+>
+&lt;/iframe>
+&lt;/div>
+&lt;h2 id="shortcodes-腾讯视频">Shortcodes 腾讯视频&lt;/h2>
+&lt;div class="video-wrapper">
+&lt;iframe src="https://v.qq.com/txp/iframe/player.html?vid=b31563j0jqw&amp;auto=0"
+scrolling="no"
+frameborder="no"
+framespacing="0"
+allowfullscreen="true"
+>
+&lt;/iframe>
+&lt;/div>
+&lt;h2 id="shortcodes-本地视频">Shortcodes 本地视频&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!-- just video src --&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;div class="video-wrapper">
+&lt;video
+controls
+src="./video.mp4"
+>
+&lt;p>
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="./video.mp4">link to the video&lt;/a> instead.
+&lt;/p>
+&lt;/video>
+&lt;/div>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!-- Other option --&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;div class="video-wrapper">
+&lt;video
+controls
+src="./video.mp4"
+poster="./video-poster.png"
+autoplay
+>
+&lt;p>
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="./video.mp4">link to the video&lt;/a> instead.
+&lt;/p>
+&lt;/video>
+&lt;/div>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="video-wrapper">
+&lt;video
+controls
+src="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4"
+>
+&lt;p>
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4">link to the video&lt;/a> instead.
+&lt;/p>
+&lt;/video>
+&lt;/div>
+&lt;h2 id="heading">&lt;/h2></description></item></channel></rss>

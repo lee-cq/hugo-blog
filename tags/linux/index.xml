@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/linux/</link><description>Recent content in Linux on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 17 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 小技巧</title><link>https://blog-g.leecq.cn/p/linux-%E5%B0%8F%E6%8A%80%E5%B7%A7/</link><pubDate>Sat, 17 Dec 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux-%E5%B0%8F%E6%8A%80%E5%B7%A7/</guid><description>&lt;h2 id="linux-修改指定进程的打开文件数限制">Linux 修改指定进程的打开文件数限制&lt;/h2>
+&lt;p>&lt;code>prlimit --pid {pid} --nofile=65535:65535&lt;/code>&lt;/p>
+&lt;h2 id="查询指定pid打开的句文件柄数">查询指定PID打开的句文件柄数&lt;/h2>
+&lt;p>&lt;code>lsof -n | awk '{print $2}' |sort |uniq -c |sort -nr |grep PID&lt;/code>&lt;/p>
+&lt;h2 id="查询指定pid的limit信息">查询指定PID的limit信息&lt;/h2>
+&lt;p>&lt;code>cat /proc/$PID/limits&lt;/code>&lt;/p>
+&lt;h2 id="telnet-自动超时退出">Telnet 自动超时退出&lt;/h2>
+&lt;p>&lt;code>timeout --signal=9 {timout_sec} telnet {ip} {port}&lt;/code>&lt;/p>
+&lt;h2 id="mysql导出前100条数据">MySQL导出前100条数据&lt;/h2>
+&lt;p>&lt;code>mysqldump -uroot -p'password' {db} --where &amp;quot;1=1 limit 100&amp;quot; &amp;gt; test.sql&lt;/code>&lt;/p>
+&lt;h2 id="使用python快速开启一个简单的文件服务器">使用Python快速开启一个简单的文件服务器&lt;/h2>
+&lt;p>&lt;code>python3 -m http.server&lt;/code> 或 &lt;code>python -m SimpleHTTPServer&lt;/code>&lt;/p></description></item><item><title>ip命令解析</title><link>https://blog-g.leecq.cn/p/ip%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90/</link><pubDate>Sat, 19 Nov 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/ip%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90/</guid><description>&lt;h2 id="iproute2-模块包含的子命令">iproute2 模块包含的子命令&lt;/h2>
+&lt;p>&lt;img src="https://blog-g.leecq.cn/img/ip_index/1677854766519.png"
+loading="lazy"
+alt="iproute2模块包含的11个子命令介绍"
+>&lt;/p></description></item><item><title>Linux创建路由网关</title><link>https://blog-g.leecq.cn/p/linux%E5%88%9B%E5%BB%BA%E8%B7%AF%E7%94%B1%E7%BD%91%E5%85%B3/</link><pubDate>Sat, 19 Nov 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux%E5%88%9B%E5%BB%BA%E8%B7%AF%E7%94%B1%E7%BD%91%E5%85%B3/</guid><description>&lt;h2 id="背景">背景&lt;/h2></description></item><item><title>Linux下查看Ipv6邻居的方法</title><link>https://blog-g.leecq.cn/p/linux%E4%B8%8B%E6%9F%A5%E7%9C%8Bipv6%E9%82%BB%E5%B1%85%E7%9A%84%E6%96%B9%E6%B3%95/</link><pubDate>Sat, 19 Nov 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux%E4%B8%8B%E6%9F%A5%E7%9C%8Bipv6%E9%82%BB%E5%B1%85%E7%9A%84%E6%96%B9%E6%B3%95/</guid><description>&lt;p>使用命令 &lt;code>ip -6 neigh&lt;/code>&lt;/p></description></item><item><title>iptables 实现端口转发</title><link>https://blog-g.leecq.cn/p/iptables-%E5%AE%9E%E7%8E%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</link><pubDate>Thu, 17 Nov 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/iptables-%E5%AE%9E%E7%8E%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</guid><description>&lt;h1 id="iptables-实现端口转发">iptables 实现端口转发&lt;/h1>
+&lt;h2 id="1-确保ipv4内核流量转发功能开启">1. 确保IPv4内核流量转发功能开启&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> net.ipv4.ip_forward&lt;span class="o">=&lt;/span>&lt;span class="m">1&lt;/span> &amp;gt;&amp;gt; /etc/sysctl.conf
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sysctl -p
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="2-配置iptables抓发规则">2. 配置iptables抓发规则&lt;/h2>
+&lt;p>流量状态：
+Inter &amp;ndash;&amp;gt; 10.0.4.14:13389 &amp;ndash;&amp;gt; 10.1.1.10:3389&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 将外网访问192.168.75.5的80端口转发到192.168.75.3:8000端口。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">iptables -t nat -A PREROUTING -d 10.0.4.14 -p tcp --dport &lt;span class="m">13389&lt;/span> -j DNAT --to-destination 10.1.1.10:3389
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 将192.168.75.3 8000端口将数据返回给客户端时，将源ip改为192.168.75.5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">iptables -t nat -A POSTROUTING -d 10.1.1.10 -p tcp --dport &lt;span class="m">3389&lt;/span> -j SNAT --to 10.0.4.14
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
