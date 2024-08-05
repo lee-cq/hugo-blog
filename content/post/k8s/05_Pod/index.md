@@ -55,7 +55,7 @@ status字段是一个字符串，可能的值有
 - False
 - Unknown
 
-![Pod生命周期.jpg](./Pod生命周期.jpg)
+![Pod生命周期.jpg](Pod生命周期.jpg)
 
 ## 容器的生命周期和重启策略
 
