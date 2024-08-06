@@ -138,7 +138,7 @@ spec:
   - name: nginx# Pod间通信的端口名称
     port: 80 # Pod间通信的端口号
   selector:
-    app: nginx# 选择标签为app:nginx的Pod
+    app: nginx # 选择标签为app:nginx的Pod
   clusterIP: None # 必须设置为None
 ```
 - 创建Headless Service：
@@ -242,8 +242,143 @@ ownerReferences:
 
 ## DaemonSet
 
+DaemonSet（守护进程集）部署的副本Pod会分布在各个Node上。它具备以下特点：
+- 确保每一个节点或者期望的节点（通过nodeSelector实现）上运行一个Pod；
+- 新增节点时自动部署一个Pod；
+- 移除节点时自动删除Pod。
 
-## Job
+![守护进程集](image-3.png)
+
+通过yaml创建DaemonSet的方式与创建Deployment的方式相似，区别在于：
+- kind选择DeamonSet；
+- 不需要规定replicas项。
+
+### 操作步骤：
+
+- 创建Yaml
+```yaml
+apiVersion: app/v1
+kind: DaemonSet
+
+metadata:
+  name: nginx-daemonset
+
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  
+  template:
+    metadata: 
+      labels:
+        app: nginx
+    spec:
+      containors:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+```
+
+- 应用配置文件 `kubectl apply -f daemonset.yaml`
+- 查看创建的Pod `kubectl get pod -o wide`
+- 如果将一个Pod从Node上删除，会自动重启一个新的
+- 当Kubernetes的Node出现故障时，相应的Pod也将被移除，不会在其他的节点上启动新的Pod。
+
+## Job / CronJob
+
+Job主要处理一些短暂的一次性任务，任务结束后资源释放，不需要保证应用得实时可用。
+
+Job执行一次性任务：
+- kind：选择Job。
+- completions：当前的任务需要执行的Pod数量。
+- parallelism：表示最多有多少个并发执行的任务。
+- restartPolicy：只能选择Never或OnFailure。
+- backoffLimit：参数指定job失败后进行重试的次数。
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: pi
+
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 3
+  template: #Pod 模板
+    spec:
+      containers:
+      - name: pi
+        image: perl:latest
+        command: ["perl", "-Mbignum=bpi", "-wle", "print bpi(200)"]
+        restartPolicy: onFailure
+```
+- 应用上述YAML `kubectl apply -f job.yaml`
+- 查看Job  `kubectl get job `
+- 当运行结束后Job会自动被停止并清理。
 
 
 ## CronJob
+
+CronJob是一种特殊的Job，主要处理周期性或者重复性的任务。
+
+CronJob是一种特殊的Job，它能够按照时间对任务进行调度，与我们熟悉的crontab非常相似。我们可以使用Cron格式快速指定任务的调度时间：
+- 在给定时间点只运行一次；
+- 在给定时间点周期性地运行。
+
+Schedule格式：
+```
+与Linux Crontab 的语法一致。
+┌───────────── 分 (0 - 59)
+│ ┌───────────── 时 (0 - 23)
+│ │ ┌───────────── 月中的天 (1 - 31)
+│ │ │ ┌───────────── 月份 (1 - 12)
+│ │ │ │ ┌───────────── 周几 (0 - 6) (周日开始，部分系统中7是周日)
+│ │ │ │ │ 
+│ │ │ │ │
+│ │ │ │ │
+* * * * *
+```
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: pi
+
+spec:
+  schedule: "*/1 * * * *" # 与Cornd的语法保持一致
+  jobTemplate:  # Job模板
+    completions: 1
+    parallelism: 1
+    backoffLimit: 3
+    template:
+      spec:  # Pod模板
+        containers:
+        - name: pi
+          image: perl:latest
+          command: ["perl", "-Mbignum=bpi", "-wle", "print bpi(200)"]
+          restartPolicy: onFailure
+```
+
+- 根据yaml创建CronJob对象之后，每分钟都会创建新的Job对象，所有的CronJob创建的任务都会带有调度时的时间戳。
+```
+$ kubectlget cronjob--watch
+NAME  SCHEDULE    SUSPEND ACTIVE LAST SCHEDULE AGE
+pi    */1 * * * * False   0       <none>       3s
+pi    */1 * * * * False   1       1s           7s
+$ kubectlget job --watch
+NAME          COMPLETIONS DURATION AGE
+pi-1551660600 0/3         0s       0s
+pi-1551660600 1/3         16s       16s
+pi-1551660600 2/3         31s       31s
+pi-1551660600 3/3         44s       44s
+pi-1551660660 0/3         1s
+pi-1551660660 0/3         1s        1s
+pi-1551660660 1/3         14s       14s
+pi-1551660660 2/3         28s       28s
+pi-1551660660 3/3         42s       43s
+```
