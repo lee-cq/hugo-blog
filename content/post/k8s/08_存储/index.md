@@ -11,8 +11,10 @@ tags:
   - "K8s"
   - "Kubernetes"
   - "运维"
-  - "configMap"
-  - "Secret"
+  - "PV"
+  - "PVC"
+  - "SC"
+  - "持久化存储"
 ---
 
 Kubernetes初期为存算分离所做的解耦设计Volume，采用强耦合、灵活性差的in-tree模式，虽然已经让用户专注于业务功能设计。但这类存储卷的生命周期是跟随pod的，只能用作存储临时数据，无法做为最终数据使用。
