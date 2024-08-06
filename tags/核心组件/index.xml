@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>核心组件 on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/</link><description>Recent content in 核心组件 on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 01 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/index.xml" rel="self" type="application/rss+xml"/><item><title>Kubernetes核心组件</title><link>https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/</link><pubDate>Thu, 01 Aug 2024 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/</guid><description>&lt;h1 id="核心组件">核心组件
+&lt;/h1>&lt;h2 id="etcd-公共核心组件">Etcd (公共核心组件)
+&lt;/h2>&lt;p>etcd是一个分布式key-value存储系统，为Kubernetes提供原数据的存储。&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>接口简单：&lt;/strong> 通过客户端或HTTP的方式访问；&lt;/li>
+&lt;li>&lt;strong>数据表示简单：&lt;/strong> 存储key-value数据，可理解为一个有序的map；&lt;/li>
+&lt;li>&lt;strong>方便数据订阅：&lt;/strong> 支持watch机制；&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Etcd-%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5.png"
+width="1248"
+height="355"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Etcd-%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5_hu1919525281682672423.png 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Etcd-%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5_hu5918492471970318571.png 1024w"
+loading="lazy"
+alt="Etcd-同步策略.png"
+class="gallery-image"
+data-flex-grow="351"
+data-flex-basis="843px"
+>&lt;/p>
+&lt;h2 id="api-server-master">Api-Server (Master)
+&lt;/h2>&lt;p>Api-Server通过Master节点上的kube-apiserver进程提供服务，该服务是集群内各个功能模块之间数据交互和通信的中心枢纽，实现了 Kubernetes 对象模型（如 Pods, Services, Deployments 等）的 CRUD 操作。&lt;br>
+由于API Server承担了系统内关键的数据通信部分，所以API Server的性能高低决定了集群性能的高低。&lt;/p>
+&lt;p>使用 etcd 数据库作为持久化存储后端。所有 Kubernetes 对象的状态都保存在 etcd 中。&lt;/p>
+&lt;h3 id="api-server提供的api">API Server提供的API:
+&lt;/h3>&lt;ol>
+&lt;li>/api/vi - 核心API&lt;/li>
+&lt;li>/apis - 分组API&lt;/li>
+&lt;li>/healthz - 健康监测&lt;/li>
+&lt;li>/logs - 日志&lt;/li>
+&lt;li>/swaggerapi - SwaggerAPI (OpenAPI)&lt;/li>
+&lt;li>/metrics - 性能度量&lt;/li>
+&lt;/ol>
+&lt;h3 id="访问控制">访问控制
+&lt;/h3>&lt;ol>
+&lt;li>授权&lt;/li>
+&lt;li>身份验证&lt;/li>
+&lt;li>准入控制&lt;/li>
+&lt;/ol>
+&lt;h3 id="服务注册">服务注册
+&lt;/h3>&lt;ol>
+&lt;li>Pod&lt;/li>
+&lt;li>NameSpace&lt;/li>
+&lt;li>Service&lt;/li>
+&lt;li>Apps&lt;/li>
+&lt;li>Storage&lt;/li>
+&lt;li>&amp;hellip;&lt;/li>
+&lt;/ol>
+&lt;h2 id="controller-manager-master">Controller Manager (Master)
+&lt;/h2>&lt;p>在Kubernetes中，每个Controller是一个控制回路，通过APIServer监视集群内Node、Pod的等资源的状态，并确保其当前状态（由spec字段规定）接近期望状态。&lt;/p>
+&lt;p>Controller按照其实现方式，可以分为内部控制器和外部控制器。&lt;br>
+Kubernetes内部几乎每种特定资源都有特定的Controller维护管理，而ControllerManager的职责便是把所有的Controller聚合起来，以达到以下目的：&lt;/p>
+&lt;ul>
+&lt;li>提供基础设施，启动和维持Controller的正常运行，降低Controller的实现复杂度。&lt;/li>
+&lt;li>通过Watch apiserver监控资源状态变化，对不同的Controller分发事件通知。&lt;/li>
+&lt;/ul>
+&lt;h3 id="controller工作流程">Controller工作流程
+&lt;/h3>&lt;p>Controller Manager主要提供了一个分发事件的能力，而不同的Controller只需要注册对应的Handler来等待接收和处理事件。在Controller Manager的帮助下，Controller的逻辑可以做的非常纯粹，只需要实现相应的EventHandler即可。以Deployment controller为例:&lt;/p>
+&lt;p>&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/controller%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.jpg"
+width="665"
+height="420"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/controller%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_hu17083423079350797585.jpg 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/controller%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_hu7108943337624392539.jpg 1024w"
+loading="lazy"
+alt="Controller Manager 工作流程"
+class="gallery-image"
+data-flex-grow="158"
+data-flex-basis="380px"
+>&lt;/p>
+&lt;p>&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Client-Go%E6%9E%B6%E6%9E%84.jpg"
+width="1238"
+height="581"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Client-Go%E6%9E%B6%E6%9E%84_hu12818658648932105601.jpg 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Client-Go%E6%9E%B6%E6%9E%84_hu13761399650219017802.jpg 1024w"
+loading="lazy"
+alt="Client-Go 架构"
+class="gallery-image"
+data-flex-grow="213"
+data-flex-basis="511px"
+>&lt;/p>
+&lt;h3 id="内部控制器">内部控制器
+&lt;/h3>&lt;ol>
+&lt;li>Deployment Controller： 用于管理应用程序的部署过程。
+它基于 ReplicaSets 来管理 Pods，并支持滚动更新和回滚等高级部署策略。&lt;/li>
+&lt;li>ReplicaSet： 确保指定数量的副本（Pods）始终处于运行状态。如果 Pod 数量减少，它会自动创建新的 Pod；如果 Pod 数量超过期望值，则删除多余的 Pod。&lt;/li>
+&lt;li>StatefulSet Controller: 管理有状态的应用程序实例。维护持久的标识符和稳定的持久卷绑定。&lt;/li>
+&lt;li>DaemonSet Controller: 确保所有（或某些）节点上运行一个 Pod 的副本。常用于运行守护进程，如日志收集或监控代理。&lt;/li>
+&lt;li>Job Controller: 确保一个或多个任务完成指定次数的执行。通常用于批处理作业或一次性任务。&lt;/li>
+&lt;li>CronJob Controller: 创建基于时间的 Jobs，类似于 Unix cron 任务。&lt;/li>
+&lt;li>Namespace Controller: 管理 Namespace 的生命周期，包括删除 Namespace 及其关联资源。&lt;/li>
+&lt;li>Node Controller: 用于监控节点的状态，标记不健康的Node，并迁移其上的POD。&lt;/li>
+&lt;li>Endpoints Controller: 更新每个Service的Endpoint列表，以反映实际可用的Pod。&lt;/li>
+&lt;/ol>
+&lt;h2 id="kube-scheduler">Kube-Scheduler
+&lt;/h2>&lt;p>kube-scheduler组件是kubernetes默认的调度器，kube-scheduler组件内置的预选和优选算法，主要负责把创建的Pod调度到具体的工作节点上，完成Pod到Node的调度和预绑定工作。&lt;/p>
+&lt;p>&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Scheduler%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%AE%B0%E5%BD%95.jpg"
+width="762"
+height="460"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Scheduler%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%AE%B0%E5%BD%95_hu17566035763658298472.jpg 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Scheduler%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%AE%B0%E5%BD%95_hu17124046928738517999.jpg 1024w"
+loading="lazy"
+alt="Scheduler介绍"
+class="gallery-image"
+data-flex-grow="165"
+data-flex-basis="397px"
+>&lt;/p>
+&lt;h3 id="工作流程">工作流程
+&lt;/h3>&lt;ul>
+&lt;li>Informer组件list-watch apiserver，同步etcd中Pod（spec.nodeName）信息的变化；&lt;/li>
+&lt;li>将未调度Pod的信息加入队列中，同时更新Scheduler Cache缓存，并获取Node列表；&lt;/li>
+&lt;li>预选阶段，针对Pod和Node列表执行Predicate算法，过滤掉不合适的节点；&lt;/li>
+&lt;li>优选阶段，针对Pod和Node列表执行Priority算法，给节点打分，根据打分，计算出得分最高的节点；&lt;/li>
+&lt;li>当调度器为Pod选择了一个合适的节点时，通过Bind将Pod和节点进行绑定；&lt;/li>
+&lt;li>更新缓存。&lt;/li>
+&lt;/ul>
+&lt;h2 id="kubelet">Kubelet
+&lt;/h2>&lt;p>kubelet用于处理master节点下发到本节点的任务，管理Pod以及Pod中的容器。kubelet的工作核心，就是一个控制循环，即：SyncLoop。&lt;/p>
+&lt;p>&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Kubelet-SyncLoop.jpg"
+width="965"
+height="491"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Kubelet-SyncLoop_hu2783373820503813143.jpg 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Kubelet-SyncLoop_hu11317546636436028389.jpg 1024w"
+loading="lazy"
+alt="Kubelet-SyncLoop.jpg"
+class="gallery-image"
+data-flex-grow="196"
+data-flex-basis="471px"
+>&lt;/p>
+&lt;h2 id="kube-proxy">Kube-Proxy
+&lt;/h2>&lt;p>Kube-proxy是一个简单的网络代理组件，它的作用主要是负责Service的实现。&lt;/p>
+&lt;h3 id="实现与工作原理">实现与工作原理
+&lt;/h3>&lt;ul>
+&lt;li>&lt;strong>Kube-proxy：&lt;/strong> 在每个节点上运行一个kube-proxy服务，监听API server中Service、Endpoint及Node的变化情况。&lt;/li>
+&lt;li>&lt;strong>Iptables/IPVS：&lt;/strong> Kube-proxy根据监听资源变化，操作代理后端来为服务配置负载均衡。目前Kube-proxy常用的代理模式为：
+&lt;ul>
+&lt;li>Iptables：Linux内核的一项功能。kube-proxy为每一个Serive创建相应的iptables规则，并将发送到Service的VIP（Cluster IP）的流量转发后端Pod的相应端口上。&lt;/li>
+&lt;li>IPVS：专门用于负载均衡的Linux内核功能，其功能依赖iptables，具有更好的扩展性和性能，支持更加复杂的负载均衡算法。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog-g.leecq.cn/Kube-Proxy%e5%8e%9f%e7%90%86.jpg"
+loading="lazy"
+alt="Kube-Proxy"
+>&lt;/p></description></item></channel></rss>
