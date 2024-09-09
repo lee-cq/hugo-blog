@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes的服务访问-Service"
+title: "Kubernetes的服务访问-Ingress"
 author: "Li, Caleb Chaoqun"
 date: "2024-08-06"
 description: "Ingress是基于七层的HTTP和HTTPS协议的请求转发，可以通过域名和路径做到更细粒度的划分。"
