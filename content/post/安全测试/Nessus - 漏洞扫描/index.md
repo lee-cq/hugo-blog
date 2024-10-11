@@ -21,6 +21,8 @@ tags:
 [官方下载页面](https://www.tenable.com/downloads/nessus)
 一键命令：`curl -o 'Nessus-10.8.2-ubuntu1604_amd64.deb' 'https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.8.2-ubuntu1604_amd64.deb'  && sudo apt install ./Nessus-10.8.2-ubuntu1604_amd64.deb`
 
+[Windows破解版](https://mp.weixin.qq.com/s/USzyYMAfx2IFw3vpjRA3Cg)
+
 ## 启动
 
 
