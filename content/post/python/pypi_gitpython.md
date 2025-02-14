@@ -1,6 +1,6 @@
 +++
 title= "GitPython入门"
-date= "{{ .Date }}"
+date= "2022-06-28"
 description = "Python操作Git的库"
 draft=true
 tags= ["Python", "pypi", "GitPython"] 

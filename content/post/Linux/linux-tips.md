@@ -30,4 +30,4 @@ tags:
 
 ## 使用Python快速开启一个简单的文件服务器
 
-`python3 -m http.server` 或 `python -m SimpleHTTPServer`
+`python3 -m http.server` (v3.4+) 或 `python -m SimpleHTTPServer` (v2.7+)

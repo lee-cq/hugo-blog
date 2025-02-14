@@ -21,7 +21,7 @@ subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 [sidebar.avatar]
 enabled = true
 local = true
-src = "static/img/avatar.png"
+# src = "static/img/avatar.png"
 
 [article]
 math = false
