@@ -70,8 +70,8 @@ relase_time=$(date --date="@$(date -d '+4 hours' +%s)" +'%Y-%m-%dT%H:%M:%SZ' -u)
 # 查询价格
 aliyun ecs DescribePrice --force --RegionId cn-shenzhen --ImageId "ubuntu_24_04_x64_20G_alibase_20250113.vhd" \
     --InstanceType "ecs.e-c1m1.large" --SystemDisk.Category cloud_essd_entry --SystemDisk.Size 20 \
-    --InstanceName PayByTraffic --SpotStrategy SpotAsPriceGo \
-    --InternetMaxBandwidthOut 10 --InternetMaxBandwidthIn 100 \
+    --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate \
+    --InternetChargeType PayByTraffic --InternetMaxBandwidthOut 10 --InternetMaxBandwidthIn 100 \
     --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** \
     --HostName "api-test" --Password "${ecs_password}"  --DryRun true
 
@@ -79,8 +79,8 @@ aliyun ecs DescribePrice --force --RegionId cn-shenzhen --ImageId "ubuntu_24_04_
 ecs_password="*******"
 aliyun ecs RunInstances --RegionId cn-shenzhen --ImageId "ubuntu_24_04_x64_20G_alibase_20250113.vhd" \
     --InstanceType "ecs.e-c1m1.large" --SystemDisk.Category cloud_essd_entry --SystemDisk.Size 20 \
-    --InstanceName PayByTraffic --SpotStrategy SpotAsPriceGo \
-    --InternetMaxBandwidthOut 10 --InternetMaxBandwidthIn 100 \
+    --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate \
+    --InternetChargeType PayByTraffic --InternetMaxBandwidthOut 10 --InternetMaxBandwidthIn 100 \
     --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** \
     --HostName "api-test" --Password "${ecs_password}"  --UserData ${user_data} --AutoReleaseTime ${relase_time} \
     --DryRun true
@@ -164,8 +164,8 @@ DOMAIN=""
 # 查询价格
 aliyun ecs DescribePrice --force --RegionId cn-shenzhen --ImageId "ubuntu_24_04_x64_20G_alibase_20250113.vhd" \
     --InstanceType "ecs.e-c1m1.large" --SystemDisk.Category cloud_essd_entry --SystemDisk.Size 20 \
-    --InstanceName PayByTraffic --SpotStrategy SpotAsPriceGo \
-    --InternetMaxBandwidthOut 10 --InternetMaxBandwidthIn 100 \
+    --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate \
+    --InternetChargeType PayByTraffic --InternetMaxBandwidthOut 10 --InternetMaxBandwidthIn 100 \
     --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** \
     --HostName "api-test" --Password "${ecs_password}"  --DryRun true
 
@@ -173,8 +173,8 @@ aliyun ecs DescribePrice --force --RegionId cn-shenzhen --ImageId "ubuntu_24_04_
 ecs_password="*******"
 aliyun ecs RunInstances --RegionId cn-shenzhen --ImageId "ubuntu_24_04_x64_20G_alibase_20250113.vhd" \
     --InstanceType "ecs.e-c1m1.large" --SystemDisk.Category cloud_essd_entry --SystemDisk.Size 20 \
-    --InstanceName PayByTraffic --SpotStrategy SpotAsPriceGo \
-    --InternetMaxBandwidthOut 10 --InternetMaxBandwidthIn 100 \
+    --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate \
+    --InternetChargeType PayByTraffic --InternetMaxBandwidthOut 10 --InternetMaxBandwidthIn 100 \
     --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** \
     --HostName "api-test" --Password "${ecs_password}"  --UserData ${user_data} \
     --AutoReleaseTime ${relase_time} | tee /dev/tty |jq -r '.InstanceIdSets.InstanceIdSet[0]' > ecs-instance-id
