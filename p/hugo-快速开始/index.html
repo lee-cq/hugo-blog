@@ -1,0 +1,106 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Hugo是最流行的开源静态站点生成器之一, 简单的介绍它的使用方式。"><title>Hugo 快速开始</title>
+<link rel=canonical href=https://blog-g.leecq.cn/p/hugo-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="Hugo 快速开始"><meta property='og:description' content="Hugo是最流行的开源静态站点生成器之一, 简单的介绍它的使用方式。"><meta property='og:url' content='https://blog-g.leecq.cn/p/hugo-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/'><meta property='og:site_name' content='LeeCQ小空间'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='建站'><meta property='article:tag' content='Hugo'><meta property='article:published_time' content='2021-05-29T00:33:55+08:00'><meta property='article:modified_time' content='2021-05-29T00:33:55+08:00'><meta property='og:image' content='https://blog-g.leecq.cn/img/hugo-hone-page.png'><meta name=twitter:title content="Hugo 快速开始"><meta name=twitter:description content="Hugo是最流行的开源静态站点生成器之一, 简单的介绍它的使用方式。"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://blog-g.leecq.cn/img/hugo-hone-page.png'></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_f509edb42ecc0ebd.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>LeeCQ小空间</a></h1><h2 class=site-description>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Lee-CQ/hugo-blog target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://leecq.cn target=_blank title=Home rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li><a href=https://leecq.cn/ target=_blank><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>home</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#the-worlds-fastest-framework-for-building-websites>The world’s fastest framework for building websites.</a></li><li><a href=#安装>安装</a><ol><li><a href=#1-windows>1. Windows</a></li><li><a href=#2-mac-os>2. Mac OS</a></li><li><a href=#3-linux>3. Linux</a></li></ol></li><li><a href=#快速开始>快速开始</a><ol><li><a href=#1-初始化-->1. **初始化: **</a></li><li><a href=#2-添加主题>2. <strong>添加主题:</strong></a></li><li><a href=#3-添加内容->3. **添加内容: **</a></li><li><a href=#4-编辑和修改你的文章>4. <strong>编辑和修改你的文章</strong></a></li><li><a href=#5-启动hugo服务器->5. **启动Hugo服务器 **</a></li><li><a href=#6-自定义主题>6. 自定义主题</a></li><li><a href=#7-构建静态页面-hugo--d>7. <strong>构建静态页面 <code>hugo -D</code></strong></a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/hugo-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/><img src=/img/hugo-hone-page.png loading=lazy alt="Featured image of post Hugo 快速开始"></a></div><div class=article-details><header class=article-category><a href=/categories/%E6%8A%80%E6%9C%AF/>技术</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/hugo-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/>Hugo 快速开始</a></h2><h3 class=article-subtitle>Hugo是最流行的开源静态站点生成器之一, 简单的介绍它的使用方式。</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 29, 2021</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><blockquote><h2 id=the-worlds-fastest-framework-for-building-websites>The world’s fastest framework for building websites.</h2></blockquote><p>Hugo是最流行的开源静态站点生成器之一。凭借其惊人的速度和灵活性，Hugo使构建网站再次变得有趣。</p><p>===</p><h2 id=安装>安装</h2><p>​ Hugo是由Go语言开发的软件, 你可以在 <a class=link href=https://github.com/gohugoio/hugo target=_blank rel=noopener>GitHub </a>或者 <a class=link href>镜像地址</a>上获取到它的源码, 自行编译; 或者在 <a class=link href=https://github.com/gohugoio/hugo/releases/ target=_blank rel=noopener>Releases · gohugoio/hugo · GitHub</a> 获取到预编译版本 .</p><p>​ 或者使用下面的指令一键安装</p><h3 id=1-windows>1. Windows</h3><pre><code>```powershell
+# 1. 安装包管理工具 choco
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+# 2. 安装 Hugo
+choco install hugo -confirm
+# 如果你需要安转拓展的 Sass/SCSS 版本执行:
+choco install hugo-extended -confirm
+```
+</code></pre><h3 id=2-mac-os>2. Mac OS</h3><pre><code>```shell
+# 1. 安装包管理工具 Brew
+/bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;
+# 2. 安装hugo
+brew install hugo
+```
+</code></pre><h3 id=3-linux>3. Linux</h3><pre><code>```shell
+# Debian / Armbian / Ubuntu
+apt install hugo
+# CentOS
+yum install hugo
+```
+</code></pre><h2 id=快速开始>快速开始</h2><p>​ 快速的建立一个hugo构建的blog.</p><h3 id=1-初始化-->1. **初始化: **</h3><p><code>hugo new site &lt;BlogName></code>
+执行此步骤后会在工作目录中创建一个名为 <code>BlogName</code>的目录, 其中包含了站点的基本元素;</p><pre><code>```sh
+&lt;BlogName&gt;
+|   config.toml   # 项目配置文件
++-+-archetypes    # 
+| \--   default.md
++---content       # 内容, 创作的blog放在这个目录下
++---data          # 
++---layouts
++---static        # 静态文件
+\---themes        # 主题文件
+```
+</code></pre><h3 id=2-添加主题>2. <strong>添加主题:</strong></h3><pre><code>&gt; 推荐的主题:  [Next](https://leecq.lanzoui.com/ijqbUpki8vc )
+
+你可以查看[themes.gohugo.io](themes.gohugo.io)上的主题列表。或者在社区中搜索你喜欢的主题样式.
+
+把主题下载下来后添加到项目的`themes`目录
+
+最后修改项目目录下的 `config.toml`  使其`theme=&lt;你下载的主题名字&gt;`
+</code></pre><h3 id=3-添加内容->3. **添加内容: **</h3><p><code>hugo new posts/my-first-post.md</code></p><pre><code>&gt; 注意: 他需要当前工作目录是你的项目目录, 否则会报错. 找不到config.toml
+
+执行此步骤会在`content/` 下创建 `posts/my-first-post.md` 文件作为一篇文章.
+
+使用`MarkDown`标记语法构建.
+</code></pre><h3 id=4-编辑和修改你的文章>4. <strong>编辑和修改你的文章</strong></h3><pre><code>如果你想编辑新创建的内容文件，它会像这样开始:
+</code></pre><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>title: &#34;My First Post&#34;
+</span></span><span class=line><span class=cl>date: 20121-05-29T08:47:11+08:00
+</span></span><span class=line><span class=cl>draft: true  
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=gh># 草稿不会被部署;一旦你完成了一篇文章，更新文章标题，写上draft: false
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=5-启动hugo服务器->5. **启动Hugo服务器 **</h3><pre><code>`hugo server -D`
+现在，启动Hugo服务器并启用草稿:
+
+新网站一般会被部署在 `http://localhost:1313/`。
+</code></pre><h3 id=6-自定义主题>6. 自定义主题</h3><pre><code>打开并编辑`config.toml`文件.
+</code></pre><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=nx>baseURL</span> <span class=p>=</span> <span class=s2>&#34;https://example.org/&#34;</span>
+</span></span><span class=line><span class=cl><span class=nx>languageCode</span> <span class=p>=</span> <span class=s2>&#34;en-us&#34;</span>
+</span></span><span class=line><span class=cl><span class=nx>title</span> <span class=p>=</span> <span class=s2>&#34;My New Hugo Site&#34;</span>
+</span></span><span class=line><span class=cl><span class=nx>theme</span> <span class=p>=</span> <span class=s2>&#34;ananke&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>用一自己的东西替换上面的标题。
+
+另外，如果您已经准备好了一个域名，那么设置baseURL。注意，运行本地开发服务器时不需要这个值。
+
+&gt; 提示:
+&gt;
+&gt; ​		当Hugo服务器运行时，对站点配置或站点中的任何其他文件进行更改，您将立即在浏览器中看到更改，但您可能需要清空缓存。
+
+*有关特定于主题的配置选项，请参阅[主题站点](https://github.com/theNewDynamic/gohugo-theme-ananke)。*
+</code></pre><h3 id=7-构建静态页面-hugo--d>7. <strong>构建静态页面 <code>hugo -D</code></strong></h3><pre><code>默认情况下输出将在`./public/ `目录下.
+
+你可以使用 `-d / --destination `标记来显示的指定输出位置.
+</code></pre></section><footer class=article-footer><section class=article-tags><a href=/tags/%E5%BB%BA%E7%AB%99/>建站</a>
+<a href=/tags/hugo/>Hugo</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/hugo%E6%97%A0%E6%B3%95%E8%A7%A3%E6%9E%90md%E4%B8%ADhtml%E4%BB%A3%E7%A0%81/><div class=article-details><h2 class=article-title>Hugo无法解析md中HTML代码</h2></div></a></article><article><a href=/p/%E7%BB%88%E4%BA%8E%E6%9C%89%E4%BA%86%E4%B8%80%E4%B8%AA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E7%BD%91%E7%AB%99/><div class=article-details><h2 class=article-title>终于有了一个属于自己的网站</h2></div></a></article><article><a href=/p/docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3/><div class=article-details><h2 class=article-title>Docker网络详解</h2></div></a></article><article><a href=/p/pip-%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90/><div class=article-details><h2 class=article-title>pip 更换国内源</h2></div></a></article><article class=has-image><a href=/p/video-test/><div class=article-image><img src=https://one.p.leecq.cn/E5Drive/imgs/1.jpg loading=lazy data-key data-hash=https://one.p.leecq.cn/E5Drive/imgs/1.jpg></div><div class=article-details><h2 class=article-title>video-test</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=lee-cq/hugo-blog data-repo-id=R_kgDOHhaNdw data-category=Announcements data-category-id=DIC_kwDOHhaNd84CQtzr data-mapping=title data-strict=0 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=light data-lang=zh-cn data-loading crossorigin=anonymous async></script><script>function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onColorSchemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})()</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 LeeCQ小空间</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

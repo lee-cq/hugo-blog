@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aliyun on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/aliyun/</link><description>Recent content in Aliyun on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 15 Feb 2025 17:24:41 +0800</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/aliyun/index.xml" rel="self" type="application/rss+xml"/><item><title>阿里云自动创建抢占实例</title><link>https://blog-g.leecq.cn/p/%E9%98%BF%E9%87%8C%E4%BA%91%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA%E6%8A%A2%E5%8D%A0%E5%AE%9E%E4%BE%8B/</link><pubDate>Sat, 15 Feb 2025 17:24:41 +0800</pubDate><guid>https://blog-g.leecq.cn/p/%E9%98%BF%E9%87%8C%E4%BA%91%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA%E6%8A%A2%E5%8D%A0%E5%AE%9E%E4%BE%8B/</guid><description>&lt;h1 id="aliyun快速创建ecs实例---clash">Aliyun快速创建ECS实例 - Clash
+&lt;/h1>&lt;ol>
+&lt;li>
+&lt;p>设置合适的安全组
+在控制台中设置安全组并记录组ID：开放22, 80, 443, 3389端口。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>编写启动脚本
+克隆项目，或从OSS下载启动文件, 。
+从蓝奏云上下载数据，并部署&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">自定义
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="3">
+&lt;li>运行实例
+使用模板或者使用自定义参数。&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;RegionId&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;cn-shenzhen&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">区域&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;InstanceType&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;ecs.e-c1m1.large&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;ImageId&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;SystemDisk.Size&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">20&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">系统盘大小&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;SystemDisk.Category&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;cloud_essd_entry&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">系统盘类型&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;SecurityEnhancementStrategy&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Active&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">安全加固Active：启用安全加固，Deactive：不启用安全加固&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;InstanceChargeType&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;PostPaid&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">实例计费类型&lt;/span> &lt;span class="err">-&lt;/span> &lt;span class="err">后付费&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;SpotStrategy&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;SpotAsPriceGo&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">按量付费实例的竞价策略。SpotAsPriceGo&lt;/span> &lt;span class="err">-&lt;/span> &lt;span class="err">系统自动出价，跟随当前市场实际价格&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;SpotInterruptionBehavior&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Terminate&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">抢占实例中断模式。&lt;/span> &lt;span class="err">Terminate：直接释放实例。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;InternetChargeType&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;PayByTraffic&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">网络计费类型，按流量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;AutoRenew&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">自动续费&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;InternetMaxBandwidthIn&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">100&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;InternetMaxBandwidthOut&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">出带宽大于0&lt;/span> &lt;span class="err">自动分配公网IP&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;VSwitchId&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;vsw-wz9q3hnkysu1p4sc*****&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">绑定交换机&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;SecurityGroupId&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;sg-wz9etfd2xhsxa1p*****&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">绑定安全组&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;ResourceGroupId&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;rg-acfmvpl4ra*****&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">资源组&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;InstanceName&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;api-test&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">实例名字&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;HostName&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;api-test&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">主机名&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;Password&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;****&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">密码&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;UserData&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Iy9iaW4vYmFzaAplY2hvICJzdGFydCBFQ1MiID4gdGVzdC50eHQ=&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">用户脚本&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;DryRun&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">测试运行&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Aliyun CLI 参数&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">user_data&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Iy9iaW4vYmFzaAplY2hvICJzdGFydCBFQ1MiID4gdGVzdC50eHQ&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ecs_password&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;*******&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">relase_time&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>date --date&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;@&lt;/span>&lt;span class="k">$(&lt;/span>date -d &lt;span class="s1">&amp;#39;+4 hours&amp;#39;&lt;/span> +%s&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> +&lt;span class="s1">&amp;#39;%Y-%m-%dT%H:%M:%SZ&amp;#39;&lt;/span> -u&lt;span class="k">)&lt;/span> &lt;span class="c1"># 获取4小时后的UTC时间&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查询价格&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aliyun ecs DescribePrice --force --RegionId cn-shenzhen --ImageId &lt;span class="s2">&amp;#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InstanceType &lt;span class="s2">&amp;#34;ecs.e-c1m1.large&amp;#34;&lt;/span> --SystemDisk.Category cloud_essd_entry --SystemDisk.Size &lt;span class="m">20&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InternetChargeType PayByTraffic --InternetMaxBandwidthOut &lt;span class="m">10&lt;/span> --InternetMaxBandwidthIn &lt;span class="m">100&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --HostName &lt;span class="s2">&amp;#34;api-test&amp;#34;&lt;/span> --Password &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ecs_password&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> --DryRun &lt;span class="nb">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 创建实例&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ecs_password&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;*******&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aliyun ecs RunInstances --RegionId cn-shenzhen --ImageId &lt;span class="s2">&amp;#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InstanceType &lt;span class="s2">&amp;#34;ecs.e-c1m1.large&amp;#34;&lt;/span> --SystemDisk.Category cloud_essd_entry --SystemDisk.Size &lt;span class="m">20&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InternetChargeType PayByTraffic --InternetMaxBandwidthOut &lt;span class="m">10&lt;/span> --InternetMaxBandwidthIn &lt;span class="m">100&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --HostName &lt;span class="s2">&amp;#34;api-test&amp;#34;&lt;/span> --Password &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ecs_password&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> --UserData &lt;span class="si">${&lt;/span>&lt;span class="nv">user_data&lt;/span>&lt;span class="si">}&lt;/span> --AutoReleaseTime &lt;span class="si">${&lt;/span>&lt;span class="nv">relase_time&lt;/span>&lt;span class="si">}&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --DryRun &lt;span class="nb">true&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>返回结果：{
+&amp;ldquo;InstanceIdSets&amp;rdquo;: {
+&amp;ldquo;InstanceIdSet&amp;rdquo;: [
+&amp;ldquo;i-wz91g5uy6dgm8gas****&amp;rdquo;
+]
+},
+&amp;ldquo;RequestId&amp;rdquo;: &amp;ldquo;C449D45D-CC95-5BDD-9438-9DD139679A48&amp;rdquo;
+}&lt;/p>
+&lt;p>得到实例ID： &lt;code>jq -r '.InstanceIdSets.InstanceIdSet[0]&lt;/code>&lt;/p>
+&lt;ol start="4">
+&lt;li>
+&lt;p>分配IP地址
+使用StartInstance创建实例时，需要手动调用分配公网IP API（出带宽必须大于0）；
+使用RunInstancesces创建实例时，当出带宽打于0时，自动分配IP。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>查询ECS信息
+调用查询接口&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aliyun ecs DescribeInstanceAttribute --region cn-shenzhen --InstanceId &lt;span class="s1">&amp;#39;i-wz91g5uy6dgm8gas****&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>返回：{
+&amp;ldquo;ClusterId&amp;rdquo;: &amp;ldquo;&amp;rdquo;,
+&amp;ldquo;Cpu&amp;rdquo;: 2,
+&amp;ldquo;CreationTime&amp;rdquo;: &amp;ldquo;2025-02-15T09:52:38Z&amp;rdquo;,
+&amp;ldquo;CreditSpecification&amp;rdquo;: &amp;ldquo;&amp;rdquo;,
+&amp;hellip;&amp;hellip;
+&amp;ldquo;Memory&amp;rdquo;: 2048,
+&amp;ldquo;OperationLocks&amp;rdquo;: {
+&amp;ldquo;LockReason&amp;rdquo;: []
+},
+&amp;ldquo;PublicIpAddress&amp;rdquo;: {
+&amp;ldquo;IpAddress&amp;rdquo;: [
+&amp;ldquo;47.119.180.220&amp;rdquo;
+]
+},
+&amp;ldquo;RegionId&amp;rdquo;: &amp;ldquo;cn-shenzhen&amp;rdquo;,
+&amp;hellip;&amp;hellip;
+},
+&amp;ldquo;ZoneId&amp;rdquo;: &amp;ldquo;cn-shenzhen-e&amp;rdquo;
+}&lt;/p>
+&lt;p>查询公网IP地址。aliyun ecs DescribeInstanceAttribute &amp;ndash;InstanceId &amp;lsquo;i-wz91g5uy6dgm8gas****&amp;rsquo; |jq .PublicIpAddress.IpAddress[0] -r&lt;/p>
+&lt;ol start="6">
+&lt;li>更新DNS到主机
+更新IP地址信息到DNSPOD。&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl -X POST https://dnsapi.cn/Record.Modify --header &lt;span class="s1">&amp;#39;User-Agent: HostCreate/v0.1(lee-cq@qq.com)&amp;#39;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s1">&amp;#39;login_token=${LOGIN_TOKEN}&amp;amp;format=json&amp;amp;domain=${DOMAIN}&amp;amp;sub_domain=ali-host&amp;amp;record_type=A&amp;amp;record_line_id=10%3D0&amp;amp;value=${pub_ip}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Aliyun DNS&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aliyun alidns AddDomainRecord --region cn-shenzhen --DomainName &lt;span class="s1">&amp;#39;DOMAIN&amp;#39;&lt;/span> --RR &lt;span class="s1">&amp;#39;api-test&amp;#39;&lt;/span> --Type A --Value &lt;span class="si">${&lt;/span>&lt;span class="nv">pub_ip&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="7">
+&lt;li>手动释放实例&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">aliyun ecs DeleteInstance --region cn-shenzhen --InstanceId &lt;span class="s1">&amp;#39;i-wz91g5uy6dgm8gasp6ac&amp;#39;&lt;/span> --Force &lt;span class="nb">true&lt;/span> &lt;span class="c1"># 强制释放实例&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">record_id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>curl -X POST https://dnsapi.cn/Record.List --header &lt;span class="s1">&amp;#39;User-Agent: HostCreate/V0.1(lee-cq@qq.com)&amp;#39;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s1">&amp;#39;login_token=${LOGIN_TOKEN}&amp;amp;format=json&amp;amp;domain_id=${DOMAIN}&amp;amp;sub_domain=ali-host&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> jq -r &lt;span class="s1">&amp;#39;.records[0].id&amp;#39;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 删除DNS解析&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">curl -X POST https://dnsapi.cn/Record.Remove --header &lt;span class="s1">&amp;#39;User-Agent: HostCreate/V0.1(lee-cq@qq.com)&amp;#39;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s1">&amp;#39;login_token=${LOGIN_TOKEN}&amp;amp;format=json&amp;amp;domain=${DOMAIN}&amp;amp;record_id=${record_id}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="完整脚本">完整脚本
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">user_data&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Iy9iaW4vYmFzaAplY2hvICJzdGFydCBFQ1MiID4gdGVzdC50eHQ&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ecs_password&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;*******&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">relase_time&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>date --date&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;@&lt;/span>&lt;span class="k">$(&lt;/span>date -d &lt;span class="s1">&amp;#39;+4 hours&amp;#39;&lt;/span> +%s&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> +&lt;span class="s1">&amp;#39;%Y-%m-%dT%H:%M:%SZ&amp;#39;&lt;/span> -u&lt;span class="k">)&lt;/span> &lt;span class="c1"># 获取4小时后的UTC时间&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">DOMAIN&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查询价格&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aliyun ecs DescribePrice --force --RegionId cn-shenzhen --ImageId &lt;span class="s2">&amp;#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InstanceType &lt;span class="s2">&amp;#34;ecs.e-c1m1.large&amp;#34;&lt;/span> --SystemDisk.Category cloud_essd_entry --SystemDisk.Size &lt;span class="m">20&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InternetChargeType PayByTraffic --InternetMaxBandwidthOut &lt;span class="m">10&lt;/span> --InternetMaxBandwidthIn &lt;span class="m">100&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --HostName &lt;span class="s2">&amp;#34;api-test&amp;#34;&lt;/span> --Password &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ecs_password&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> --DryRun &lt;span class="nb">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 创建实例&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ecs_password&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;*******&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aliyun ecs RunInstances --RegionId cn-shenzhen --ImageId &lt;span class="s2">&amp;#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InstanceType &lt;span class="s2">&amp;#34;ecs.e-c1m1.large&amp;#34;&lt;/span> --SystemDisk.Category cloud_essd_entry --SystemDisk.Size &lt;span class="m">20&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --InternetChargeType PayByTraffic --InternetMaxBandwidthOut &lt;span class="m">10&lt;/span> --InternetMaxBandwidthIn &lt;span class="m">100&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --HostName &lt;span class="s2">&amp;#34;api-test&amp;#34;&lt;/span> --Password &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ecs_password&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> --UserData &lt;span class="si">${&lt;/span>&lt;span class="nv">user_data&lt;/span>&lt;span class="si">}&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --AutoReleaseTime &lt;span class="si">${&lt;/span>&lt;span class="nv">relase_time&lt;/span>&lt;span class="si">}&lt;/span> &lt;span class="p">|&lt;/span> tee /dev/tty &lt;span class="p">|&lt;/span>jq -r &lt;span class="s1">&amp;#39;.InstanceIdSets.InstanceIdSet[0]&amp;#39;&lt;/span> &amp;gt; ecs-instance-id
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查询公网IP地址&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">aliyun ecs DescribeInstanceAttribute --region cn-shenzhen --InstanceId &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">$(&lt;/span>cat ecs-instance-id&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> tee /dev/tty &lt;span class="p">|&lt;/span> jq -r .PublicIpAddress.IpAddress&lt;span class="o">[&lt;/span>0&lt;span class="o">]&lt;/span> &amp;gt; ecs-instanse-ip
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 将公网IP地址注册到DNSPOD&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">curl -X POST https://dnsapi.cn/Record.Modify --header &lt;span class="s1">&amp;#39;User-Agent: HostCreate/v0.1(lee-cq@qq.com)&amp;#39;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s2">&amp;#34;login_token=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">LOGIN_TOKEN&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;amp;format=json&amp;amp;domain=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">DOMAIN&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;amp;sub_domain=ali-host&amp;amp;record_type=A&amp;amp;record_line_id=10%3D0&amp;amp;value=&lt;/span>&lt;span class="k">$(&lt;/span>cat ecs-instanse-ip&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

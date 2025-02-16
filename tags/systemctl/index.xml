@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Systemctl on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/systemctl/</link><description>Recent content in Systemctl on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 09 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/systemctl/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux系统守护进程管理器</title><link>https://blog-g.leecq.cn/p/linux%E7%B3%BB%E7%BB%9F%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%99%A8/</link><pubDate>Mon, 09 Sep 2024 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux%E7%B3%BB%E7%BB%9F%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%99%A8/</guid><description>&lt;p>systemd 是一个系统和服务管理器，它是许多现代Linux发行版（如Fedora、Red Hat Enterprise Linux、Debian、Ubuntu等）中默认使用的初始化系统。systemd 提供了一种替代传统的SysV init系统的方法，旨在提高系统的启动速度和运行效率，并且提供了更为强大的服务管理和依赖关系处理机制。&lt;/p>
+&lt;h2 id="systemd的特点">systemd的特点
+&lt;/h2>&lt;p>并发启动：systemd 支持并行启动服务，这意味着它可以在同一时间启动多个服务，而不是像传统init系统那样顺序启动。
+依赖关系管理：它可以自动处理服务之间的依赖关系，确保当一个服务启动时，其依赖的服务也已经启动。
+Socket激活：允许服务监听套接字，当有连接请求到达时自动启动服务。
+设备挂载和挂载点激活：systemd 可以基于设备挂载状态来控制服务的启动。
+统一的日志记录：通过journald，systemd 统一了系统日志记录方式，并且提供了比传统syslog更丰富的查询和过滤功能。
+资源控制：可以对服务的资源使用（如CPU和内存）进行限制。
+服务单元文件：systemd 使用.service、.socket、.timer等单元文件来描述服务、套接字和定时任务等。&lt;/p>
+&lt;h2 id="基本命令">基本命令
+&lt;/h2>&lt;p>一些常用的systemd命令包括：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>systemctl list-unit-files&lt;/code>：列出所有已知的单元文件。&lt;/li>
+&lt;li>&lt;code>systemctl start &amp;lt;service&amp;gt;&lt;/code>：启动指定的服务。&lt;/li>
+&lt;li>&lt;code>systemctl stop &amp;lt;service&amp;gt;&lt;/code>：停止指定的服务。&lt;/li>
+&lt;li>&lt;code>systemctl restart &amp;lt;service&amp;gt;&lt;/code>：重启指定的服务。&lt;/li>
+&lt;li>&lt;code>systemctl status &amp;lt;service&amp;gt;&lt;/code>：查看指定服务的状态。&lt;/li>
+&lt;li>&lt;code>systemctl enable &amp;lt;service&amp;gt;&lt;/code>：使服务开机自启。&lt;/li>
+&lt;li>&lt;code>systemctl disable &amp;lt;service&amp;gt;&lt;/code>：禁止服务开机自启。&lt;/li>
+&lt;li>&lt;code>systemctl daemon-reload&lt;/code>：重新加载systemd配置。&lt;/li>
+&lt;li>&lt;code>journalctl&lt;/code>：查看系统日志。&lt;/li>
+&lt;/ul>
+&lt;h2 id="单元文件示例">单元文件示例
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-ini" data-lang="ini">&lt;span class="line">&lt;span class="cl">&lt;span class="k">[Unit]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">Description&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">The Nginx HTTP Server&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">After&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">network.target&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">[Service]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">User&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">nginx&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">group&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">nginx&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">ExecStart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/usr/sbin/nginx&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">Restart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">always&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">RestartSec&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">10s&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">Type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">forking&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">PIDFile&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/run/nginx.pid&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">[Install]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">WantedBy&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">multi-user.target&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
