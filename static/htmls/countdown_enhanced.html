@@ -15,14 +15,15 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3B82F6',
-                        success: '#10B981',
-                        danger: '#EF4444',
+                        primary: '#4F46E5', // 主色调：深紫色
+                        secondary: '#10B981', // 完成状态：绿色
+                        danger: '#EF4444', // 取消状态：红色
+                        warning: '#F59E0B', // 正计时：橙色
                         dark: '#1E293B',
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif'],
-                        mono: ['Consolas', 'Monaco', 'monospace'],
+                        mono: ['JetBrains Mono', 'Consolas', 'monospace'],
                     },
                 }
             }
@@ -36,20 +37,31 @@
                 content-visibility: auto;
             }
             .card-hover {
-                @apply transition-all duration-300 hover:shadow-md;
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
             }
             .btn-effect {
                 @apply transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+            }
+            .pulse-animation {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.7;
+                }
             }
         }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen font-sans text-dark p-4 md:p-6">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto">
         <!-- 标题区域 -->
         <header class="text-center mb-6 md:mb-8">
             <h1 class="text-2xl md:text-3xl font-bold mb-2 flex items-center justify-center">
-                <i class="fa fa-clock-o text-primary mr-2"></i>多队列倒计时工具
+                <i class="fa fa-clock-o text-primary mr-2"></i>高级多队列倒计时工具
             </h1>
             <p class="text-gray-600">高效管理多个倒计时任务，不错过任何重要时刻</p>
             
@@ -65,17 +77,17 @@
         <main>
             <!-- 添加倒计时按钮 -->
             <div class="text-center mb-6">
-                <button id="addCountdownBtn" class="px-5 py-2 bg-primary text-white rounded-md font-medium btn-effect hover:bg-primary/90 focus:ring-primary/50">
+                <button id="addCountdownBtn" class="px-5 py-2.5 bg-primary text-white rounded-md font-medium btn-effect hover:bg-primary/90 focus:ring-primary/50 shadow-md">
                     <i class="fa fa-plus mr-2"></i>添加新倒计时
                 </button>
             </div>
             
             <!-- 倒计时列表 -->
-            <div class="mb-8">
+            <div class="mb-10">
                 <h2 class="text-lg font-semibold mb-3 flex items-center">
                     <i class="fa fa-list-alt text-primary mr-2"></i>当前倒计时
                 </h2>
-                <div id="countdownList" class="space-y-3">
+                <div id="countdownList" class="space-y-4">
                     <!-- 倒计时项将通过JavaScript动态添加 -->
                     <div class="text-center text-gray-500 py-10" id="emptyState">
                         <i class="fa fa-hourglass-o text-4xl mb-3 opacity-30"></i>
@@ -89,7 +101,7 @@
                 <h2 class="text-lg font-semibold mb-3 flex items-center">
                     <i class="fa fa-history text-gray-500 mr-2"></i>历史记录
                 </h2>
-                <div id="historyList" class="space-y-2 max-h-96 overflow-y-auto pr-2">
+                <div id="historyList" class="space-y-3 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300">
                     <!-- 历史记录项将通过JavaScript动态添加 -->
                     <div class="text-center text-gray-500 py-6" id="historyEmptyState">
                         <p class="text-sm">暂无历史记录</p>
@@ -100,27 +112,28 @@
         
         <!-- 页脚 -->
         <footer class="mt-10 text-center text-gray-500 text-sm">
-            <p>倒计时工具 &copy; 2023</p>
+            <p>高级倒计时工具 &copy; 2023</p>
         </footer>
     </div>
     
-    <!-- 添加倒计时的模态框 -->
-    <div id="addModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <!-- 添加/编辑倒计时的模态框 -->
+    <div id="countdownModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-5 md:p-6 transform transition-all scale-95 opacity-0" id="modalContent">
             <h2 class="text-xl font-bold mb-4 flex items-center">
                 <i class="fa fa-plus-circle text-primary mr-2"></i>
                 <span id="modalTitle">添加倒计时</span>
             </h2>
             
-            <!-- 关键修复：将div改为form元素 -->
-            <form id="addForm" class="space-y-4">
+            <form id="countdownForm" class="space-y-4">
+                <input type="hidden" id="editId">
+                
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-1">描述</label>
                     <input 
                         type="text" 
                         id="description" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="例如：会议开始"
+                        placeholder="例如：会议开始、休息时间"
                         required
                     >
                 </div>
@@ -167,8 +180,8 @@
                     <button type="button" id="cancelBtn" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 btn-effect">
                         取消
                     </button>
-                    <button type="button" id="confirmBtn" class="px-4 py-2 bg-primary text-white rounded-md font-medium btn-effect hover:bg-primary/90 focus:ring-primary/50">
-                        确认添加
+                    <button type="button" id="saveBtn" class="px-4 py-2 bg-primary text-white rounded-md font-medium btn-effect hover:bg-primary/90 focus:ring-primary/50">
+                        保存
                     </button>
                 </div>
             </form>
@@ -176,34 +189,65 @@
     </div>
 
     <script>
-        // 倒计时项类
+        // 倒计时项类 - 基于开始时间和总时长计算剩余时间
         class CountdownItem {
-            constructor(id, description, totalSeconds, remainingSeconds = null, startTime = null, completionTime = null, isNew = true) {
+            constructor(id, description, totalSeconds, startTime = null, completionTime = null, isNew = true) {
                 this.id = id;
                 this.description = description;
                 this.totalSeconds = totalSeconds;
-                this.remainingSeconds = remainingSeconds !== null ? remainingSeconds : totalSeconds;
+                // 使用开始时间而非剩余时间存储状态
                 this.startTime = startTime || new Date().toISOString();
-                this.completionTime = completionTime; // 新增：记录完成时间
+                this.completionTime = completionTime; // 倒计时完成时间
+                this.completeButtonClickTime = null; // 点击完成按钮的时间
                 this.running = true;
                 this.element = null;
                 this.timer = null;
                 
-                // 如果是从存储加载的，需要重新启动计时器
-                if (!isNew && this.remainingSeconds > 0) {
-                    this.start();
-                } else if (this.remainingSeconds <= 0) {
+                // 检查是否已经完成
+                if (!isNew && this.getRemainingSeconds() <= 0) {
                     this.running = false;
+                    this.completionTime = this.completionTime || this.calculateCompletionTime();
+                } else if (!isNew) {
+                    this.start();
                 }
             }
             
-            // 格式化剩余时间为 HH:MM:SS
+            // 计算剩余秒数
+            getRemainingSeconds() {
+                const start = new Date(this.startTime).getTime();
+                const now = new Date().getTime();
+                const elapsedSeconds = Math.floor((now - start) / 1000);
+                const remaining = this.totalSeconds - elapsedSeconds;
+                return remaining; // 可以是负数，表示已超时（正计时）
+            }
+            
+            // 计算完成时间（倒计时结束的理论时间）
+            calculateCompletionTime() {
+                const start = new Date(this.startTime);
+                const completion = new Date(start.getTime() + this.totalSeconds * 1000);
+                return completion.toISOString();
+            }
+            
+            // 格式化时间显示（支持正计时）
             formatTime() {
-                const hours = Math.floor(this.remainingSeconds / 3600);
-                const minutes = Math.floor((this.remainingSeconds % 3600) / 60);
-                const seconds = this.remainingSeconds % 60;
+                const remaining = this.getRemainingSeconds();
+                const isPositive = remaining >= 0;
+                const seconds = Math.abs(remaining) % 60;
+                const minutes = Math.floor(Math.abs(remaining) / 60) % 60;
+                const hours = Math.floor(Math.abs(remaining) / 3600);
                 
-                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                return isPositive ? timeStr : `+${timeStr}`;
+            }
+            
+            // 判断是否已完成（进入正计时状态）
+            isCompleted() {
+                return this.getRemainingSeconds() <= 0;
+            }
+            
+            // 计算正计时持续时间（如果已完成）
+            getPositiveSeconds() {
+                return Math.max(0, -this.getRemainingSeconds());
             }
             
             // 格式化总时间（用于历史记录）
@@ -220,11 +264,29 @@
                 return parts.join('');
             }
             
-            // 格式化剩余时间（用于历史记录）
+            // 格式化正计时时间
+            formatPositiveTime() {
+                const seconds = this.getPositiveSeconds();
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                
+                let parts = [];
+                if (hours > 0) parts.push(`${hours}小时`);
+                if (minutes > 0) parts.push(`${minutes}分钟`);
+                if (secs > 0) parts.push(`${secs}秒`);
+                
+                return parts.length > 0 ? parts.join('') : '0秒';
+            }
+            
+            // 格式化剩余时间（用于未完成的历史记录）
             formatRemainingTime() {
-                const hours = Math.floor(this.remainingSeconds / 3600);
-                const minutes = Math.floor((this.remainingSeconds % 3600) / 60);
-                const seconds = this.remainingSeconds % 60;
+                const remaining = this.getRemainingSeconds();
+                if (remaining <= 0) return '0秒';
+                
+                const hours = Math.floor(remaining / 3600);
+                const minutes = Math.floor((remaining % 3600) / 60);
+                const seconds = remaining % 60;
                 
                 let parts = [];
                 if (hours > 0) parts.push(`${hours}小时`);
@@ -243,47 +305,79 @@
             // 创建DOM元素
             createElement() {
                 const item = document.createElement('div');
-                item.className = 'bg-white rounded-lg shadow-sm p-4 flex items-center justify-between card-hover';
+                item.className = 'bg-white rounded-lg shadow-sm p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between card-hover border border-gray-100';
                 item.dataset.id = this.id;
                 
-                // 基础HTML结构
+                // 按钮区域HTML
                 let buttonHtml = `
-                    <button class="delete-btn px-3 py-1.5 bg-danger text-white rounded-md text-sm btn-effect hover:bg-danger/90 focus:ring-danger/50" data-remove>
-                        <i class="fa fa-trash-o mr-1"></i>删除
-                    </button>
+                    <div class="flex space-x-2 mt-3 md:mt-0">
+                        <button class="edit-btn px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md text-sm btn-effect hover:bg-gray-200">
+                            <i class="fa fa-pencil mr-1"></i>编辑
+                        </button>
+                        <button class="delete-btn px-3 py-1.5 bg-danger text-white rounded-md text-sm btn-effect hover:bg-danger/90 focus:ring-danger/50">
+                            <i class="fa fa-trash-o mr-1"></i>删除
+                        </button>
+                    </div>
                 `;
                 
-                // 如果已经完成，显示不同样式
-                if (this.remainingSeconds <= 0) {
+                // 如果已经完成，显示不同样式的按钮
+                if (this.isCompleted()) {
                     buttonHtml = `
-                        <button class="complete-btn px-3 py-1.5 bg-success text-white rounded-md text-sm btn-effect hover:bg-success/90 focus:ring-success/50" data-remove>
-                            <i class="fa fa-check mr-1"></i>完成
-                        </button>
+                        <div class="flex space-x-2 mt-3 md:mt-0">
+                            <button class="complete-btn px-3 py-1.5 bg-secondary text-white rounded-md text-sm btn-effect hover:bg-secondary/90 focus:ring-secondary/50">
+                                <i class="fa fa-check mr-1"></i>完成
+                            </button>
+                        </div>
                     `;
                 }
                 
+                // 基础HTML结构
                 item.innerHTML = `
-                    <div class="flex-1 min-w-0 mr-4">
+                    <div class="flex-1 min-w-0">
                         <div class="font-medium truncate">${this.description}</div>
-                        <div class="time-display font-mono text-primary mt-1" data-time>${this.formatTime()}</div>
+                        <div class="time-display font-mono text-primary mt-1 text-lg md:text-xl" data-time>${this.formatTime()}</div>
                     </div>
                     ${buttonHtml}
                 `;
                 
-                // 如果已经完成，更新样式
-                if (this.remainingSeconds <= 0) {
+                // 如果已经完成，更新样式为正计时
+                if (this.isCompleted()) {
                     const timeElement = item.querySelector('[data-time]');
-                    timeElement.classList.add('text-success', 'font-bold');
+                    timeElement.classList.remove('text-primary');
+                    timeElement.classList.add('text-warning');
+                    
+                    // 为已完成但未点击完成按钮的项目添加脉冲动画
+                    if (!this.completeButtonClickTime) {
+                        timeElement.classList.add('pulse-animation');
+                    }
                 }
                 
-                // 存储时间显示元素的引用
+                // 存储元素引用
                 this.timeElement = item.querySelector('[data-time]');
-                this.actionButton = item.querySelector('[data-remove]');
+                this.deleteButton = item.querySelector('.delete-btn');
+                this.completeButton = item.querySelector('.complete-btn');
+                this.editButton = item.querySelector('.edit-btn');
                 
-                // 添加删除事件监听
-                this.actionButton.addEventListener('click', () => {
-                    this.moveToHistory();
-                });
+                // 添加事件监听
+                if (this.deleteButton) {
+                    this.deleteButton.addEventListener('click', () => {
+                        this.moveToHistory(false);
+                    });
+                }
+                
+                if (this.completeButton) {
+                    this.completeButton.addEventListener('click', () => {
+                        // 记录点击完成按钮的时间
+                        this.completeButtonClickTime = new Date().toISOString();
+                        this.moveToHistory(true);
+                    });
+                }
+                
+                if (this.editButton) {
+                    this.editButton.addEventListener('click', () => {
+                        this.editCountdown();
+                    });
+                }
                 
                 this.element = item;
                 return item;
@@ -293,35 +387,50 @@
             start() {
                 if (this.timer) clearInterval(this.timer);
                 
+                // 每秒更新显示，但不存储剩余时间
                 this.timer = setInterval(() => {
-                    if (this.running && this.remainingSeconds > 0) {
-                        this.remainingSeconds--;
-                        this.timeElement.textContent = this.formatTime();
-                        
-                        // 保存更新后的状态
-                        saveData();
-                    } else if (this.remainingSeconds <= 0) {
-                        this.complete();
+                    const remaining = this.getRemainingSeconds();
+                    const wasCompleted = this.isCompleted();
+                    
+                    this.timeElement.textContent = this.formatTime();
+                    
+                    // 检查是否刚刚完成
+                    if (!wasCompleted && remaining <= 0) {
+                        this.handleCompletion();
                     }
                 }, 1000);
             }
             
-            // 倒计时完成
-            complete() {
-                clearInterval(this.timer);
-                this.timeElement.textContent = '00:00:00';
-                this.timeElement.classList.add('text-success', 'font-bold');
-                this.running = false;
-                
-                // 关键修复：记录完成时间
-                this.completionTime = new Date().toISOString();
+            // 处理倒计时完成
+            handleCompletion() {
+                // 更新UI为正计时状态
+                this.timeElement.classList.remove('text-primary');
+                this.timeElement.classList.add('text-warning', 'pulse-animation');
                 
                 // 更新按钮为完成状态
-                this.actionButton.innerHTML = '<i class="fa fa-check mr-1"></i>完成';
-                this.actionButton.className = 'complete-btn px-3 py-1.5 bg-success text-white rounded-md text-sm btn-effect hover:bg-success/90 focus:ring-success/50';
+                const buttonContainer = this.element.querySelector('.flex.space-x-2');
+                buttonContainer.innerHTML = `
+                    <button class="complete-btn px-3 py-1.5 bg-secondary text-white rounded-md text-sm btn-effect hover:bg-secondary/90 focus:ring-secondary/50">
+                        <i class="fa fa-check mr-1"></i>完成
+                    </button>
+                `;
                 
-                // 尝试发送通知
+                // 更新按钮引用和事件
+                this.completeButton = this.element.querySelector('.complete-btn');
+                this.completeButton.addEventListener('click', () => {
+                    this.completeButtonClickTime = new Date().toISOString();
+                    this.moveToHistory(true);
+                });
+                
+                // 移除编辑按钮
+                this.editButton = null;
+                this.deleteButton = null;
+                
+                // 发送通知
                 this.showNotification();
+                
+                // 记录完成时间
+                this.completionTime = this.calculateCompletionTime();
                 
                 // 保存状态
                 saveData();
@@ -337,9 +446,9 @@
                     });
                 } else {
                     // 通知未授权时，显示视觉提示
-                    this.element.classList.add('bg-green-50');
+                    this.element.classList.add('bg-yellow-50');
                     setTimeout(() => {
-                        this.element.classList.remove('bg-green-50');
+                        this.element.classList.remove('bg-yellow-50');
                     }, 2000);
                     
                     // 显示授权提示按钮
@@ -347,8 +456,50 @@
                 }
             }
             
+            // 编辑倒计时
+            editCountdown() {
+                // 填充表单
+                document.getElementById('editId').value = this.id;
+                document.getElementById('description').value = this.description;
+                
+                // 计算小时、分钟、秒
+                const hours = Math.floor(this.totalSeconds / 3600);
+                const minutes = Math.floor((this.totalSeconds % 3600) / 60);
+                const seconds = this.totalSeconds % 60;
+                
+                document.getElementById('hours').value = hours;
+                document.getElementById('minutes').value = minutes;
+                document.getElementById('seconds').value = seconds;
+                document.getElementById('modalTitle').textContent = '编辑倒计时';
+                
+                // 显示模态框
+                showModal();
+            }
+            
+            // 更新倒计时
+            updateCountdown(description, totalSeconds) {
+                this.description = description;
+                this.totalSeconds = totalSeconds;
+                this.startTime = new Date().toISOString(); // 重置开始时间
+                this.completionTime = null;
+                this.completeButtonClickTime = null;
+                
+                // 重新创建元素
+                if (this.element && this.element.parentNode) {
+                    const parent = this.element.parentNode;
+                    const newElement = this.createElement();
+                    parent.replaceChild(newElement, this.element);
+                }
+                
+                // 重启计时器
+                this.start();
+                
+                // 保存数据
+                saveData();
+            }
+            
             // 移到历史记录
-            moveToHistory() {
+            moveToHistory(isCompleted) {
                 this.running = false;
                 clearInterval(this.timer);
                 
@@ -363,8 +514,7 @@
                     countdowns.splice(index, 1);
                 }
                 
-                // 添加到历史记录（判断是否完成）
-                const isCompleted = this.remainingSeconds <= 0;
+                // 添加到历史记录
                 addToHistory(this, isCompleted);
                 
                 // 更新UI状态
@@ -378,9 +528,9 @@
                     id: this.id,
                     description: this.description,
                     totalSeconds: this.totalSeconds,
-                    remainingSeconds: this.remainingSeconds,
                     startTime: this.startTime,
-                    completionTime: this.completionTime, // 保存完成时间
+                    completionTime: this.completionTime,
+                    completeButtonClickTime: this.completeButtonClickTime,
                     running: this.running
                 };
             }
@@ -394,19 +544,22 @@
                 this.totalSeconds = countdownItem.totalSeconds;
                 this.totalTime = countdownItem.formatTotalTime();
                 this.startTime = countdownItem.startTime;
-                // 关键修复：使用倒计时完成时间作为结束时间
-                this.endTime = isCompleted ? countdownItem.completionTime : new Date().toISOString();
+                this.completionTime = countdownItem.completionTime;
+                this.completeButtonClickTime = countdownItem.completeButtonClickTime;
+                this.endTime = new Date().toISOString(); // 从当前列表移除的时间
                 this.isCompleted = isCompleted;
-                this.remainingSeconds = countdownItem.remainingSeconds;
+                this.remainingSeconds = countdownItem.getRemainingSeconds();
                 this.remainingTime = countdownItem.formatRemainingTime();
+                this.positiveTime = countdownItem.formatPositiveTime();
                 this.element = null;
             }
             
             // 创建DOM元素
             createElement() {
                 const item = document.createElement('div');
-                const statusClass = this.isCompleted ? 'border-l-4 border-success' : 'border-l-4 border-danger';
-                const statusIcon = this.isCompleted ? 'fa-check-circle text-success' : 'fa-times-circle text-danger';
+                const statusClass = this.isCompleted ? 'border-l-4 border-secondary' : 'border-l-4 border-danger';
+                const statusIcon = this.isCompleted ? 'fa-check-circle text-secondary' : 'fa-times-circle text-danger';
+                const statusText = this.isCompleted ? '已完成' : '已取消';
                 
                 // 格式化日期显示
                 const formatDateTime = (timestamp) => {
@@ -414,38 +567,56 @@
                     return `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
                 };
                 
-                // 时间信息
+                // 时间信息 - 区分已完成和已取消
                 let timeInfo = '';
                 if (this.isCompleted) {
                     timeInfo = `
-                        <div class="text-sm mt-1">
-                            <span>持续时间: ${this.totalTime}</span> | 
-                            <span>开始: ${formatDateTime(this.startTime)}</span> | 
-                            <span>完成: ${formatDateTime(this.endTime)}</span>
+                        <div class="text-sm mt-1 space-y-1">
+                            <div>
+                                <span>持续时间: ${this.totalTime}</span>
+                                <span class="ml-2 text-gray-500">(${this.positiveTime})</span>
+                            </div>
+                            <div>
+                                <span>开始: ${formatDateTime(this.startTime)}</span>
+                            </div>
+                            <div>
+                                <span>结束: ${formatDateTime(this.completionTime)}</span>
+                            </div>
+                            <div>
+                                <span>完成: ${formatDateTime(this.completeButtonClickTime || this.endTime)}</span>
+                            </div>
                         </div>
                     `;
                 } else {
                     timeInfo = `
-                        <div class="text-sm mt-1">
-                            <span>指定时长: ${this.totalTime} (剩余: ${this.remainingTime})</span> | 
-                            <span>开始: ${formatDateTime(this.startTime)}</span> | 
-                            <span>删除: ${formatDateTime(this.endTime)}</span>
+                        <div class="text-sm mt-1 space-y-1">
+                            <div>
+                                <span>指定时长: ${this.totalTime}</span>
+                                <span class="ml-2 text-gray-500">(${this.remainingTime})</span>
+                            </div>
+                            <div>
+                                <span>开始: ${formatDateTime(this.startTime)}</span>
+                            </div>
+                            <div>
+                                <span>删除: ${formatDateTime(this.endTime)}</span>
+                            </div>
                         </div>
                     `;
                 }
                 
-                item.className = `pl-3 py-2 bg-gray-50 rounded-r-md flex items-center justify-between cursor-pointer card-hover ${statusClass}`;
+                item.className = `pl-3 py-3 bg-gray-50 rounded-r-md flex flex-col md:flex-row items-start md:items-center justify-between cursor-pointer card-hover ${statusClass} border-t border-r border-b border-gray-100`;
                 item.dataset.id = this.id;
                 
                 item.innerHTML = `
                     <div class="flex-1 min-w-0">
                         <div class="font-medium truncate flex items-center">
                             <i class="fa ${statusIcon} mr-2"></i>
-                            ${this.description}
+                            <span>${this.description}</span>
+                            <span class="ml-2 text-xs px-2 py-0.5 rounded-full ${this.isCompleted ? 'bg-secondary/10 text-secondary' : 'bg-danger/10 text-danger'}">${statusText}</span>
                         </div>
                         ${timeInfo}
                     </div>
-                    <button class="delete-history-btn text-gray-400 hover:text-danger p-2" data-delete-history>
+                    <button class="delete-history-btn text-gray-400 hover:text-danger p-2 mt-2 md:mt-0 self-end md:self-center" data-delete-history>
                         <i class="fa fa-times"></i>
                     </button>
                 `;
@@ -476,11 +647,12 @@
                 const seconds = this.totalSeconds % 60;
                 
                 // 填充表单
+                document.getElementById('editId').value = '';
                 document.getElementById('description').value = this.description;
                 document.getElementById('hours').value = hours;
                 document.getElementById('minutes').value = minutes;
                 document.getElementById('seconds').value = seconds;
-                document.getElementById('modalTitle').textContent = '重新添加倒计时';
+                document.getElementById('modalTitle').textContent = '添加倒计时';
                 
                 // 显示模态框
                 showModal();
@@ -511,10 +683,13 @@
                     totalSeconds: this.totalSeconds,
                     totalTime: this.totalTime,
                     startTime: this.startTime,
+                    completionTime: this.completionTime,
+                    completeButtonClickTime: this.completeButtonClickTime,
                     endTime: this.endTime,
                     isCompleted: this.isCompleted,
                     remainingSeconds: this.remainingSeconds,
-                    remainingTime: this.remainingTime
+                    remainingTime: this.remainingTime,
+                    positiveTime: this.positiveTime
                 };
             }
         }
@@ -528,10 +703,10 @@
         const emptyState = document.getElementById('emptyState');
         const historyEmptyState = document.getElementById('historyEmptyState');
         const addCountdownBtn = document.getElementById('addCountdownBtn');
-        const addModal = document.getElementById('addModal');
+        const countdownModal = document.getElementById('countdownModal');
         const modalContent = document.getElementById('modalContent');
         const cancelBtn = document.getElementById('cancelBtn');
-        const confirmBtn = document.getElementById('confirmBtn');
+        const saveBtn = document.getElementById('saveBtn');
         const requestNotificationBtn = document.getElementById('requestNotificationBtn');
         const modalTitle = document.getElementById('modalTitle');
         
@@ -555,7 +730,7 @@
         
         // 显示模态框
         function showModal() {
-            addModal.classList.remove('hidden');
+            countdownModal.classList.remove('hidden');
             // 触发动画
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
@@ -569,11 +744,11 @@
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-95', 'opacity-0');
             setTimeout(() => {
-                addModal.classList.add('hidden');
-                // 重置表单值和标题
-                document.getElementById('addForm').reset();
+                countdownModal.classList.add('hidden');
+                // 重置表单
+                document.getElementById('countdownForm').reset();
                 document.getElementById('seconds').value = 10;
-                modalTitle.textContent = '添加倒计时';
+                document.getElementById('editId').value = '';
             }, 300);
         }
         
@@ -603,6 +778,24 @@
             saveData();
             
             return true;
+        }
+        
+        // 更新倒计时
+        function updateCountdown(id, description, hours, minutes, seconds) {
+            const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+            
+            if (totalSeconds <= 0) {
+                alert('请输入有效的倒计时时间');
+                return false;
+            }
+            
+            const index = countdowns.findIndex(item => item.id === id);
+            if (index !== -1) {
+                countdowns[index].updateCountdown(description, totalSeconds);
+                return true;
+            }
+            
+            return false;
         }
         
         // 添加到历史记录
@@ -645,10 +838,9 @@
                         new CountdownItem(
                             item.id, 
                             item.description, 
-                            item.totalSeconds, 
-                            item.remainingSeconds,
+                            item.totalSeconds,
                             item.startTime,
-                            item.completionTime, // 加载完成时间
+                            item.completionTime,
                             false
                         )
                     );
@@ -670,16 +862,21 @@
                 try {
                     const parsedData = JSON.parse(historyData);
                     historyItems = parsedData.map(item => {
-                        const historyItem = new HistoryItem({
+                        // 重构一个临时的countdownItem对象
+                        const tempCountdown = {
                             id: item.id,
                             description: item.description,
                             totalSeconds: item.totalSeconds,
                             formatTotalTime: () => item.totalTime,
                             startTime: item.startTime,
-                            completionTime: item.completionTime, // 加载完成时间
-                            remainingSeconds: item.remainingSeconds,
-                            formatRemainingTime: () => item.remainingTime
-                        }, item.isCompleted);
+                            completionTime: item.completionTime,
+                            completeButtonClickTime: item.completeButtonClickTime,
+                            getRemainingSeconds: () => item.remainingSeconds,
+                            formatRemainingTime: () => item.remainingTime,
+                            formatPositiveTime: () => item.positiveTime
+                        };
+                        
+                        const historyItem = new HistoryItem(tempCountdown, item.isCompleted);
                         historyItem.endTime = item.endTime;
                         return historyItem;
                     });
@@ -709,38 +906,50 @@
         // 事件监听
         addCountdownBtn.addEventListener('click', () => {
             // 重置表单并显示模态框
-            document.getElementById('addForm').reset();
+            document.getElementById('countdownForm').reset();
             document.getElementById('seconds').value = 10;
+            document.getElementById('editId').value = '';
             modalTitle.textContent = '添加倒计时';
             showModal();
         });
         
         cancelBtn.addEventListener('click', hideModal);
         
-        addModal.addEventListener('click', (e) => {
-            if (e.target === addModal) {
+        countdownModal.addEventListener('click', (e) => {
+            if (e.target === countdownModal) {
                 hideModal();
             }
         });
         
-        // 确认添加倒计时
-        confirmBtn.addEventListener('click', () => {
+        // 保存倒计时（新增或编辑）
+        saveBtn.addEventListener('click', () => {
+            const editId = document.getElementById('editId').value;
             const description = document.getElementById('description').value.trim() || 
-                               `倒计时 #${nextId}`;
+                               (editId ? `倒计时 #${editId}` : `倒计时 #${nextId}`);
             const hours = parseInt(document.getElementById('hours').value) || 0;
             const minutes = parseInt(document.getElementById('minutes').value) || 0;
             const seconds = parseInt(document.getElementById('seconds').value) || 0;
             
-            if (addCountdown(description, hours, minutes, seconds)) {
+            let success = false;
+            
+            if (editId) {
+                // 更新现有倒计时
+                success = updateCountdown(parseInt(editId), description, hours, minutes, seconds);
+            } else {
+                // 添加新倒计时
+                success = addCountdown(description, hours, minutes, seconds);
+            }
+            
+            if (success) {
                 hideModal();
             }
         });
         
         // 支持按Enter键提交
-        document.getElementById('addForm').addEventListener('keypress', (e) => {
+        document.getElementById('countdownForm').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                confirmBtn.click();
+                saveBtn.click();
             }
         });
         
