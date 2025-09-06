@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tips on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/tips/</link><description>Recent content in Tips on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 17 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/tips/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 小技巧</title><link>https://blog-g.leecq.cn/p/linux-%E5%B0%8F%E6%8A%80%E5%B7%A7/</link><pubDate>Sat, 17 Dec 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux-%E5%B0%8F%E6%8A%80%E5%B7%A7/</guid><description>&lt;h2 id="linux-修改指定进程的打开文件数限制"&gt;Linux 修改指定进程的打开文件数限制
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;prlimit --pid {pid} --nofile=65535:65535&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="查询指定pid打开的句文件柄数"&gt;查询指定PID打开的句文件柄数
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;lsof -n | awk '{print $2}' |sort |uniq -c |sort -nr |grep PID&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="查询指定pid的limit信息"&gt;查询指定PID的limit信息
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;cat /proc/$PID/limits&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="telnet-自动超时退出"&gt;Telnet 自动超时退出
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;timeout --signal=9 {timout_sec} telnet {ip} {port}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="mysql导出前100条数据"&gt;MySQL导出前100条数据
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;mysqldump -uroot -p'password' {db} --where &amp;quot;1=1 limit 100&amp;quot; &amp;gt; test.sql&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="使用python快速开启一个简单的文件服务器"&gt;使用Python快速开启一个简单的文件服务器
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;python3 -m http.server&lt;/code&gt; (v3.4+) 或 &lt;code&gt;python -m SimpleHTTPServer&lt;/code&gt; (v2.7+)&lt;/p&gt;</description></item></channel></rss>

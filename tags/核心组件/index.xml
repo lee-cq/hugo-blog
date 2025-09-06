@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>核心组件 on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/</link><description>Recent content in 核心组件 on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 01 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/index.xml" rel="self" type="application/rss+xml"/><item><title>Kubernetes核心组件</title><link>https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/</link><pubDate>Thu, 01 Aug 2024 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/</guid><description>&lt;h1 id="核心组件"&gt;核心组件
+&lt;/h1&gt;&lt;h2 id="etcd-公共核心组件"&gt;Etcd (公共核心组件)
+&lt;/h2&gt;&lt;p&gt;etcd是一个分布式key-value存储系统，为Kubernetes提供原数据的存储。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;接口简单：&lt;/strong&gt; 通过客户端或HTTP的方式访问；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据表示简单：&lt;/strong&gt; 存储key-value数据，可理解为一个有序的map；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;方便数据订阅：&lt;/strong&gt; 支持watch机制；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Etcd-%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5.png"
+width="1248"
+height="355"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Etcd-%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5_hu_dbbe4df0dd53cb62.png 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Etcd-%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5_hu_11f9db9e97580bee.png 1024w"
+loading="lazy"
+alt="Etcd-同步策略.png"
+class="gallery-image"
+data-flex-grow="351"
+data-flex-basis="843px"
+&gt;&lt;/p&gt;
+&lt;h2 id="api-server-master"&gt;Api-Server (Master)
+&lt;/h2&gt;&lt;p&gt;Api-Server通过Master节点上的kube-apiserver进程提供服务，该服务是集群内各个功能模块之间数据交互和通信的中心枢纽，实现了 Kubernetes 对象模型（如 Pods, Services, Deployments 等）的 CRUD 操作。&lt;br&gt;
+由于API Server承担了系统内关键的数据通信部分，所以API Server的性能高低决定了集群性能的高低。&lt;/p&gt;
+&lt;p&gt;使用 etcd 数据库作为持久化存储后端。所有 Kubernetes 对象的状态都保存在 etcd 中。&lt;/p&gt;
+&lt;h3 id="api-server提供的api"&gt;API Server提供的API:
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;/api/vi - 核心API&lt;/li&gt;
+&lt;li&gt;/apis - 分组API&lt;/li&gt;
+&lt;li&gt;/healthz - 健康监测&lt;/li&gt;
+&lt;li&gt;/logs - 日志&lt;/li&gt;
+&lt;li&gt;/swaggerapi - SwaggerAPI (OpenAPI)&lt;/li&gt;
+&lt;li&gt;/metrics - 性能度量&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="访问控制"&gt;访问控制
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;授权&lt;/li&gt;
+&lt;li&gt;身份验证&lt;/li&gt;
+&lt;li&gt;准入控制&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="服务注册"&gt;服务注册
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;Pod&lt;/li&gt;
+&lt;li&gt;NameSpace&lt;/li&gt;
+&lt;li&gt;Service&lt;/li&gt;
+&lt;li&gt;Apps&lt;/li&gt;
+&lt;li&gt;Storage&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="controller-manager-master"&gt;Controller Manager (Master)
+&lt;/h2&gt;&lt;p&gt;在Kubernetes中，每个Controller是一个控制回路，通过APIServer监视集群内Node、Pod的等资源的状态，并确保其当前状态（由spec字段规定）接近期望状态。&lt;/p&gt;
+&lt;p&gt;Controller按照其实现方式，可以分为内部控制器和外部控制器。&lt;br&gt;
+Kubernetes内部几乎每种特定资源都有特定的Controller维护管理，而ControllerManager的职责便是把所有的Controller聚合起来，以达到以下目的：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;提供基础设施，启动和维持Controller的正常运行，降低Controller的实现复杂度。&lt;/li&gt;
+&lt;li&gt;通过Watch apiserver监控资源状态变化，对不同的Controller分发事件通知。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="controller工作流程"&gt;Controller工作流程
+&lt;/h3&gt;&lt;p&gt;Controller Manager主要提供了一个分发事件的能力，而不同的Controller只需要注册对应的Handler来等待接收和处理事件。在Controller Manager的帮助下，Controller的逻辑可以做的非常纯粹，只需要实现相应的EventHandler即可。以Deployment controller为例:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/controller%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.jpg"
+width="665"
+height="420"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/controller%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_hu_5f784981ea4a8c9f.jpg 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/controller%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_hu_8984e60dc2587dc5.jpg 1024w"
+loading="lazy"
+alt="Controller Manager 工作流程"
+class="gallery-image"
+data-flex-grow="158"
+data-flex-basis="380px"
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Client-Go%E6%9E%B6%E6%9E%84.jpg"
+width="1238"
+height="581"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Client-Go%E6%9E%B6%E6%9E%84_hu_8fb15c38cb480d20.jpg 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Client-Go%E6%9E%B6%E6%9E%84_hu_1caeba910ea4b22d.jpg 1024w"
+loading="lazy"
+alt="Client-Go 架构"
+class="gallery-image"
+data-flex-grow="213"
+data-flex-basis="511px"
+&gt;&lt;/p&gt;
+&lt;h3 id="内部控制器"&gt;内部控制器
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;Deployment Controller： 用于管理应用程序的部署过程。
+它基于 ReplicaSets 来管理 Pods，并支持滚动更新和回滚等高级部署策略。&lt;/li&gt;
+&lt;li&gt;ReplicaSet： 确保指定数量的副本（Pods）始终处于运行状态。如果 Pod 数量减少，它会自动创建新的 Pod；如果 Pod 数量超过期望值，则删除多余的 Pod。&lt;/li&gt;
+&lt;li&gt;StatefulSet Controller: 管理有状态的应用程序实例。维护持久的标识符和稳定的持久卷绑定。&lt;/li&gt;
+&lt;li&gt;DaemonSet Controller: 确保所有（或某些）节点上运行一个 Pod 的副本。常用于运行守护进程，如日志收集或监控代理。&lt;/li&gt;
+&lt;li&gt;Job Controller: 确保一个或多个任务完成指定次数的执行。通常用于批处理作业或一次性任务。&lt;/li&gt;
+&lt;li&gt;CronJob Controller: 创建基于时间的 Jobs，类似于 Unix cron 任务。&lt;/li&gt;
+&lt;li&gt;Namespace Controller: 管理 Namespace 的生命周期，包括删除 Namespace 及其关联资源。&lt;/li&gt;
+&lt;li&gt;Node Controller: 用于监控节点的状态，标记不健康的Node，并迁移其上的POD。&lt;/li&gt;
+&lt;li&gt;Endpoints Controller: 更新每个Service的Endpoint列表，以反映实际可用的Pod。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="kube-scheduler"&gt;Kube-Scheduler
+&lt;/h2&gt;&lt;p&gt;kube-scheduler组件是kubernetes默认的调度器，kube-scheduler组件内置的预选和优选算法，主要负责把创建的Pod调度到具体的工作节点上，完成Pod到Node的调度和预绑定工作。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Scheduler%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%AE%B0%E5%BD%95.jpg"
+width="762"
+height="460"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Scheduler%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%AE%B0%E5%BD%95_hu_e6c368199196f05a.jpg 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Scheduler%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%AE%B0%E5%BD%95_hu_9bdf3a767ea01375.jpg 1024w"
+loading="lazy"
+alt="Scheduler介绍"
+class="gallery-image"
+data-flex-grow="165"
+data-flex-basis="397px"
+&gt;&lt;/p&gt;
+&lt;h3 id="工作流程"&gt;工作流程
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Informer组件list-watch apiserver，同步etcd中Pod（spec.nodeName）信息的变化；&lt;/li&gt;
+&lt;li&gt;将未调度Pod的信息加入队列中，同时更新Scheduler Cache缓存，并获取Node列表；&lt;/li&gt;
+&lt;li&gt;预选阶段，针对Pod和Node列表执行Predicate算法，过滤掉不合适的节点；&lt;/li&gt;
+&lt;li&gt;优选阶段，针对Pod和Node列表执行Priority算法，给节点打分，根据打分，计算出得分最高的节点；&lt;/li&gt;
+&lt;li&gt;当调度器为Pod选择了一个合适的节点时，通过Bind将Pod和节点进行绑定；&lt;/li&gt;
+&lt;li&gt;更新缓存。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="kubelet"&gt;Kubelet
+&lt;/h2&gt;&lt;p&gt;kubelet用于处理master节点下发到本节点的任务，管理Pod以及Pod中的容器。kubelet的工作核心，就是一个控制循环，即：SyncLoop。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Kubelet-SyncLoop.jpg"
+width="965"
+height="491"
+srcset="https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Kubelet-SyncLoop_hu_b1a4b602dd1bb839.jpg 480w, https://blog-g.leecq.cn/p/kubernetes%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6/Kubelet-SyncLoop_hu_3764984a92df413b.jpg 1024w"
+loading="lazy"
+alt="Kubelet-SyncLoop.jpg"
+class="gallery-image"
+data-flex-grow="196"
+data-flex-basis="471px"
+&gt;&lt;/p&gt;
+&lt;h2 id="kube-proxy"&gt;Kube-Proxy
+&lt;/h2&gt;&lt;p&gt;Kube-proxy是一个简单的网络代理组件，它的作用主要是负责Service的实现。&lt;/p&gt;
+&lt;h3 id="实现与工作原理"&gt;实现与工作原理
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Kube-proxy：&lt;/strong&gt; 在每个节点上运行一个kube-proxy服务，监听API server中Service、Endpoint及Node的变化情况。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Iptables/IPVS：&lt;/strong&gt; Kube-proxy根据监听资源变化，操作代理后端来为服务配置负载均衡。目前Kube-proxy常用的代理模式为：
+&lt;ul&gt;
+&lt;li&gt;Iptables：Linux内核的一项功能。kube-proxy为每一个Serive创建相应的iptables规则，并将发送到Service的VIP（Cluster IP）的流量转发后端Pod的相应端口上。&lt;/li&gt;
+&lt;li&gt;IPVS：专门用于负载均衡的Linux内核功能，其功能依赖iptables，具有更好的扩展性和性能，支持更加复杂的负载均衡算法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/Kube-Proxy%e5%8e%9f%e7%90%86.jpg"
+loading="lazy"
+alt="Kube-Proxy"
+&gt;&lt;/p&gt;</description></item></channel></rss>

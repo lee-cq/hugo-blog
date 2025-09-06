@@ -1,0 +1,161 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Docker系列文章"><title>Docker网络详解</title><link rel=canonical href=https://blog-g.leecq.cn/p/docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="Docker网络详解"><meta property='og:description' content="Docker系列文章"><meta property='og:url' content='https://blog-g.leecq.cn/p/docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3/'><meta property='og:site_name' content='LeeCQ小空间'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Docker'><meta property='article:tag' content='常用命令'><meta property='article:tag' content='CLI命令'><meta property='article:published_time' content='2023-02-26T00:00:00+00:00'><meta property='article:modified_time' content='2023-02-26T00:00:00+00:00'><meta name=twitter:title content="Docker网络详解"><meta name=twitter:description content="Docker系列文章"></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_f509edb42ecc0ebd.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>LeeCQ小空间</a></h1><h2 class=site-description>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Lee-CQ/hugo-blog target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://leecq.cn target=_blank title=Home rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li><a href=/tools/><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673.0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53.0l-.563-.187a1.993 1.993.0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z" clip-rule="evenodd"/></svg>
+<span>Tools</span></a></li><li><a href=https://leecq.cn/ target=_blank><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>home</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#docker-网络类型>docker 网络类型</a><ol><li><a href=#1-bridge--网桥>1. bridge &ndash; 网桥</a></li><li><a href=#2-host--主机网络>2. host &ndash; 主机网络</a></li><li><a href=#4-container--容器附加网络>4. container &ndash; 容器附加网络</a></li><li><a href=#3-none--空网络>3. none &ndash; 空网络</a></li><li><a href=#4-macvlan--桥接网络>4. macvlan &ndash; 桥接网络</a></li></ol></li><li><a href=#容器连接到网络>容器连接到网络</a></li><li><a href=#将一个容器从指定网络中断开-disconnect>将一个容器从指定网络中断开 disconnect</a></li><li><a href=#创建一个网络>创建一个网络</a></li><li><a href=#查看指定网络的详细信息-inspect>查看指定网络的详细信息 inspect</a></li><li><a href=#列出当前docker服务的全部网路-list>列出当前Docker服务的全部网路 list</a></li><li><a href=#删除未使用的网络-prune>删除未使用的网络 prune</a></li><li><a href=#删除置顶网络-rm>删除置顶网络 rm</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E6%8A%80%E6%9C%AF/>技术</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3/>Docker网络详解</a></h2><h3 class=article-subtitle>Docker系列文章</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Feb 26, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><h1 id=docker-网络>docker 网络</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@debian:~# docker network --help
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Usage:  docker network COMMAND
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Manage networks
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Commands:
+</span></span><span class=line><span class=cl>  connect     Connect a container to a network
+</span></span><span class=line><span class=cl>  create      Create a network
+</span></span><span class=line><span class=cl>  disconnect  Disconnect a container from a network
+</span></span><span class=line><span class=cl>  inspect     Display detailed information on one or more networks
+</span></span><span class=line><span class=cl>  ls          List networks
+</span></span><span class=line><span class=cl>  prune       Remove all unused networks
+</span></span><span class=line><span class=cl>  rm          Remove one or more networks
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Run <span class=s1>&#39;docker network COMMAND --help&#39;</span> <span class=k>for</span> more information on a command.
+</span></span></code></pre></td></tr></table></div></div><h2 id=docker-网络类型>docker 网络类型</h2><h3 id=1-bridge--网桥>1. bridge &ndash; 网桥</h3><p>是一个SNET, 将会创建一个子网</p><ol><li>在此网络中的容器将会分配一个子网地址；</li><li>并通过NET端口映射访问服务；</li><li>主机网络中的其他机器无法直接访问容器中的IP地址</li></ol><h3 id=2-host--主机网络>2. host &ndash; 主机网络</h3><p>使用主机的IP地址。此网络类型智能被创建一个，特征如下：</p><ol><li>没有自己的IP地址，</li><li>所有的网络信息复用主机（使用主机的命名空间）</li><li>可以轻松与主机网络中的其他服务通信；</li><li>由于没有独立的命名空间，容器和主机之间很容易产生端口冲突。</li></ol><h3 id=4-container--容器附加网络>4. container &ndash; 容器附加网络</h3><p>相似于 <strong>host</strong> 网络，区别在于Host网络附加的是主机的IP地址，而 <strong>container</strong> 附加的是制定容器所拥有的IP地址；</p><h3 id=3-none--空网络>3. none &ndash; 空网络</h3><p>不向容器分配网络，使用此模式的network容器无法联网，也无法使用网络通信（可以使用socket文件管道通信）</p><ol><li>容器中没有IP地址，无法与其他容器和主机直接通信；</li></ol><h3 id=4-macvlan--桥接网络>4. macvlan &ndash; 桥接网络</h3><p>macvlan是另一种网桥，相当于交换网络中的交换机功能，容器会被分配一个和主机在同一个网断中的IP地址，拥有自己的IP，同样的主机网络中的其他机器也能直接轻松的直接访问到容器内部。</p><ol><li>拥有一个和主机IP在同一个网段的IP地址</li><li>主机网络中的其他机器能够轻松的链接到容器</li></ol><h2 id=容器连接到网络>容器连接到网络</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>lcq@iMac ~ % docker network connect --help
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Usage:  docker network connect <span class=o>[</span>OPTIONS<span class=o>]</span> NETWORK CONTAINER
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Connect a container to a network
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Options:
+</span></span><span class=line><span class=cl>      --alias strings           Add network-scoped <span class=nb>alias</span> <span class=k>for</span> the container
+</span></span><span class=line><span class=cl>      --driver-opt strings      driver options <span class=k>for</span> the network
+</span></span><span class=line><span class=cl>      --ip string               IPv4 address <span class=o>(</span>e.g., 172.30.100.104<span class=o>)</span>
+</span></span><span class=line><span class=cl>      --ip6 string              IPv6 address <span class=o>(</span>e.g., 2001:db8::33<span class=o>)</span>
+</span></span><span class=line><span class=cl>      --link list               Add link to another container
+</span></span><span class=line><span class=cl>      --link-local-ip strings   Add a link-local address <span class=k>for</span> the container
+</span></span></code></pre></td></tr></table></div></div><h2 id=将一个容器从指定网络中断开-disconnect>将一个容器从指定网络中断开 disconnect</h2><h2 id=创建一个网络>创建一个网络</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>lcq@LCQ-MacdeiMac ~ % docker network create --help
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Usage:  docker network create <span class=o>[</span>OPTIONS<span class=o>]</span> NETWORK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Create a network
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Options:
+</span></span><span class=line><span class=cl>      --attachable           Enable manual container attachment. 
+</span></span><span class=line><span class=cl>                             启用手动容器附件
+</span></span><span class=line><span class=cl>      --aux-address map      Auxiliary IPv4 or IPv6 addresses used by Network driver <span class=o>(</span>default map<span class=o>[])</span>. 
+</span></span><span class=line><span class=cl>                             网络驱动程序使用的辅助IPv4或IPv6地址<span class=o>(</span>默认map<span class=o>[])</span>
+</span></span><span class=line><span class=cl>      --config-from string   The network from which to copy the configuration. 
+</span></span><span class=line><span class=cl>                             要从中复制配置的网络
+</span></span><span class=line><span class=cl>      --config-only          Create a configuration only network. 
+</span></span><span class=line><span class=cl>                             创建一个只配置的网络
+</span></span><span class=line><span class=cl>  -d, --driver string        Driver to manage the Network <span class=o>(</span>default <span class=s2>&#34;bridge&#34;</span><span class=o>)</span>. 
+</span></span><span class=line><span class=cl>                             驱动程序来管理网络<span class=o>(</span>默认的“桥”<span class=o>)</span>
+</span></span><span class=line><span class=cl>      --gateway strings      IPv4 or IPv6 Gateway <span class=k>for</span> the master subnet. 
+</span></span><span class=line><span class=cl>                             IPv4或IPv6主子网的网关
+</span></span><span class=line><span class=cl>      --ingress              Create swarm routing-mesh network. 
+</span></span><span class=line><span class=cl>                             创建群集路由网状网络
+</span></span><span class=line><span class=cl>      --internal             Restrict external access to the network. 
+</span></span><span class=line><span class=cl>                             限制外部对网络的访问
+</span></span><span class=line><span class=cl>      --ip-range strings     Allocate container ip from a sub-range. 
+</span></span><span class=line><span class=cl>                             从子范围分配容器ip
+</span></span><span class=line><span class=cl>      --ipam-driver string   IP Address Management Driver <span class=o>(</span>default <span class=s2>&#34;default&#34;</span><span class=o>)</span>. 
+</span></span><span class=line><span class=cl>                             IP地址管理驱动程序<span class=o>(</span>默认为default<span class=o>)</span>
+</span></span><span class=line><span class=cl>      --ipam-opt map         Set IPAM driver specific options <span class=o>(</span>default map<span class=o>[])</span>. 
+</span></span><span class=line><span class=cl>                             设置IPAM驱动程序特定选项<span class=o>(</span>默认map<span class=o>[])</span>
+</span></span><span class=line><span class=cl>      --ipv6                 Enable IPv6 networking. 
+</span></span><span class=line><span class=cl>                             启用IPv6组网
+</span></span><span class=line><span class=cl>      --label list           Set metadata on a network. 
+</span></span><span class=line><span class=cl>                             设置网络元数据
+</span></span><span class=line><span class=cl>  -o, --opt map              Set driver specific options <span class=o>(</span>default map<span class=o>[])</span>. 
+</span></span><span class=line><span class=cl>                             设置驱动程序特定的选项<span class=o>(</span>默认map<span class=o>[])</span>
+</span></span><span class=line><span class=cl>      --scope string         Control the network<span class=err>&#39;</span>s scope. 
+</span></span><span class=line><span class=cl>                             控制网络范围
+</span></span><span class=line><span class=cl>      --subnet strings       Subnet in CIDR format that represents a network segment. 
+</span></span><span class=line><span class=cl>                             CIDR格式的子网，表示一个网段
+</span></span></code></pre></td></tr></table></div></div><ol><li>创建一个简单docker网络
+<code>docker network create &lt;name></code></li><li>创建一个macvlan网络
+<code>docker network create -d macvlan --subnet=192.168.0.0/24 --gateway=172.16.10.1 -o parent=en1 mac1</code></li></ol><h2 id=查看指定网络的详细信息-inspect>查看指定网络的详细信息 inspect</h2><p><code>docker network inspect host</code></p><h2 id=列出当前docker服务的全部网路-list>列出当前Docker服务的全部网路 list</h2><p><code>docker network list</code></p><h2 id=删除未使用的网络-prune>删除未使用的网络 prune</h2><p><code>docker network prune</code></p><h2 id=删除置顶网络-rm>删除置顶网络 rm</h2><p><code>docker network rm test-network</code></p></section><footer class=article-footer><section class=article-tags><a href=/tags/docker/>Docker</a>
+<a href=/tags/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/>常用命令</a>
+<a href=/tags/cli%E5%91%BD%E4%BB%A4/>CLI命令</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/pip-%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90/><div class=article-details><h2 class=article-title>pip 更换国内源</h2></div></a></article><article><a href=/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/><div class=article-details><h2 class=article-title>Docker常用命令详解</h2></div></a></article><article><a href=/p/docker%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/><div class=article-details><h2 class=article-title>Docker基本命令</h2></div></a></article><article><a href=/p/docker%E9%85%8D%E7%BD%AE%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F/><div class=article-details><h2 class=article-title>Docker配置镜像加速</h2></div></a></article><article><a href=/p/docker-%E5%AE%89%E8%A3%85/><div class=article-details><h2 class=article-title>Docker 安装</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=lee-cq/hugo-blog data-repo-id=R_kgDOHhaNdw data-category=Announcements data-category-id=DIC_kwDOHhaNd84CQtzr data-mapping=title data-strict=0 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=light data-lang=zh-cn data-loading crossorigin=anonymous async></script><script>function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onColorSchemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})()</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 LeeCQ小空间</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

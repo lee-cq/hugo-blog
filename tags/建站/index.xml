@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>建站 on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/%E5%BB%BA%E7%AB%99/</link><description>Recent content in 建站 on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 31 Jul 2021 00:33:55 +0800</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/%E5%BB%BA%E7%AB%99/index.xml" rel="self" type="application/rss+xml"/><item><title>video-test</title><link>https://blog-g.leecq.cn/p/video-test/</link><pubDate>Sat, 31 Jul 2021 00:33:55 +0800</pubDate><guid>https://blog-g.leecq.cn/p/video-test/</guid><description>&lt;img src="https://one.p.leecq.cn/E5Drive/imgs/1.jpg" alt="Featured image of post video-test" /&gt;&lt;h1 id="video-test"&gt;video test
+&lt;/h1&gt;&lt;p&gt;支持的 Shortcodes 详见: &lt;a class="link" href="https://docs.stack.jimmycai.com/zh/writing/shortcodes" target="_blank" rel="noopener"
+&gt;https://docs.stack.jimmycai.com/zh/writing/shortcodes&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="html-code"&gt;HTML Code
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;video&lt;/span&gt; &lt;span class="na"&gt;src&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;https://alist.leecq.cn/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;controls&lt;/span&gt; &lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;video&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/static/img/test.jpg"
+loading="lazy"
+&gt;&lt;/p&gt;
+&lt;h2 id="html-video-测试1"&gt;HTML video 测试1
+&lt;/h2&gt;&lt;video controls="controls" preload controls width=100%&gt;
+&lt;source src="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4" type="video/mp4" /&gt;
+Your browser does not support the video tag.
+&lt;/video&gt;
+&lt;h2 id="html-video-测试2"&gt;HTML video 测试2
+&lt;/h2&gt;&lt;p&gt;&lt;video src="https://alist.leecq.cn/d/onedrive/%E4%B8%AD%E5%9B%BD%E6%9C%BA%E9%95%BF1080P.mp4?sign=dc625e8ea4bb25a8" controls preload width=100% &gt; &lt;/video&gt;&lt;/p&gt;
+&lt;h2 id="shortcodes-bilibili-测试"&gt;Shortcodes bilibili 测试
+&lt;/h2&gt;
+&lt;div class="video-wrapper"&gt;
+&lt;iframe src="https://player.bilibili.com/player.html?as_wide=1&amp;amp;high_quality=1&amp;amp;page=1&amp;bvid=BV1Ht4y1p7aA"
+scrolling="no"
+frameborder="no"
+framespacing="0"
+allowfullscreen="true"
+&gt;
+&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;h2 id="shortcodes-腾讯视频"&gt;Shortcodes 腾讯视频
+&lt;/h2&gt;
+&lt;div class="video-wrapper"&gt;
+&lt;iframe src="https://v.qq.com/txp/iframe/player.html?vid=b31563j0jqw&amp;auto=0"
+scrolling="no"
+frameborder="no"
+framespacing="0"
+allowfullscreen="true"
+&gt;
+&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;h2 id="shortcodes-本地视频"&gt;Shortcodes 本地视频
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;&amp;lt;!-- just video src --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;div class="video-wrapper"&gt;
+&lt;video
+controls
+src="./video.mp4"
+&gt;
+&lt;p&gt;
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="./video.mp4"&gt;link to the video&lt;/a&gt; instead.
+&lt;/p&gt;
+&lt;/video&gt;
+&lt;/div&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;&amp;lt;!-- Other option --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;div class="video-wrapper"&gt;
+&lt;video
+controls
+src="./video.mp4"
+poster="./video-poster.png"
+autoplay
+&gt;
+&lt;p&gt;
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="./video.mp4"&gt;link to the video&lt;/a&gt; instead.
+&lt;/p&gt;
+&lt;/video&gt;
+&lt;/div&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="video-wrapper"&gt;
+&lt;video
+controls
+src="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4"
+&gt;
+&lt;p&gt;
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4"&gt;link to the video&lt;/a&gt; instead.
+&lt;/p&gt;
+&lt;/video&gt;
+&lt;/div&gt;
+&lt;h2 id=""&gt;
+&lt;/h2&gt;</description></item><item><title>Hugo无法解析md中HTML代码</title><link>https://blog-g.leecq.cn/p/hugo%E6%97%A0%E6%B3%95%E8%A7%A3%E6%9E%90md%E4%B8%ADhtml%E4%BB%A3%E7%A0%81/</link><pubDate>Sun, 20 Jun 2021 00:33:55 +0800</pubDate><guid>https://blog-g.leecq.cn/p/hugo%E6%97%A0%E6%B3%95%E8%A7%A3%E6%9E%90md%E4%B8%ADhtml%E4%BB%A3%E7%A0%81/</guid><description>&lt;h2 id="hugo-解析markdown时-无法显示其中的html语句段"&gt;Hugo 解析markdown时， 无法显示其中的HTML语句段
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;： hugo默认情况下无法正常显示markdown中内嵌的html，在生成的网页中，html代码会被&lt;code&gt;&amp;lt;!-- raw HTML omitted --&amp;gt;&lt;/code&gt;替代。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;原因&lt;/strong&gt;： 在2019年11月的hugo更新中，使用了Goldmark作为默认库，该库认为在md文档中嵌入HTML是不安全的行为；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;解决方法&lt;/strong&gt;： 在Hogo的配置文件中添加如下代码段，以屏蔽其安全机制：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;markup&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;markup&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;goldmark&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nx"&gt;markup&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;goldmark&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;renderer&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nx"&gt;unsafe&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;或者是yaml:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# 注意yaml的缩进可能不适用于你的文件&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;&lt;/span&gt;&lt;span class="nt"&gt;markup&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;goldmark&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;renderer&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;unsafe&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;： 作者：new房昭之 &lt;a class="link" href="https://www.bilibili.com/read/cv4516916" target="_blank" rel="noopener"
+&gt;https://www.bilibili.com/read/cv4516916&lt;/a&gt; 出处：bilibili&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="例子"&gt;例子
+&lt;/h3&gt;&lt;h4 id="code-向网页注入video标签"&gt;code 向网页注入video标签
+&lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;video&lt;/span&gt; &lt;span class="na"&gt;src&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;controls&lt;/span&gt; &lt;span class="na"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;100%&lt;/span&gt; &lt;span class="p"&gt;&amp;gt;&lt;/span&gt;你的浏览器不支持video标签,是时候换浏览器了&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;video&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;video src="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4" controls width=100% &gt;你的浏览器不支持video标签&lt;br/&gt;是时候换浏览器了&lt;/video&gt;&lt;/p&gt;</description></item><item><title>Hugo 快速开始</title><link>https://blog-g.leecq.cn/p/hugo-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</link><pubDate>Sat, 29 May 2021 00:33:55 +0800</pubDate><guid>https://blog-g.leecq.cn/p/hugo-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/</guid><description>&lt;img src="https://blog-g.leecq.cn/img/hugo-hone-page.png" alt="Featured image of post Hugo 快速开始" /&gt;&lt;blockquote&gt;
+&lt;h2 id="the-worlds-fastest-framework-for-building-websites"&gt;The world’s fastest framework for building websites.
+&lt;/h2&gt;&lt;/blockquote&gt;
+&lt;p&gt;Hugo是最流行的开源静态站点生成器之一。凭借其惊人的速度和灵活性，Hugo使构建网站再次变得有趣。&lt;/p&gt;
+&lt;p&gt;===&lt;/p&gt;
+&lt;h2 id="安装"&gt;安装
+&lt;/h2&gt;&lt;p&gt;​ Hugo是由Go语言开发的软件, 你可以在 &lt;a class="link" href="https://github.com/gohugoio/hugo" target="_blank" rel="noopener"
+&gt;GitHub &lt;/a&gt;或者 &lt;a class="link" href="" &gt;镜像地址&lt;/a&gt;上获取到它的源码, 自行编译; 或者在 &lt;a class="link" href="https://github.com/gohugoio/hugo/releases/" target="_blank" rel="noopener"
+&gt;Releases · gohugoio/hugo · GitHub&lt;/a&gt; 获取到预编译版本 .&lt;/p&gt;
+&lt;p&gt;​ 或者使用下面的指令一键安装&lt;/p&gt;
+&lt;h3 id="1-windows"&gt;1. Windows
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;```powershell
+# 1. 安装包管理工具 choco
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+# 2. 安装 Hugo
+choco install hugo -confirm
+# 如果你需要安转拓展的 Sass/SCSS 版本执行:
+choco install hugo-extended -confirm
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="2-mac-os"&gt;2. Mac OS
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;```shell
+# 1. 安装包管理工具 Brew
+/bin/bash -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&amp;quot;
+# 2. 安装hugo
+brew install hugo
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="3-linux"&gt;3. Linux
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;```shell
+# Debian / Armbian / Ubuntu
+apt install hugo
+# CentOS
+yum install hugo
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="快速开始"&gt;快速开始
+&lt;/h2&gt;&lt;p&gt;​ 快速的建立一个hugo构建的blog.&lt;/p&gt;
+&lt;h3 id="1-初始化--"&gt;1. **初始化: **
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;hugo new site &amp;lt;BlogName&amp;gt;&lt;/code&gt;
+执行此步骤后会在工作目录中创建一个名为 &lt;code&gt;BlogName&lt;/code&gt;的目录, 其中包含了站点的基本元素;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```sh
+&amp;lt;BlogName&amp;gt;
+| config.toml # 项目配置文件
++-+-archetypes #
+| \-- default.md
++---content # 内容, 创作的blog放在这个目录下
++---data #
++---layouts
++---static # 静态文件
+\---themes # 主题文件
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="2-添加主题"&gt;2. &lt;strong&gt;添加主题:&lt;/strong&gt;
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;&amp;gt; 推荐的主题: [Next](https://leecq.lanzoui.com/ijqbUpki8vc )
+你可以查看[themes.gohugo.io](themes.gohugo.io)上的主题列表。或者在社区中搜索你喜欢的主题样式.
+把主题下载下来后添加到项目的`themes`目录
+最后修改项目目录下的 `config.toml` 使其`theme=&amp;lt;你下载的主题名字&amp;gt;`
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="3-添加内容-"&gt;3. **添加内容: **
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;hugo new posts/my-first-post.md&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; 注意: 他需要当前工作目录是你的项目目录, 否则会报错. 找不到config.toml
+执行此步骤会在`content/` 下创建 `posts/my-first-post.md` 文件作为一篇文章.
+使用`MarkDown`标记语法构建.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="4-编辑和修改你的文章"&gt;4. &lt;strong&gt;编辑和修改你的文章&lt;/strong&gt;
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;如果你想编辑新创建的内容文件，它会像这样开始:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;title: &amp;#34;My First Post&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;date: 20121-05-29T08:47:11+08:00
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;draft: true
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gh"&gt;# 草稿不会被部署;一旦你完成了一篇文章，更新文章标题，写上draft: false
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="5-启动hugo服务器-"&gt;5. **启动Hugo服务器 **
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;`hugo server -D`
+现在，启动Hugo服务器并启用草稿:
+新网站一般会被部署在 `http://localhost:1313/`。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="6-自定义主题"&gt;6. 自定义主题
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;打开并编辑`config.toml`文件.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-toml" data-lang="toml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;baseURL&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;https://example.org/&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;languageCode&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;en-us&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;title&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;My New Hugo Site&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nx"&gt;theme&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ananke&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;pre&gt;&lt;code&gt;用一自己的东西替换上面的标题。
+另外，如果您已经准备好了一个域名，那么设置baseURL。注意，运行本地开发服务器时不需要这个值。
+&amp;gt; 提示:
+&amp;gt;
+&amp;gt; ​ 当Hugo服务器运行时，对站点配置或站点中的任何其他文件进行更改，您将立即在浏览器中看到更改，但您可能需要清空缓存。
+*有关特定于主题的配置选项，请参阅[主题站点](https://github.com/theNewDynamic/gohugo-theme-ananke)。*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="7-构建静态页面"&gt;7. &lt;strong&gt;构建静态页面 &lt;code&gt;hugo -D&lt;/code&gt;&lt;/strong&gt;
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;默认情况下输出将在`./public/ `目录下.
+你可以使用 `-d / --destination `标记来显示的指定输出位置.
+&lt;/code&gt;&lt;/pre&gt;</description></item><item><title>终于有了一个属于自己的网站</title><link>https://blog-g.leecq.cn/p/%E7%BB%88%E4%BA%8E%E6%9C%89%E4%BA%86%E4%B8%80%E4%B8%AA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E7%BD%91%E7%AB%99/</link><pubDate>Sun, 25 Aug 2019 21:00:57 +0800</pubDate><guid>https://blog-g.leecq.cn/p/%E7%BB%88%E4%BA%8E%E6%9C%89%E4%BA%86%E4%B8%80%E4%B8%AA%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E7%BD%91%E7%AB%99/</guid><description>&lt;h1 id="终于有了一个属于自己的网站"&gt;终于有了一个属于自己的网站
+&lt;/h1&gt;&lt;h2 id="网站建立的过程"&gt;网站建立的过程
+&lt;/h2&gt;&lt;h4 id="1域名申请"&gt;1、域名申请
+&lt;/h4&gt;&lt;p&gt;在阿里云(&lt;a class="link" href="http://aliyun.com/" target="_blank" rel="noopener"
+&gt;aliyun.com&lt;/a&gt;)申请了自己的域名(&lt;code&gt;leech.xyz&lt;/code&gt;)一年，花了6元RMB。&lt;/p&gt;
+&lt;h4 id="2空间云主机的申请"&gt;2、空间（云主机）的申请
+&lt;/h4&gt;&lt;p&gt;在强人网络（https://www.qiangren.net/）购买了免费的云空间，主机位于加拿大，延迟一般。&lt;/p&gt;
+&lt;h4 id="4平台上传"&gt;4、平台上传
+&lt;/h4&gt;&lt;p&gt;将准备好的wordpress平台上传到空间。并解压到&lt;code&gt;/根目录&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id="5wordpress初始化"&gt;5、Wordpress初始化
+&lt;/h4&gt;&lt;p&gt;配置数据库（参数在空间提供商给的邮件中）。&lt;/p&gt;
+&lt;h4 id="6调试"&gt;6、调试
+&lt;/h4&gt;&lt;p&gt;修改主题、配置用户等。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;感谢：&lt;a class="link" href="https://cangshui.net/" target="_blank" rel="noopener"
+&gt;苍水酱&lt;/a&gt;告诉我免费的空间提供商。&lt;/p&gt;
+&lt;p&gt;腾讯课堂：周红川老师的&lt;a class="link" href="https://ke.qq.com/mobilev2/courseDetail.html?_bid=167&amp;amp;_wv=3&amp;amp;course_id=131185&amp;amp;from=iosapp#from=iosapp" target="_blank" rel="noopener"
+&gt;30min学会网站搭建课程&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;</description></item></channel></rss>
