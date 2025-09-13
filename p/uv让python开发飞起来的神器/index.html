@@ -1,0 +1,242 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="比pip快10-100倍！安装依赖从泡咖啡时间缩短到眨眼功夫; 再也不用在pip、pipenv、poetry之间纠结了; "><title>UV：让Python开发飞起来的神器</title><link rel=canonical href=https://blog-g.leecq.cn/p/uv%E8%AE%A9python%E5%BC%80%E5%8F%91%E9%A3%9E%E8%B5%B7%E6%9D%A5%E7%9A%84%E7%A5%9E%E5%99%A8/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="UV：让Python开发飞起来的神器"><meta property='og:description' content="比pip快10-100倍！安装依赖从泡咖啡时间缩短到眨眼功夫; 再也不用在pip、pipenv、poetry之间纠结了; "><meta property='og:url' content='https://blog-g.leecq.cn/p/uv%E8%AE%A9python%E5%BC%80%E5%8F%91%E9%A3%9E%E8%B5%B7%E6%9D%A5%E7%9A%84%E7%A5%9E%E5%99%A8/'><meta property='og:site_name' content='LeeCQ小空间'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Python'><meta property='article:tag' content='包管理'><meta property='article:tag' content='实用工具'><meta property='article:published_time' content='2025-09-04T00:00:00+00:00'><meta property='article:modified_time' content='2025-09-04T00:00:00+00:00'><meta name=twitter:title content="UV：让Python开发飞起来的神器"><meta name=twitter:description content="比pip快10-100倍！安装依赖从泡咖啡时间缩短到眨眼功夫; 再也不用在pip、pipenv、poetry之间纠结了; "></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_f509edb42ecc0ebd.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>LeeCQ小空间</a></h1><h2 class=site-description>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Lee-CQ/hugo-blog target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://leecq.cn target=_blank title=Home rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li><a href=/tools/><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673.0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53.0l-.563-.187a1.993 1.993.0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z" clip-rule="evenodd"/></svg>
+<span>Tools</span></a></li><li><a href=https://leecq.cn/ target=_blank><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>home</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#-为什么每个python开发者都在疯狂安利uv>🔥 为什么每个Python开发者都在疯狂安利UV？</a></li><li><a href=#-上手指南>📖 上手指南</a><ol><li><a href=#step-1一键安装>Step 1️⃣：一键安装</a></li><li><a href=#step-2创建项目3秒搞定>Step 2️⃣：创建项目（3秒搞定！）</a></li><li><a href=#step-3管理依赖比点外卖还简单>Step 3️⃣：管理依赖（比点外卖还简单！）</a></li></ol></li><li><a href=#-日常使用技巧大公开>🎪 日常使用技巧大公开</a><ol><li><a href=#-项目管理篇>🛠️ 项目管理篇</a></li><li><a href=#-python版本管理篇>🐍 Python版本管理篇</a></li><li><a href=#-工具安装篇>🔧 工具安装篇</a></li></ol></li><li><a href=#-实战场景>🎯 实战场景</a><ol><li><a href=#-新项目快速启动>🆕 新项目快速启动</a></li><li><a href=#-团队协作>👥 团队协作</a></li></ol></li><li><a href=#-部署准备>🚢 部署准备</a></li><li><a href=#-遇到问题秒速解决>🆘 遇到问题？秒速解决！</a><ol><li><a href=#常见问题速查>常见问题速查</a></li><li><a href=#救命技巧>救命技巧</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/p/uv%E8%AE%A9python%E5%BC%80%E5%8F%91%E9%A3%9E%E8%B5%B7%E6%9D%A5%E7%9A%84%E7%A5%9E%E5%99%A8/>UV：让Python开发飞起来的神器</a></h2><h3 class=article-subtitle>比pip快10-100倍！安装依赖从泡咖啡时间缩短到眨眼功夫; 再也不用在pip、pipenv、poetry之间纠结了;</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Sep 04, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><h1 id=uv让python开发飞起来的神器>UV：让Python开发飞起来的神器！✨</h1><h2 id=-为什么每个python开发者都在疯狂安利uv>🔥 为什么每个Python开发者都在疯狂安利UV？</h2><blockquote><p>💨 速度快到你怀疑人生！</p></blockquote><ul><li>比pip快10-100倍！安装依赖从泡咖啡时间缩短到眨眼功夫</li><li>实测UV约比pip快至少10倍以上，复杂项目提升更明显⚡️</li><li>告别漫长等待，开发效率瞬间起飞！</li></ul><blockquote><p>一个工具搞定所有事情！
+再也不用在pip、pipenv、poetry之间纠结了： 一个UV = 整个工具链！ 电脑内存和心智负担都减轻了～</p></blockquote><ul><li>✅ 包管理</li><li>✅ 虚拟环境</li><li>✅ 项目初始化</li><li>✅ Python版本管理</li><li>✅ 依赖锁定</li></ul><blockquote><p>🛡️ 依赖冲突？不存在的！</p></blockquote><ul><li>智能依赖解析，自动避免版本冲突</li><li>锁文件确保团队环境100%一致</li><li>再也不会出现"在我电脑上能跑"的尴尬</li></ul><blockquote><p>🚀 现代化体验，告别石器时代</p></blockquote><ul><li>零配置开箱即用</li><li>命令简洁易记</li><li>错误提示超级友好</li><li>跨平台无缝使用</li></ul><h2 id=-上手指南>📖 上手指南</h2><h3 id=step-1一键安装>Step 1️⃣：一键安装</h3><blockquote><p>macOS/Linux 用户</p></blockquote><p><code>curl -LsSf https://astral.sh/uv/install.sh | sh</code></p><blockquote><p>Windows 用户</p></blockquote><p><code>powershell -c "irm https://astral.sh/uv/install.ps1 | iex"</code></p><blockquote><p>也可以用包管理器</p></blockquote><p><code>brew install uv </code># macOS<br><code>scoop install uv</code> # Windows</p><h3 id=step-2创建项目3秒搞定>Step 2️⃣：创建项目（3秒搞定！）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 初始化新项目</span>
+</span></span><span class=line><span class=cl>uv init my-awesome-project
+</span></span><span class=line><span class=cl><span class=nb>cd</span> my-awesome-project
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 自动生成标准项目结构 📁</span>
+</span></span><span class=line><span class=cl><span class=c1># ├── README.md</span>
+</span></span><span class=line><span class=cl><span class=c1># ├── pyproject.toml  </span>
+</span></span><span class=line><span class=cl><span class=c1># └── src/my_awesome_project/</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=step-3管理依赖比点外卖还简单>Step 3️⃣：管理依赖（比点外卖还简单！）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 添加常用包</span>
+</span></span><span class=line><span class=cl>uv add requests pandas numpy matplotlib
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 添加开发工具</span>
+</span></span><span class=line><span class=cl>uv add pytest black ruff --dev
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 一键安装所有依赖</span>
+</span></span><span class=line><span class=cl>uv sync
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 运行代码（自动激活环境）</span>
+</span></span><span class=line><span class=cl>uv run python main.py
+</span></span></code></pre></td></tr></table></div></div><h2 id=-日常使用技巧大公开>🎪 日常使用技巧大公开</h2><h3 id=-项目管理篇>🛠️ 项目管理篇</h3><blockquote><p>快速添加依赖</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 基础用法</span>
+</span></span><span class=line><span class=cl>uv add requests          <span class=c1># 添加最新版本</span>
+</span></span><span class=line><span class=cl>uv add <span class=s2>&#34;django&gt;=4.0&#34;</span>     <span class=c1># 指定版本范围</span>
+</span></span><span class=line><span class=cl>uv add pytest --dev     <span class=c1># 开发依赖</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 高级用法</span>
+</span></span><span class=line><span class=cl>uv add jupyter --group notebook    <span class=c1># 分组管理</span>
+</span></span><span class=line><span class=cl>uv add mysql-connector-python --optional database  <span class=c1># 可选依赖</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>环境同步</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 完整同步（包括开发依赖）</span>
+</span></span><span class=line><span class=cl>uv sync
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 只要生产依赖</span>
+</span></span><span class=line><span class=cl>uv sync --no-dev
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 同步特定组</span>
+</span></span><span class=line><span class=cl>uv sync --group docs --group <span class=nb>test</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=-python版本管理篇>🐍 Python版本管理篇</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 查看可用版本</span>
+</span></span><span class=line><span class=cl>uv python list
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装多个Python版本</span>
+</span></span><span class=line><span class=cl>uv python install 3.10 3.11 3.12
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 为项目指定Python版本</span>
+</span></span><span class=line><span class=cl>uv python pin 3.11
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 用不同版本测试</span>
+</span></span><span class=line><span class=cl>uv run --python 3.10 pytest
+</span></span><span class=line><span class=cl>uv run --python 3.12 pytest
+</span></span></code></pre></td></tr></table></div></div><h3 id=-工具安装篇>🔧 工具安装篇</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 安装全局工具</span>
+</span></span><span class=line><span class=cl>uv tool install black ruff jupyter
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 直接运行工具（无需安装）</span>
+</span></span><span class=line><span class=cl>uv tool run black .
+</span></span><span class=line><span class=cl>uv tool run ruff check
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 管理已安装工具</span>
+</span></span><span class=line><span class=cl>uv tool list
+</span></span><span class=line><span class=cl>uv tool upgrade black
+</span></span></code></pre></td></tr></table></div></div><h2 id=-实战场景>🎯 实战场景</h2><h3 id=-新项目快速启动>🆕 新项目快速启动</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 1. 创建项目</span>
+</span></span><span class=line><span class=cl>uv init web-scraper
+</span></span><span class=line><span class=cl><span class=nb>cd</span> web-scraper
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. 添加依赖</span>
+</span></span><span class=line><span class=cl>uv add requests beautifulsoup4 pandas
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 3. 添加开发工具</span>
+</span></span><span class=line><span class=cl>uv add pytest black ruff --dev
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 4. 开始编码</span>
+</span></span><span class=line><span class=cl>uv run python src/web_scraper/main.py
+</span></span></code></pre></td></tr></table></div></div><h3 id=-团队协作>👥 团队协作</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 队友拉取代码后一键安装</span>
+</span></span><span class=line><span class=cl>git clone project-repo
+</span></span><span class=line><span class=cl><span class=nb>cd</span> project-repo
+</span></span><span class=line><span class=cl>uv sync  <span class=c1># 根据uv.lock完全复现环境</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 更新依赖后通知队友</span>
+</span></span><span class=line><span class=cl>uv add new-package
+</span></span><span class=line><span class=cl>git add uv.lock pyproject.toml
+</span></span><span class=line><span class=cl>git commit -m <span class=s2>&#34;Add new-package dependency&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=-部署准备>🚢 部署准备</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 生成requirements.txt给Docker用</span>
+</span></span><span class=line><span class=cl>uv <span class=nb>export</span> --format requirements-txt &gt; requirements.txt
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 构建发布包</span>
+</span></span><span class=line><span class=cl>uv build
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 发布到PyPI</span>
+</span></span><span class=line><span class=cl>uv publish
+</span></span></code></pre></td></tr></table></div></div><h2 id=-遇到问题秒速解决>🆘 遇到问题？秒速解决！</h2><h3 id=常见问题速查>常见问题速查</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 🔧 清理缓存</span>
+</span></span><span class=line><span class=cl>uv cache clean
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 🔄 重建环境</span>
+</span></span><span class=line><span class=cl>rm -rf .venv <span class=o>&amp;&amp;</span> uv sync
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 🔍 查看依赖树</span>
+</span></span><span class=line><span class=cl>uv tree
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 🐛 详细日志调试</span>
+</span></span><span class=line><span class=cl>uv sync --verbose
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ✅ 检查配置</span>
+</span></span><span class=line><span class=cl>uv --version
+</span></span></code></pre></td></tr></table></div></div><h3 id=救命技巧>救命技巧</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 依赖冲突解决</span>
+</span></span><span class=line><span class=cl>uv lock --resolution lowest-direct
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 验证环境一致性</span>
+</span></span><span class=line><span class=cl>uv lock --check
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 强制重新解析</span>
+</span></span><span class=line><span class=cl>uv lock --upgrade
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/python/>Python</a>
+<a href=/tags/%E5%8C%85%E7%AE%A1%E7%90%86/>包管理</a>
+<a href=/tags/%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/>实用工具</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/%E5%BF%AB%E6%8D%B7%E7%BF%BB%E8%AF%91%E8%84%9A%E6%9C%AC/><div class=article-details><h2 class=article-title>快捷翻译脚本</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=lee-cq/hugo-blog data-repo-id=R_kgDOHhaNdw data-category=Announcements data-category-id=DIC_kwDOHhaNd84CQtzr data-mapping=title data-strict=0 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=light data-lang=en data-loading crossorigin=anonymous async></script><script>function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onColorSchemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})()</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 LeeCQ小空间</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.31.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

@@ -1,0 +1,293 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Docker系列文章 - 基本命令集"><title>Docker基本命令</title><link rel=canonical href=https://blog-g.leecq.cn/p/docker%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="Docker基本命令"><meta property='og:description' content="Docker系列文章 - 基本命令集"><meta property='og:url' content='https://blog-g.leecq.cn/p/docker%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/'><meta property='og:site_name' content='LeeCQ小空间'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Docker'><meta property='article:tag' content='--help'><meta property='article:tag' content='-h'><meta property='article:published_time' content='2021-06-22T00:00:00+00:00'><meta property='article:modified_time' content='2021-06-22T00:00:00+00:00'><meta name=twitter:title content="Docker基本命令"><meta name=twitter:description content="Docker系列文章 - 基本命令集"></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_f509edb42ecc0ebd.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>LeeCQ小空间</a></h1><h2 class=site-description>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Lee-CQ/hugo-blog target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://leecq.cn target=_blank title=Home rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li><a href=/tools/><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673.0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53.0l-.563-.187a1.993 1.993.0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z" clip-rule="evenodd"/></svg>
+<span>Tools</span></a></li><li><a href=https://leecq.cn/ target=_blank><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>home</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#docker-全局选项---options>Docker 全局选项 - OPTIONS</a></li><li><a href=#docker管理指令>Docker管理指令</a></li><li><a href=#docker普通指令>Docker普通指令</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E6%8A%80%E6%9C%AF/>技术</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/docker%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/>Docker基本命令</a></h2><h3 class=article-subtitle>Docker系列文章 - 基本命令集</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jun 22, 2021</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><h1 id=docker基本命令>Docker基本命令</h1><blockquote><p>详细信息参见： <a class=link href=https://docs.docker.com/engine/reference/commandline/cli/ target=_blank rel=noopener>Use the Docker command line | Docker Documentation</a></p></blockquote><h2 id=docker-全局选项---options>Docker 全局选项 - OPTIONS</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tex data-lang=tex><span class=line><span class=cl>Usage:  docker [OPTIONS] COMMAND
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>A self-sufficient runtime for containers
+</span></span><span class=line><span class=cl>容器自给自足的运行时
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Options:
+</span></span><span class=line><span class=cl>      --config string      Location of client config files (default &#34;/root/.docker&#34;)
+</span></span><span class=line><span class=cl>                           客户端配置文件的位置(默认“/root/.docker”)
+</span></span><span class=line><span class=cl>  -c, --context string     Name of the context to use to connect to the daemon 
+</span></span><span class=line><span class=cl>                           (overrides DOCKER<span class=nb>_</span>HOST env var and default context set with 
+</span></span><span class=line><span class=cl>                           &#34;docker context use&#34;)
+</span></span><span class=line><span class=cl>                           用于连接守护进程的上下文的名称
+</span></span><span class=line><span class=cl>                           (用&#34;docker context use&#34;重写DOCKER<span class=nb>_</span>HOST环境变量的值)
+</span></span><span class=line><span class=cl>  
+</span></span><span class=line><span class=cl>  -D, --debug              Enable debug mode
+</span></span><span class=line><span class=cl>                            启用debug模式
+</span></span><span class=line><span class=cl>  -H, --host list          Daemon socket(s) to connect to
+</span></span><span class=line><span class=cl>                           需要连接的守护socket
+</span></span><span class=line><span class=cl>                              
+</span></span><span class=line><span class=cl>  -l, --log-level string   Set the logging level 
+</span></span><span class=line><span class=cl>                           (&#34;debug&#34;|&#34;info&#34;|&#34;warn&#34;|&#34;error&#34;|&#34;fatal&#34;) (default &#34;info&#34;)
+</span></span><span class=line><span class=cl>                          设置日志级别(默认INFO)
+</span></span><span class=line><span class=cl>                              
+</span></span><span class=line><span class=cl>      --tls                Use TLS; implied by --tlsverify
+</span></span><span class=line><span class=cl>                              使用TLS；
+</span></span><span class=line><span class=cl>      --tlscacert string   Trust certs signed only by this CA 
+</span></span><span class=line><span class=cl>                            (default &#34;/root/.docker/ca.pem&#34;)
+</span></span><span class=line><span class=cl>                            仅信任由此CA签署的证书
+</span></span><span class=line><span class=cl>                              
+</span></span><span class=line><span class=cl>      --tlscert string     Path to TLS certificate file (default &#34;/root/.docker/cert.pem&#34;)
+</span></span><span class=line><span class=cl>                          TLS证书文件路径
+</span></span><span class=line><span class=cl>                              
+</span></span><span class=line><span class=cl>      --tlskey string      Path to TLS key file (default &#34;/root/.docker/key.pem&#34;)
+</span></span><span class=line><span class=cl>                          TLS证书key路径
+</span></span><span class=line><span class=cl>                              
+</span></span><span class=line><span class=cl>      --tlsverify          Use TLS and verify the remote
+</span></span><span class=line><span class=cl>                            使用TLS并验证远程证书
+</span></span><span class=line><span class=cl>      
+</span></span><span class=line><span class=cl>  -v, --version            Print version information and quit
+</span></span><span class=line><span class=cl>                          打印版本信息并退出
+</span></span></code></pre></td></tr></table></div></div><h2 id=docker管理指令>Docker管理指令</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tex data-lang=tex><span class=line><span class=cl>Management Commands:  管理指令
+</span></span><span class=line><span class=cl>  app*        Docker App (Docker Inc., v0.9.1-beta3)
+</span></span><span class=line><span class=cl>  builder     Manage builds
+</span></span><span class=line><span class=cl>  buildx*     Build with BuildKit (Docker Inc., v0.5.1-docker)
+</span></span><span class=line><span class=cl>  config      Manage Docker configs
+</span></span><span class=line><span class=cl>  container   Manage containers  管理容器
+</span></span><span class=line><span class=cl>  context     Manage contexts  管理上下文
+</span></span><span class=line><span class=cl>  image       Manage images
+</span></span><span class=line><span class=cl>  manifest    Manage Docker image manifests and manifest lists  》》 ？？？？ 《《
+</span></span><span class=line><span class=cl>  network     Manage networks
+</span></span><span class=line><span class=cl>  node        Manage Swarm nodes  管理集群节点
+</span></span><span class=line><span class=cl>  plugin      Manage plugins   管理插件
+</span></span><span class=line><span class=cl>  secret      Manage Docker secrets  
+</span></span><span class=line><span class=cl>  service     Manage services
+</span></span><span class=line><span class=cl>  stack       Manage Docker stacks
+</span></span><span class=line><span class=cl>  swarm       Manage Swarm
+</span></span><span class=line><span class=cl>  system      Manage Docker
+</span></span><span class=line><span class=cl>  trust       Manage trust on Docker images
+</span></span><span class=line><span class=cl>  volume      Manage volumes
+</span></span></code></pre></td></tr></table></div></div><h2 id=docker普通指令>Docker普通指令</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-tex data-lang=tex><span class=line><span class=cl>Commands:
+</span></span><span class=line><span class=cl>  attach      Attach local standard input, output, and error streams to a running container
+</span></span><span class=line><span class=cl>                将本地标准输入、输出和错误流附加到正在运行的容器中
+</span></span><span class=line><span class=cl>  build       Build an image from a Dockerfile
+</span></span><span class=line><span class=cl>                从Dockerfile构建一个镜像
+</span></span><span class=line><span class=cl>  commit      Create a new image from a container&#39;s changes
+</span></span><span class=line><span class=cl>                根据容器的更改创建一个新映像
+</span></span><span class=line><span class=cl>  cp          Copy files/folders between a container and the local filesystem
+</span></span><span class=line><span class=cl>                在容器和本地文件系统之间复制文件/文件夹
+</span></span><span class=line><span class=cl>  create      Create a new container
+</span></span><span class=line><span class=cl>                创建一个新的容器
+</span></span><span class=line><span class=cl>  diff        Inspect changes to files or directories on a container&#39;s filesystem
+</span></span><span class=line><span class=cl>                检查容器文件系统中文件或目录的更改
+</span></span><span class=line><span class=cl>  events      Get real time events from the server
+</span></span><span class=line><span class=cl>                 从服务器获取实时事件
+</span></span><span class=line><span class=cl>  exec        Run a command in a running container
+</span></span><span class=line><span class=cl>                在正在运行的容器中运行命令
+</span></span><span class=line><span class=cl>  export      Export a container&#39;s filesystem as a tar archive
+</span></span><span class=line><span class=cl>              导出容器的文件系统作为tar存档
+</span></span><span class=line><span class=cl>  history     Show the history of an image
+</span></span><span class=line><span class=cl>              展示一个镜像的历史版本
+</span></span><span class=line><span class=cl>  images      List images
+</span></span><span class=line><span class=cl>  import      Import the contents from a tarball to create a filesystem image
+</span></span><span class=line><span class=cl>              从tar存档导入内容以创建文件系统映像
+</span></span><span class=line><span class=cl>  info        Display system-wide information
+</span></span><span class=line><span class=cl>              显示全系统信息    
+</span></span><span class=line><span class=cl>  inspect     Return low-level information on Docker objects
+</span></span><span class=line><span class=cl>              返回Docker对象的低级信息
+</span></span><span class=line><span class=cl>  kill        Kill one or more running containers
+</span></span><span class=line><span class=cl>              杀死一个或多个正在运行的容器
+</span></span><span class=line><span class=cl>  load        Load an image from a tar archive or STDIN
+</span></span><span class=line><span class=cl>              从tar或者STDIN加载镜像
+</span></span><span class=line><span class=cl>  login       Log in to a Docker registry
+</span></span><span class=line><span class=cl>                登录到Docker注册表
+</span></span><span class=line><span class=cl>  logout      Log out from a Docker registry
+</span></span><span class=line><span class=cl>  logs        Fetch the logs of a container
+</span></span><span class=line><span class=cl>              收集容器的日志
+</span></span><span class=line><span class=cl>  pause       Pause all processes within one or more containers
+</span></span><span class=line><span class=cl>              暂停一个或多个容器内的所有过程
+</span></span><span class=line><span class=cl>  port        List port mappings or a specific mapping for the container
+</span></span><span class=line><span class=cl>              列出容器的端口映射或特定映射
+</span></span><span class=line><span class=cl>  ps          List containers
+</span></span><span class=line><span class=cl>  pull        Pull an image or a repository from a registry
+</span></span><span class=line><span class=cl>  push        Push an image or a repository to a registry
+</span></span><span class=line><span class=cl>              将图像或存储库推送到注册表
+</span></span><span class=line><span class=cl>  rename      Rename a container
+</span></span><span class=line><span class=cl>              重命名一个容器
+</span></span><span class=line><span class=cl>  restart     Restart one or more containers
+</span></span><span class=line><span class=cl>  rm          Remove one or more containers
+</span></span><span class=line><span class=cl>  rmi         Remove one or more images
+</span></span><span class=line><span class=cl>  run         Run a command in a new container
+</span></span><span class=line><span class=cl>  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+</span></span><span class=line><span class=cl>              将一个或多个镜像保存到tar存档(默认情况下流至STDOUT)
+</span></span><span class=line><span class=cl>  search      Search the Docker Hub for images
+</span></span><span class=line><span class=cl>  start       Start one or more stopped containers
+</span></span><span class=line><span class=cl>              启动一个或多个停止的容器
+</span></span><span class=line><span class=cl>  stats       Display a live stream of container(s) resource usage statistics
+</span></span><span class=line><span class=cl>  stop        Stop one or more running containers
+</span></span><span class=line><span class=cl>  tag         Create a tag TARGET<span class=nb>_</span>IMAGE that refers to SOURCE<span class=nb>_</span>IMAGE
+</span></span><span class=line><span class=cl>              创建一个引用SOURCE<span class=nb>_</span>IMAGE的标记TARGET<span class=nb>_</span>IMAGE
+</span></span><span class=line><span class=cl>  top         Display the running processes of a container
+</span></span><span class=line><span class=cl>              显示容器的运行过程
+</span></span><span class=line><span class=cl>  unpause     Unpause all processes within one or more containers
+</span></span><span class=line><span class=cl>              取消暂停一个或多个容器内的所有进程
+</span></span><span class=line><span class=cl>  update      Update configuration of one or more containers
+</span></span><span class=line><span class=cl>              更新一个或多个容器的配置
+</span></span><span class=line><span class=cl>  version     Show the Docker version information
+</span></span><span class=line><span class=cl>              显示Docker版本信息
+</span></span><span class=line><span class=cl>  wait        Block until one or more containers stop, then print their exit codes
+</span></span><span class=line><span class=cl>              阻塞直到一个或多个容器停止，然后打印它们的退出代码
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Run &#39;docker COMMAND --help&#39; for more information on a command.
+</span></span><span class=line><span class=cl>运行“docker COMMAND --help”获得更多关于命令的信息。
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>To get more help with docker, check out our guides at https://docs.docker.com/go/guides/
+</span></span><span class=line><span class=cl>为了得到更多的帮助码头，看看我们的指南在https://docs.docker.com/go/guides/
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/docker/>Docker</a>
+<a href=/tags/--help/>--Help</a>
+<a href=/tags/-h/>-H</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3/><div class=article-details><h2 class=article-title>Docker网络详解</h2></div></a></article><article><a href=/p/pip-%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90/><div class=article-details><h2 class=article-title>pip 更换国内源</h2></div></a></article><article><a href=/p/docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/><div class=article-details><h2 class=article-title>Docker常用命令详解</h2></div></a></article><article><a href=/p/docker%E9%85%8D%E7%BD%AE%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F/><div class=article-details><h2 class=article-title>Docker配置镜像加速</h2></div></a></article><article><a href=/p/docker-%E5%AE%89%E8%A3%85/><div class=article-details><h2 class=article-title>Docker 安装</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=lee-cq/hugo-blog data-repo-id=R_kgDOHhaNdw data-category=Announcements data-category-id=DIC_kwDOHhaNd84CQtzr data-mapping=title data-strict=0 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=light data-lang=en data-loading crossorigin=anonymous async></script><script>function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onColorSchemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})()</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 LeeCQ小空间</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.31.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

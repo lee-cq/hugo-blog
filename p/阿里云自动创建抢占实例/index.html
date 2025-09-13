@@ -1,0 +1,241 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Aliyun快速创建ECS实例 - Clash 设置合适的安全组 在控制台中设置安全组并记录组ID：开放22, 80, 443, 3389端口。\n编写启动脚本 克隆项目，或从OSS下载启动文件, 。 从蓝奏云上下载数据，并部署\n"><title>阿里云自动创建抢占实例</title><link rel=canonical href=https://blog-g.leecq.cn/p/%E9%98%BF%E9%87%8C%E4%BA%91%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA%E6%8A%A2%E5%8D%A0%E5%AE%9E%E4%BE%8B/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="阿里云自动创建抢占实例"><meta property='og:description' content="Aliyun快速创建ECS实例 - Clash 设置合适的安全组 在控制台中设置安全组并记录组ID：开放22, 80, 443, 3389端口。\n编写启动脚本 克隆项目，或从OSS下载启动文件, 。 从蓝奏云上下载数据，并部署\n"><meta property='og:url' content='https://blog-g.leecq.cn/p/%E9%98%BF%E9%87%8C%E4%BA%91%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA%E6%8A%A2%E5%8D%A0%E5%AE%9E%E4%BE%8B/'><meta property='og:site_name' content='LeeCQ小空间'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='运维'><meta property='article:tag' content='aliyun'><meta property='article:tag' content='自动化'><meta property='article:published_time' content='2025-02-15T17:24:41+08:00'><meta property='article:modified_time' content='2025-02-15T17:24:41+08:00'><meta name=twitter:title content="阿里云自动创建抢占实例"><meta name=twitter:description content="Aliyun快速创建ECS实例 - Clash 设置合适的安全组 在控制台中设置安全组并记录组ID：开放22, 80, 443, 3389端口。\n编写启动脚本 克隆项目，或从OSS下载启动文件, 。 从蓝奏云上下载数据，并部署\n"></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_f509edb42ecc0ebd.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>LeeCQ小空间</a></h1><h2 class=site-description>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Lee-CQ/hugo-blog target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://leecq.cn target=_blank title=Home rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li><a href=/tools/><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673.0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53.0l-.563-.187a1.993 1.993.0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z" clip-rule="evenodd"/></svg>
+<span>Tools</span></a></li><li><a href=https://leecq.cn/ target=_blank><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>home</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#完整脚本>完整脚本</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/p/%E9%98%BF%E9%87%8C%E4%BA%91%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA%E6%8A%A2%E5%8D%A0%E5%AE%9E%E4%BE%8B/>阿里云自动创建抢占实例</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Feb 15, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><h1 id=aliyun快速创建ecs实例---clash>Aliyun快速创建ECS实例 - Clash</h1><ol><li><p>设置合适的安全组
+在控制台中设置安全组并记录组ID：开放22, 80, 443, 3389端口。</p></li><li><p>编写启动脚本
+克隆项目，或从OSS下载启动文件, 。
+从蓝奏云上下载数据，并部署</p></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>自定义
+</span></span></code></pre></td></tr></table></div></div><ol start=3><li>运行实例
+使用模板或者使用自定义参数。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;RegionId&#34;</span><span class=p>:</span> <span class=s2>&#34;cn-shenzhen&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>区域</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;InstanceType&#34;</span><span class=p>:</span> <span class=s2>&#34;ecs.e-c1m1.large&#34;</span><span class=p>,</span>   
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;ImageId&#34;</span><span class=p>:</span> <span class=s2>&#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;SystemDisk.Size&#34;</span><span class=p>:</span> <span class=mi>20</span><span class=p>,</span>  <span class=err>#</span> <span class=err>系统盘大小</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;SystemDisk.Category&#34;</span><span class=p>:</span> <span class=s2>&#34;cloud_essd_entry&#34;</span><span class=p>,</span> <span class=err>#</span> <span class=err>系统盘类型</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;SecurityEnhancementStrategy&#34;</span><span class=p>:</span> <span class=s2>&#34;Active&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>安全加固Active：启用安全加固，Deactive：不启用安全加固</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;InstanceChargeType&#34;</span><span class=p>:</span> <span class=s2>&#34;PostPaid&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>实例计费类型</span> <span class=err>-</span> <span class=err>后付费</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;SpotStrategy&#34;</span><span class=p>:</span> <span class=s2>&#34;SpotAsPriceGo&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>按量付费实例的竞价策略。SpotAsPriceGo</span> <span class=err>-</span> <span class=err>系统自动出价，跟随当前市场实际价格</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;SpotInterruptionBehavior&#34;</span><span class=p>:</span> <span class=s2>&#34;Terminate&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>抢占实例中断模式。</span> <span class=err>Terminate：直接释放实例。</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;InternetChargeType&#34;</span><span class=p>:</span> <span class=s2>&#34;PayByTraffic&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>网络计费类型，按流量</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;AutoRenew&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>  <span class=err>#</span> <span class=err>自动续费</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;InternetMaxBandwidthIn&#34;</span><span class=p>:</span> <span class=mi>100</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;InternetMaxBandwidthOut&#34;</span><span class=p>:</span> <span class=mi>10</span><span class=p>,</span>  <span class=err>#</span> <span class=err>出带宽大于0</span> <span class=err>自动分配公网IP</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;VSwitchId&#34;</span><span class=p>:</span> <span class=s2>&#34;vsw-wz9q3hnkysu1p4sc*****&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>绑定交换机</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;SecurityGroupId&#34;</span><span class=p>:</span> <span class=s2>&#34;sg-wz9etfd2xhsxa1p*****&#34;</span><span class=p>,</span> <span class=err>#</span> <span class=err>绑定安全组</span>
+</span></span><span class=line><span class=cl>  
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;ResourceGroupId&#34;</span><span class=p>:</span> <span class=s2>&#34;rg-acfmvpl4ra*****&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>资源组</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;InstanceName&#34;</span><span class=p>:</span> <span class=s2>&#34;api-test&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>实例名字</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;HostName&#34;</span><span class=p>:</span> <span class=s2>&#34;api-test&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>主机名</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;Password&#34;</span><span class=p>:</span> <span class=s2>&#34;****&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>密码</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;UserData&#34;</span><span class=p>:</span> <span class=s2>&#34;Iy9iaW4vYmFzaAplY2hvICJzdGFydCBFQ1MiID4gdGVzdC50eHQ=&#34;</span><span class=p>,</span>  <span class=err>#</span> <span class=err>用户脚本</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;DryRun&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>  <span class=err>#</span> <span class=err>测试运行</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Aliyun CLI 参数</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>user_data</span><span class=o>=</span><span class=s2>&#34;Iy9iaW4vYmFzaAplY2hvICJzdGFydCBFQ1MiID4gdGVzdC50eHQ&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>ecs_password</span><span class=o>=</span><span class=s2>&#34;*******&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>relase_time</span><span class=o>=</span><span class=k>$(</span>date --date<span class=o>=</span><span class=s2>&#34;@</span><span class=k>$(</span>date -d <span class=s1>&#39;+4 hours&#39;</span> +%s<span class=k>)</span><span class=s2>&#34;</span> +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span> -u<span class=k>)</span>  <span class=c1># 获取4小时后的UTC时间</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查询价格</span>
+</span></span><span class=line><span class=cl>aliyun ecs DescribePrice --force --RegionId cn-shenzhen --ImageId <span class=s2>&#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InstanceType <span class=s2>&#34;ecs.e-c1m1.large&#34;</span> --SystemDisk.Category cloud_essd_entry --SystemDisk.Size <span class=m>20</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InternetChargeType PayByTraffic --InternetMaxBandwidthOut <span class=m>10</span> --InternetMaxBandwidthIn <span class=m>100</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --HostName <span class=s2>&#34;api-test&#34;</span> --Password <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ecs_password</span><span class=si>}</span><span class=s2>&#34;</span>  --DryRun <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 创建实例</span>
+</span></span><span class=line><span class=cl><span class=nv>ecs_password</span><span class=o>=</span><span class=s2>&#34;*******&#34;</span>
+</span></span><span class=line><span class=cl>aliyun ecs RunInstances --RegionId cn-shenzhen --ImageId <span class=s2>&#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InstanceType <span class=s2>&#34;ecs.e-c1m1.large&#34;</span> --SystemDisk.Category cloud_essd_entry --SystemDisk.Size <span class=m>20</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InternetChargeType PayByTraffic --InternetMaxBandwidthOut <span class=m>10</span> --InternetMaxBandwidthIn <span class=m>100</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --HostName <span class=s2>&#34;api-test&#34;</span> --Password <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ecs_password</span><span class=si>}</span><span class=s2>&#34;</span>  --UserData <span class=si>${</span><span class=nv>user_data</span><span class=si>}</span> --AutoReleaseTime <span class=si>${</span><span class=nv>relase_time</span><span class=si>}</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --DryRun <span class=nb>true</span>
+</span></span></code></pre></td></tr></table></div></div><p>返回结果：{
+&ldquo;InstanceIdSets&rdquo;: {
+&ldquo;InstanceIdSet&rdquo;: [
+&ldquo;i-wz91g5uy6dgm8gas****&rdquo;
+]
+},
+&ldquo;RequestId&rdquo;: &ldquo;C449D45D-CC95-5BDD-9438-9DD139679A48&rdquo;
+}</p><p>得到实例ID： <code>jq -r '.InstanceIdSets.InstanceIdSet[0]</code></p><ol start=4><li><p>分配IP地址
+使用StartInstance创建实例时，需要手动调用分配公网IP API（出带宽必须大于0）；
+使用RunInstancesces创建实例时，当出带宽打于0时，自动分配IP。</p></li><li><p>查询ECS信息
+调用查询接口</p></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aliyun ecs DescribeInstanceAttribute --region cn-shenzhen --InstanceId <span class=s1>&#39;i-wz91g5uy6dgm8gas****&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>返回：{
+&ldquo;ClusterId&rdquo;: &ldquo;&rdquo;,
+&ldquo;Cpu&rdquo;: 2,
+&ldquo;CreationTime&rdquo;: &ldquo;2025-02-15T09:52:38Z&rdquo;,
+&ldquo;CreditSpecification&rdquo;: &ldquo;&rdquo;,
+&mldr;&mldr;
+&ldquo;Memory&rdquo;: 2048,
+&ldquo;OperationLocks&rdquo;: {
+&ldquo;LockReason&rdquo;: []
+},
+&ldquo;PublicIpAddress&rdquo;: {
+&ldquo;IpAddress&rdquo;: [
+&ldquo;47.119.180.220&rdquo;
+]
+},
+&ldquo;RegionId&rdquo;: &ldquo;cn-shenzhen&rdquo;,
+&mldr;&mldr;
+},
+&ldquo;ZoneId&rdquo;: &ldquo;cn-shenzhen-e&rdquo;
+}</p><p>查询公网IP地址。aliyun ecs DescribeInstanceAttribute &ndash;InstanceId &lsquo;i-wz91g5uy6dgm8gas****&rsquo; |jq .PublicIpAddress.IpAddress[0] -r</p><ol start=6><li>更新DNS到主机
+更新IP地址信息到DNSPOD。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl -X POST https://dnsapi.cn/Record.Modify --header <span class=s1>&#39;User-Agent: HostCreate/v0.1(lee-cq@qq.com)&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -d <span class=s1>&#39;login_token=${LOGIN_TOKEN}&amp;format=json&amp;domain=${DOMAIN}&amp;sub_domain=ali-host&amp;record_type=A&amp;record_line_id=10%3D0&amp;value=${pub_ip}&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Aliyun DNS</span>
+</span></span><span class=line><span class=cl>aliyun alidns AddDomainRecord --region cn-shenzhen --DomainName <span class=s1>&#39;DOMAIN&#39;</span> --RR <span class=s1>&#39;api-test&#39;</span> --Type A --Value <span class=si>${</span><span class=nv>pub_ip</span><span class=si>}</span>
+</span></span></code></pre></td></tr></table></div></div><ol start=7><li>手动释放实例</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>aliyun ecs DeleteInstance --region cn-shenzhen --InstanceId <span class=s1>&#39;i-wz91g5uy6dgm8gasp6ac&#39;</span> --Force <span class=nb>true</span> <span class=c1># 强制释放实例</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>record_id</span><span class=o>=</span><span class=k>$(</span>curl -X POST https://dnsapi.cn/Record.List --header <span class=s1>&#39;User-Agent: HostCreate/V0.1(lee-cq@qq.com)&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -d <span class=s1>&#39;login_token=${LOGIN_TOKEN}&amp;format=json&amp;domain_id=${DOMAIN}&amp;sub_domain=ali-host&#39;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.records[0].id&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 删除DNS解析</span>
+</span></span><span class=line><span class=cl>curl -X POST https://dnsapi.cn/Record.Remove --header <span class=s1>&#39;User-Agent: HostCreate/V0.1(lee-cq@qq.com)&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -d <span class=s1>&#39;login_token=${LOGIN_TOKEN}&amp;format=json&amp;domain=${DOMAIN}&amp;record_id=${record_id}&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=完整脚本>完整脚本</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>user_data</span><span class=o>=</span><span class=s2>&#34;Iy9iaW4vYmFzaAplY2hvICJzdGFydCBFQ1MiID4gdGVzdC50eHQ&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>ecs_password</span><span class=o>=</span><span class=s2>&#34;*******&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>relase_time</span><span class=o>=</span><span class=k>$(</span>date --date<span class=o>=</span><span class=s2>&#34;@</span><span class=k>$(</span>date -d <span class=s1>&#39;+4 hours&#39;</span> +%s<span class=k>)</span><span class=s2>&#34;</span> +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span> -u<span class=k>)</span>  <span class=c1># 获取4小时后的UTC时间</span>
+</span></span><span class=line><span class=cl><span class=nv>DOMAIN</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查询价格</span>
+</span></span><span class=line><span class=cl>aliyun ecs DescribePrice --force --RegionId cn-shenzhen --ImageId <span class=s2>&#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InstanceType <span class=s2>&#34;ecs.e-c1m1.large&#34;</span> --SystemDisk.Category cloud_essd_entry --SystemDisk.Size <span class=m>20</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InternetChargeType PayByTraffic --InternetMaxBandwidthOut <span class=m>10</span> --InternetMaxBandwidthIn <span class=m>100</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --HostName <span class=s2>&#34;api-test&#34;</span> --Password <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ecs_password</span><span class=si>}</span><span class=s2>&#34;</span>  --DryRun <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 创建实例</span>
+</span></span><span class=line><span class=cl><span class=nv>ecs_password</span><span class=o>=</span><span class=s2>&#34;*******&#34;</span>
+</span></span><span class=line><span class=cl>aliyun ecs RunInstances --RegionId cn-shenzhen --ImageId <span class=s2>&#34;ubuntu_24_04_x64_20G_alibase_20250113.vhd&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InstanceType <span class=s2>&#34;ecs.e-c1m1.large&#34;</span> --SystemDisk.Category cloud_essd_entry --SystemDisk.Size <span class=m>20</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InstanceChargeType PostPaid --SpotStrategy SpotAsPriceGo --SpotInterruptionBehavior Terminate <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --InternetChargeType PayByTraffic --InternetMaxBandwidthOut <span class=m>10</span> --InternetMaxBandwidthIn <span class=m>100</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --VSwitchId vsw-wz9q3hnkysu1p4scm**** --SecurityGroupId sg-wz9etfd2xhsxa1p**** <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --HostName <span class=s2>&#34;api-test&#34;</span> --Password <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ecs_password</span><span class=si>}</span><span class=s2>&#34;</span>  --UserData <span class=si>${</span><span class=nv>user_data</span><span class=si>}</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --AutoReleaseTime <span class=si>${</span><span class=nv>relase_time</span><span class=si>}</span> <span class=p>|</span> tee /dev/tty <span class=p>|</span>jq -r <span class=s1>&#39;.InstanceIdSets.InstanceIdSet[0]&#39;</span> &gt; ecs-instance-id
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查询公网IP地址</span>
+</span></span><span class=line><span class=cl>aliyun ecs DescribeInstanceAttribute --region cn-shenzhen --InstanceId <span class=s2>&#34;</span><span class=k>$(</span>cat ecs-instance-id<span class=k>)</span><span class=s2>&#34;</span> <span class=p>|</span> tee /dev/tty <span class=p>|</span> jq -r .PublicIpAddress.IpAddress<span class=o>[</span>0<span class=o>]</span> &gt; ecs-instanse-ip
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 将公网IP地址注册到DNSPOD</span>
+</span></span><span class=line><span class=cl>curl -X POST https://dnsapi.cn/Record.Modify --header <span class=s1>&#39;User-Agent: HostCreate/v0.1(lee-cq@qq.com)&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -d <span class=s2>&#34;login_token=</span><span class=si>${</span><span class=nv>LOGIN_TOKEN</span><span class=si>}</span><span class=s2>&amp;format=json&amp;domain=</span><span class=si>${</span><span class=nv>DOMAIN</span><span class=si>}</span><span class=s2>&amp;sub_domain=ali-host&amp;record_type=A&amp;record_line_id=10%3D0&amp;value=</span><span class=k>$(</span>cat ecs-instanse-ip<span class=k>)</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/%E8%BF%90%E7%BB%B4/>运维</a>
+<a href=/tags/aliyun/>Aliyun</a>
+<a href=/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/>自动化</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><script src=https://giscus.app/client.js data-repo=lee-cq/hugo-blog data-repo-id=R_kgDOHhaNdw data-category=Announcements data-category-id=DIC_kwDOHhaNd84CQtzr data-mapping=title data-strict=0 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=light data-lang=en data-loading crossorigin=anonymous async></script><script>function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onColorSchemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})()</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 LeeCQ小空间</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.31.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
