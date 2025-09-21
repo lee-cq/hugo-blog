@@ -19,5 +19,22 @@ categories:
 forfiles /p E:\ /s /m *.* /c "cmd /c if @fsize geq 104857600 (echo @path @fsize)" > E:\big_files.txt
 ```
 
+Excel数据大小易于阅读公式
+```
+=IF(
+  A1>=1024^3, 
+  ROUND(A1/1024^3, 2)&" GB", 
+  IF(
+    A1>=1024^2, 
+    ROUND(A1/1024^2, 2)&" MB", 
+    IF(
+      A1>=1024, 
+      ROUND(A1/1024, 2)&" KB",
+      A1&" B"
+    )
+  )
+)
+```
+
 将结果导入Excel进行排序和分析
 
