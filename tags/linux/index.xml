@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/linux/</link><description>Recent content in Linux on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 09 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux系统守护进程管理器</title><link>https://blog-g.leecq.cn/p/linux%E7%B3%BB%E7%BB%9F%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%99%A8/</link><pubDate>Mon, 09 Sep 2024 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux%E7%B3%BB%E7%BB%9F%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%99%A8/</guid><description>&lt;p&gt;systemd 是一个系统和服务管理器，它是许多现代Linux发行版（如Fedora、Red Hat Enterprise Linux、Debian、Ubuntu等）中默认使用的初始化系统。systemd 提供了一种替代传统的SysV init系统的方法，旨在提高系统的启动速度和运行效率，并且提供了更为强大的服务管理和依赖关系处理机制。&lt;/p&gt;
+&lt;h2 id="systemd的特点"&gt;systemd的特点
+&lt;/h2&gt;&lt;p&gt;并发启动：systemd 支持并行启动服务，这意味着它可以在同一时间启动多个服务，而不是像传统init系统那样顺序启动。
+依赖关系管理：它可以自动处理服务之间的依赖关系，确保当一个服务启动时，其依赖的服务也已经启动。
+Socket激活：允许服务监听套接字，当有连接请求到达时自动启动服务。
+设备挂载和挂载点激活：systemd 可以基于设备挂载状态来控制服务的启动。
+统一的日志记录：通过journald，systemd 统一了系统日志记录方式，并且提供了比传统syslog更丰富的查询和过滤功能。
+资源控制：可以对服务的资源使用（如CPU和内存）进行限制。
+服务单元文件：systemd 使用.service、.socket、.timer等单元文件来描述服务、套接字和定时任务等。&lt;/p&gt;
+&lt;h2 id="基本命令"&gt;基本命令
+&lt;/h2&gt;&lt;p&gt;一些常用的systemd命令包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;systemctl list-unit-files&lt;/code&gt;：列出所有已知的单元文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl start &amp;lt;service&amp;gt;&lt;/code&gt;：启动指定的服务。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl stop &amp;lt;service&amp;gt;&lt;/code&gt;：停止指定的服务。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl restart &amp;lt;service&amp;gt;&lt;/code&gt;：重启指定的服务。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl status &amp;lt;service&amp;gt;&lt;/code&gt;：查看指定服务的状态。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl enable &amp;lt;service&amp;gt;&lt;/code&gt;：使服务开机自启。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl disable &amp;lt;service&amp;gt;&lt;/code&gt;：禁止服务开机自启。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl daemon-reload&lt;/code&gt;：重新加载systemd配置。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;journalctl&lt;/code&gt;：查看系统日志。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="单元文件示例"&gt;单元文件示例
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-ini" data-lang="ini"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Unit]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Description&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;The Nginx HTTP Server&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;After&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;network.target&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Service]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;User&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;nginx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;group&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;nginx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/sbin/nginx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Restart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;always&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;RestartSec&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;10s&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;forking&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;PIDFile&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/run/nginx.pid&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Install]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;WantedBy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;multi-user.target&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Linux 小技巧</title><link>https://blog-g.leecq.cn/p/linux-%E5%B0%8F%E6%8A%80%E5%B7%A7/</link><pubDate>Sat, 17 Dec 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux-%E5%B0%8F%E6%8A%80%E5%B7%A7/</guid><description>&lt;h2 id="linux-修改指定进程的打开文件数限制"&gt;Linux 修改指定进程的打开文件数限制
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;prlimit --pid {pid} --nofile=65535:65535&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="查询指定pid打开的句文件柄数"&gt;查询指定PID打开的句文件柄数
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;lsof -n | awk '{print $2}' |sort |uniq -c |sort -nr |grep PID&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="查询指定pid的limit信息"&gt;查询指定PID的limit信息
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;cat /proc/$PID/limits&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="telnet-自动超时退出"&gt;Telnet 自动超时退出
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;timeout --signal=9 {timout_sec} telnet {ip} {port}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="mysql导出前100条数据"&gt;MySQL导出前100条数据
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;mysqldump -uroot -p'password' {db} --where &amp;quot;1=1 limit 100&amp;quot; &amp;gt; test.sql&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="使用python快速开启一个简单的文件服务器"&gt;使用Python快速开启一个简单的文件服务器
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;python3 -m http.server&lt;/code&gt; (v3.4+) 或 &lt;code&gt;python -m SimpleHTTPServer&lt;/code&gt; (v2.7+)&lt;/p&gt;</description></item><item><title>ip命令解析</title><link>https://blog-g.leecq.cn/p/ip%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90/</link><pubDate>Sat, 19 Nov 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/ip%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90/</guid><description>&lt;h2 id="iproute2-模块包含的子命令"&gt;iproute2 模块包含的子命令
+&lt;/h2&gt;&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/img/ip_index/1677854766519.png"
+loading="lazy"
+alt="iproute2模块包含的11个子命令介绍"
+&gt;&lt;/p&gt;</description></item><item><title>Linux创建路由网关</title><link>https://blog-g.leecq.cn/p/linux%E5%88%9B%E5%BB%BA%E8%B7%AF%E7%94%B1%E7%BD%91%E5%85%B3/</link><pubDate>Sat, 19 Nov 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux%E5%88%9B%E5%BB%BA%E8%B7%AF%E7%94%B1%E7%BD%91%E5%85%B3/</guid><description>&lt;h2 id="背景"&gt;背景
+&lt;/h2&gt;</description></item><item><title>Linux下查看Ipv6邻居的方法</title><link>https://blog-g.leecq.cn/p/linux%E4%B8%8B%E6%9F%A5%E7%9C%8Bipv6%E9%82%BB%E5%B1%85%E7%9A%84%E6%96%B9%E6%B3%95/</link><pubDate>Sat, 19 Nov 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/linux%E4%B8%8B%E6%9F%A5%E7%9C%8Bipv6%E9%82%BB%E5%B1%85%E7%9A%84%E6%96%B9%E6%B3%95/</guid><description>&lt;p&gt;使用命令 &lt;code&gt;ip -6 neigh&lt;/code&gt;&lt;/p&gt;</description></item><item><title>iptables 实现端口转发</title><link>https://blog-g.leecq.cn/p/iptables-%E5%AE%9E%E7%8E%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</link><pubDate>Thu, 17 Nov 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/iptables-%E5%AE%9E%E7%8E%B0%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</guid><description>&lt;h1 id="iptables-实现端口转发"&gt;iptables 实现端口转发
+&lt;/h1&gt;&lt;h2 id="1-确保ipv4内核流量转发功能开启"&gt;1. 确保IPv4内核流量转发功能开启
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; net.ipv4.ip_forward&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt; &amp;gt;&amp;gt; /etc/sysctl.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sysctl -p
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="2-配置iptables抓发规则"&gt;2. 配置iptables抓发规则
+&lt;/h2&gt;&lt;p&gt;流量状态：
+Inter &amp;ndash;&amp;gt; 10.0.4.14:13389 &amp;ndash;&amp;gt; 10.1.1.10:3389&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将外网访问192.168.75.5的80端口转发到192.168.75.3:8000端口。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -A PREROUTING -d 10.0.4.14 -p tcp --dport &lt;span class="m"&gt;13389&lt;/span&gt; -j DNAT --to-destination 10.1.1.10:3389
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 将192.168.75.3 8000端口将数据返回给客户端时，将源ip改为192.168.75.5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -t nat -A POSTROUTING -d 10.1.1.10 -p tcp --dport &lt;span class="m"&gt;3389&lt;/span&gt; -j SNAT --to 10.0.4.14
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="3-iptables配置仅内网可以访问脚本"&gt;3. iptables配置仅内网可以访问脚本
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -F &lt;span class="c1"&gt;# 删除全部的规则&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -X &lt;span class="c1"&gt;# 删除全部自定义的链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT &lt;span class="c1"&gt;# 允许已经建立的连接&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 添加允许的IP地址段示例&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -i lo -j ACCEPT &lt;span class="c1"&gt;# 允许lo接口的全部流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -s 192.168.0.0/16 -j ACCEPT &lt;span class="c1"&gt;# 允许192.168.0.0/16网段的入栈流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT &lt;span class="c1"&gt;# 允许10.0.0.0/8网段的入栈流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -s 172.16.0.0/12 -j ACCEPT &lt;span class="c1"&gt;# 允许172.16.0.0/12网段的入栈流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -s 100.64.0.0/12 -j ACCEPT &lt;span class="c1"&gt;# 允许100.64.0.0/12网段的入栈流量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# 添加允许端口示例&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -p tcp --dport &lt;span class="m"&gt;8000&lt;/span&gt; -j ACCEPT &lt;span class="c1"&gt;# 允许全部的IP地址访问8000端口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -A INPUT -p tcp -s 10.0.0.0/8 --dport &lt;span class="m"&gt;8000&lt;/span&gt; -j ACCEPT &lt;span class="c1"&gt;# 仅允许10.0.0/8网段访问8000端口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -P INPUT DROP &lt;span class="c1"&gt;# 默认拒绝INPUT链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -P OUTPUT ACCEPT &lt;span class="c1"&gt;# 默认允许OUTPUT链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;iptables -P FORWARD DROP &lt;span class="c1"&gt;# 默认拒绝FORWARD链&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

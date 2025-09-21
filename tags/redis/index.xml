@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/redis/</link><description>Recent content in Redis on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 13 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>Redis Shake 错误总结</title><link>https://blog-g.leecq.cn/p/redis-shake-%E9%94%99%E8%AF%AF%E6%80%BB%E7%BB%93/</link><pubDate>Mon, 13 Feb 2023 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/redis-shake-%E9%94%99%E8%AF%AF%E6%80%BB%E7%BB%93/</guid><description>&lt;p&gt;Redis-Shake 2.+ 版本&lt;/p&gt;
+&lt;h1 id="同步过程中终止"&gt;同步过程中终止
+&lt;/h1&gt;&lt;h3 id="报错"&gt;报错：
+&lt;/h3&gt;&lt;h3 id="问题原因"&gt;问题原因：
+&lt;/h3&gt;&lt;p&gt;在同步过程中会出现一些集群（副本）管理相关的操作指令，这些指令不应该跨集群同步。&lt;/p&gt;
+&lt;p&gt;这些错误目前发现主要出现在源集群有slave的情况下。&lt;/p&gt;
+&lt;h3 id="解决方案"&gt;解决方案：
+&lt;/h3&gt;&lt;p&gt;在配置文件中加入或修改 项： &lt;code&gt;filter.command.blacklist&lt;/code&gt; 中追加 &lt;code&gt;replconf&lt;/code&gt; ，用于过滤replconf 指令的同步。&lt;/p&gt;
+&lt;h1 id="重连后全量同步过成中的rdb-save-error"&gt;重连后全量同步过成中的RDB Save Error
+&lt;/h1&gt;&lt;h3 id="报错-1"&gt;报错：
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[PANIC] restore command error key:gmv2022-09-18 00:00:00690047125391hyper1092HYPERCPC err:MISCONF Redis is configured to save RDB snapshot
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="问题原因-1"&gt;问题原因
+&lt;/h3&gt;&lt;p&gt;redis save rdb 失败，具体根因未知。&lt;/p&gt;
+&lt;h3 id="解决方案-1"&gt;解决方案
+&lt;/h3&gt;&lt;p&gt;删除全部集群节点中的 rdb 和 aof 文件 并重启集群。&lt;/p&gt;</description></item></channel></rss>

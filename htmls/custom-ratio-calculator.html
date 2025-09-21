@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义比例资源计算器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#8B5CF6',
+                        neutral: '#64748B',
+                        light: '#F1F5F9',
+                        dark: '#1E293B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .input-focus {
+                @apply focus:ring-2 focus:ring-primary/50 focus:border-primary focus:outline-none;
+            }
+            .card-shadow {
+                @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
+            }
+            .section-divider {
+                @apply h-px bg-gray-200 my-6;
+            }
+            .scale-animation {
+                @apply transition-transform duration-200;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-light to-gray-200 min-h-screen flex items-center justify-center p-4 font-sans text-dark">
+    <div class="w-full max-w-2xl bg-white rounded-xl p-6 md:p-8 card-shadow">
+        <!-- 标题区域 -->
+        <div class="text-center mb-6">
+            <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-dark mb-2">资源比例计算器</h1>
+            <p class="text-neutral text-sm md:text-base" id="currentRatioDisplay">默认比例: 肉 : 木 : 煤 : 铁 = 20 : 20 : 4 : 1</p>
+        </div>
+        <!-- 比例设置区域 -->
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-4 flex items-center">
+                <i class="fa fa-sliders text-accent mr-2"></i>比例设置
+            </h2>
+            <p class="text-sm text-neutral mb-4">设置资源之间的比例关系，设置后点击"应用比例"生效</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <!-- 肉比例输入框 -->
+                <div class="space-y-1">
+                    <label for="meatRatio" class="block text-xs font-medium text-neutral">肉比例</label>
+                    <input 
+                        type="number" 
+                        id="meatRatio" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg input-focus transition-all text-sm"
+                        value="20"
+                        min="1"
+                    >
+                </div>
+                
+                <!-- 木比例输入框 -->
+                <div class="space-y-1">
+                    <label for="woodRatio" class="block text-xs font-medium text-neutral">木比例</label>
+                    <input 
+                        type="number" 
+                        id="woodRatio" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg input-focus transition-all text-sm"
+                        value="20"
+                        min="1"
+                    >
+                </div>
+                
+                <!-- 煤比例输入框 -->
+                <div class="space-y-1">
+                    <label for="coalRatio" class="block text-xs font-medium text-neutral">煤比例</label>
+                    <input 
+                        type="number" 
+                        id="coalRatio" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg input-focus transition-all text-sm"
+                        value="4"
+                        min="1"
+                    >
+                </div>
+                
+                <!-- 铁比例输入框 -->
+                <div class="space-y-1">
+                    <label for="ironRatio" class="block text-xs font-medium text-neutral">铁比例</label>
+                    <input 
+                        type="number" 
+                        id="ironRatio" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg input-focus transition-all text-sm"
+                        value="1"
+                        min="1"
+                    >
+                </div>
+            </div>
+            
+            <!-- 比例操作按钮 -->
+            <div class="flex flex-wrap gap-3">
+                <button 
+                    type="button" 
+                    id="applyRatioBtn" 
+                    class="bg-accent hover:bg-accent/90 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center"
+                >
+                    <i class="fa fa-check mr-1"></i> 应用比例
+                </button>
+                <button 
+                    type="button" 
+                    id="resetRatioBtn" 
+                    class="bg-gray-200 hover:bg-gray-300 text-neutral font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center"
+                >
+                    <i class="fa fa-refresh mr-1"></i> 恢复默认比例
+                </button>
+                <button 
+                    type="button" 
+                    id="swapRatioBtn" 
+                    class="bg-gray-200 hover:bg-gray-300 text-neutral font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center"
+                >
+                    <i class="fa fa-exchange mr-1"></i> 反转比例
+                </button>
+            </div>
+        </div>
+        
+        <!-- 资源输入区域 -->
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold mb-4 flex items-center">
+                <i class="fa fa-cubes text-primary mr-2"></i>资源数量
+            </h2>
+            <div class="space-y-4">
+                <!-- 肉输入框 -->
+                <div class="space-y-2">
+                    <label for="meat" class="block text-sm font-medium text-neutral flex items-center">
+                        <i class="fa fa-cutlery mr-2 text-primary"></i>肉
+                    </label>
+                    <input 
+                        type="number" 
+                        id="meat" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus transition-all duration-200"
+                        placeholder="输入肉的数量"
+                        step="any"
+                        min="0"
+                    >
+                </div>
+                
+                <!-- 木输入框 -->
+                <div class="space-y-2">
+                    <label for="wood" class="block text-sm font-medium text-neutral flex items-center">
+                        <i class="fa fa-tree mr-2 text-secondary"></i>木
+                    </label>
+                    <input 
+                        type="number" 
+                        id="wood" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus transition-all duration-200"
+                        placeholder="输入木的数量"
+                        step="any"
+                        min="0"
+                    >
+                </div>
+                
+                <!-- 煤输入框 -->
+                <div class="space-y-2">
+                    <label for="coal" class="block text-sm font-medium text-neutral flex items-center">
+                        <i class="fa fa-fire mr-2 text-orange-500"></i>煤
+                    </label>
+                    <input 
+                        type="number" 
+                        id="coal" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus transition-all duration-200"
+                        placeholder="输入煤的数量"
+                        step="any"
+                        min="0"
+                    >
+                </div>
+                
+                <!-- 铁输入框 -->
+                <div class="space-y-2">
+                    <label for="iron" class="block text-sm font-medium text-neutral flex items-center">
+                        <i class="fa fa-bolt mr-2 text-gray-700"></i>铁
+                    </label>
+                    <input 
+                        type="number" 
+                        id="iron" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus transition-all duration-200"
+                        placeholder="输入铁的数量"
+                        step="any"
+                        min="0"
+                    >
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+      
+        
+        <!-- 资源操作按钮 -->
+        <div class="flex gap-3 mb-4">
+            <button 
+                type="button" 
+                id="resetResourcesBtn" 
+                class="flex-1 bg-gray-200 hover:bg-gray-300 text-neutral font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+            >
+                <i class="fa fa-refresh mr-1"></i> 重置资源数量
+            </button>
+        </div>
+        
+        <!-- 提示信息 -->
+        <div class="text-center text-sm text-neutral/80 bg-light p-3 rounded-lg">
+            <p>提示: 在任意资源输入框中输入数值后，其他资源将自动按当前比例计算</p>
+        </div>
+    </div>
+
+    <!-- 错误提示模态框 -->
+    <div id="errorModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 w-full max-w-sm transform transition-all scale-animation">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <i class="fa fa-exclamation-triangle text-red-500 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">输入错误</h3>
+                <div class="text-sm text-gray-500 mb-4" id="errorMessage">请输入有效的数字</div>
+                <button id="closeModal" class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 资源配置
+        const resources = [
+            { id: 'meat', name: '肉', icon: 'fa-cutlery' },
+            { id: 'wood', name: '木', icon: 'fa-tree' },
+            { id: 'coal', name: '煤', icon: 'fa-fire' },
+            { id: 'iron', name: '铁', icon: 'fa-bolt' }
+        ];
+        
+        // 默认比例 肉:木:煤:铁 = 20:20:4:1
+        let currentRatios = [20, 20, 4, 1];
+        
+        // 获取DOM元素
+        const resourceInputs = resources.map(res => document.getElementById(res.id));
+        const ratioInputs = resources.map(res => document.getElementById(`${res.id}Ratio`));
+        const currentRatioDisplay = document.getElementById('currentRatioDisplay');
+        const applyRatioBtn = document.getElementById('applyRatioBtn');
+        const resetRatioBtn = document.getElementById('resetRatioBtn');
+        const swapRatioBtn = document.getElementById('swapRatioBtn');
+        const resetResourcesBtn = document.getElementById('resetResourcesBtn');
+        const errorModal = document.getElementById('errorModal');
+        const errorMessage = document.getElementById('errorMessage');
+        const closeModal = document.getElementById('closeModal');
+        
+        // 更新比例显示
+        function updateRatioDisplay() {
+            currentRatioDisplay.textContent = `当前比例: ${resources[0].name} : ${resources[1].name} : ${resources[2].name} : ${resources[3].name} = ${currentRatios.join(' : ')}`;
+        }
+        
+        // 计算函数 - 根据输入计算其他资源值
+        function calculateResource(index) {
+            const input = resourceInputs[index];
+            const value = input.value.trim();
+            
+            // 空值处理
+            if (!value) {
+                clearResourceInputs(false, index);
+                return;
+            }
+            
+            // 验证数字
+            if (isNaN(value) || parseFloat(value) < 0) {
+                showError('请输入有效的非负数字');
+                input.value = '';
+                return;
+            }
+            
+            const numValue = parseFloat(value);
+            const base = numValue / currentRatios[index];
+            
+            // 计算并更新其他资源
+            resourceInputs.forEach((input, i) => {
+                if (i !== index) {
+                    let calculated = base * currentRatios[i];
+                    // 处理整数显示
+                    calculated = calculated % 1 === 0 ? calculated.toFixed(0) : calculated.toFixed(2);
+                    input.value = calculated;
+                    
+                    // 添加输入后的动画效果
+                    input.classList.add('border-green-500');
+                    setTimeout(() => {
+                        input.classList.remove('border-green-500');
+                    }, 500);
+                }
+            });
+        }
+        
+        // 清除资源输入
+        function clearResourceInputs(clearCurrent = true, excludeIndex = -1) {
+            resourceInputs.forEach((input, i) => {
+                if (clearCurrent || i !== excludeIndex) {
+                    input.value = '';
+                }
+            });
+        }
+        
+        // 应用新比例
+        function applyNewRatios() {
+            try {
+                const newRatios = ratioInputs.map(input => {
+                    const value = input.value.trim();
+                    if (!value || isNaN(value) || parseInt(value) < 1) {
+                        throw new Error('比例值必须是大于0的整数');
+                    }
+                    return parseInt(value);
+                });
+                
+                currentRatios = newRatios;
+                updateRatioDisplay();
+                clearResourceInputs();
+                
+                // 添加应用成功的视觉反馈
+                applyRatioBtn.classList.add('bg-green-500');
+                applyRatioBtn.innerHTML = '<i class="fa fa-check-circle mr-1"></i> 比例已应用';
+                setTimeout(() => {
+                    applyRatioBtn.classList.remove('bg-green-500');
+                    applyRatioBtn.innerHTML = '<i class="fa fa-check mr-1"></i> 应用比例';
+                }, 1500);
+                
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        // 恢复默认比例
+        function resetToDefaultRatios() {
+            const defaultRatios = [20, 20, 4, 1];
+            
+            // 更新输入框
+            ratioInputs.forEach((input, index) => {
+                input.value = defaultRatios[index];
+            });
+            
+            currentRatios = defaultRatios;
+            updateRatioDisplay();
+            clearResourceInputs();
+            
+            // 添加视觉反馈
+            resetRatioBtn.classList.add('scale-105');
+            setTimeout(() => {
+                resetRatioBtn.classList.remove('scale-105');
+            }, 200);
+        }
+        
+        // 反转比例
+        function reverseRatios() {
+            currentRatios = currentRatios.reverse();
+            
+            // 更新输入框
+            ratioInputs.forEach((input, index) => {
+                input.value = currentRatios[index];
+            });
+            
+            updateRatioDisplay();
+            clearResourceInputs();
+            
+            // 添加视觉反馈
+            swapRatioBtn.classList.add('scale-105');
+            setTimeout(() => {
+                swapRatioBtn.classList.remove('scale-105');
+            }, 200);
+        }
+        
+        // 显示错误提示
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorModal.classList.remove('hidden');
+            errorModal.classList.add('flex');
+            
+            // 添加弹出动画
+            const modalContent = errorModal.querySelector('div');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+        
+        // 隐藏错误提示
+        function hideError() {
+            const modalContent = errorModal.querySelector('div');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                errorModal.classList.add('hidden');
+                errorModal.classList.remove('flex');
+                modalContent.classList.remove('scale-95');
+            }, 150);
+        }
+        
+        // 绑定事件监听
+        resourceInputs.forEach((input, index) => {
+            // 失去焦点时计算
+            input.addEventListener('blur', () => calculateResource(index));
+            
+            // 按回车时计算
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    calculateResource(index);
+                    input.blur();
+                }
+            });
+            
+            // 输入时清除其他值（如果当前输入为空）
+            input.addEventListener('input', (e) => {
+                if (!e.target.value.trim()) {
+                    clearResourceInputs(false, index);
+                }
+            });
+        });
+        
+        // 应用比例按钮
+        applyRatioBtn.addEventListener('click', applyNewRatios);
+        
+        // 恢复默认比例按钮
+        resetRatioBtn.addEventListener('click', resetToDefaultRatios);
+        
+        // 反转比例按钮
+        swapRatioBtn.addEventListener('click', reverseRatios);
+        
+        // 重置资源按钮
+        resetResourcesBtn.addEventListener('click', () => {
+            clearResourceInputs();
+            
+            // 添加按钮点击效果
+            resetResourcesBtn.classList.add('bg-gray-300');
+            setTimeout(() => {
+                resetResourcesBtn.classList.remove('bg-gray-300');
+            }, 200);
+        });
+        
+        // 关闭错误提示
+        closeModal.addEventListener('click', hideError);
+        
+        // 点击模态框外部关闭
+        errorModal.addEventListener('click', (e) => {
+            if (e.target === errorModal) {
+                hideError();
+            }
+        });
+        
+        // 初始化页面
+        updateRatioDisplay();
+    </script>
+</body>
+</html>
+    

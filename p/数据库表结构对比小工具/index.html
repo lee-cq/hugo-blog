@@ -1,0 +1,689 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="数据库表结构对比小工"><title>数据库表结构对比小工具</title><link rel=canonical href=https://blog-g.leecq.cn/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94%E5%B0%8F%E5%B7%A5%E5%85%B7/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="数据库表结构对比小工具"><meta property='og:description' content="数据库表结构对比小工"><meta property='og:url' content='https://blog-g.leecq.cn/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94%E5%B0%8F%E5%B7%A5%E5%85%B7/'><meta property='og:site_name' content='LeeCQ小空间'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Python'><meta property='article:tag' content='MySQL'><meta property='article:tag' content='MsSQL'><meta property='article:published_time' content='2022-11-17T00:00:00+00:00'><meta property='article:modified_time' content='2022-11-17T00:00:00+00:00'><meta name=twitter:title content="数据库表结构对比小工具"><meta name=twitter:description content="数据库表结构对比小工"></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_f509edb42ecc0ebd.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>LeeCQ小空间</a></h1><h2 class=site-description>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Lee-CQ/hugo-blog target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://leecq.cn target=_blank title=Home rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li><a href=/tools/><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673.0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53.0l-.563-.187a1.993 1.993.0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z" clip-rule="evenodd"/></svg>
+<span>Tools</span></a></li><li><a href=https://leecq.cn/ target=_blank><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>home</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/p/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94%E5%B0%8F%E5%B7%A5%E5%85%B7/>数据库表结构对比小工具</a></h2><h3 class=article-subtitle>数据库表结构对比小工</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Nov 17, 2022</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span><span class=lnt>240
+</span><span class=lnt>241
+</span><span class=lnt>242
+</span><span class=lnt>243
+</span><span class=lnt>244
+</span><span class=lnt>245
+</span><span class=lnt>246
+</span><span class=lnt>247
+</span><span class=lnt>248
+</span><span class=lnt>249
+</span><span class=lnt>250
+</span><span class=lnt>251
+</span><span class=lnt>252
+</span><span class=lnt>253
+</span><span class=lnt>254
+</span><span class=lnt>255
+</span><span class=lnt>256
+</span><span class=lnt>257
+</span><span class=lnt>258
+</span><span class=lnt>259
+</span><span class=lnt>260
+</span><span class=lnt>261
+</span><span class=lnt>262
+</span><span class=lnt>263
+</span><span class=lnt>264
+</span><span class=lnt>265
+</span><span class=lnt>266
+</span><span class=lnt>267
+</span><span class=lnt>268
+</span><span class=lnt>269
+</span><span class=lnt>270
+</span><span class=lnt>271
+</span><span class=lnt>272
+</span><span class=lnt>273
+</span><span class=lnt>274
+</span><span class=lnt>275
+</span><span class=lnt>276
+</span><span class=lnt>277
+</span><span class=lnt>278
+</span><span class=lnt>279
+</span><span class=lnt>280
+</span><span class=lnt>281
+</span><span class=lnt>282
+</span><span class=lnt>283
+</span><span class=lnt>284
+</span><span class=lnt>285
+</span><span class=lnt>286
+</span><span class=lnt>287
+</span><span class=lnt>288
+</span><span class=lnt>289
+</span><span class=lnt>290
+</span><span class=lnt>291
+</span><span class=lnt>292
+</span><span class=lnt>293
+</span><span class=lnt>294
+</span><span class=lnt>295
+</span><span class=lnt>296
+</span><span class=lnt>297
+</span><span class=lnt>298
+</span><span class=lnt>299
+</span><span class=lnt>300
+</span><span class=lnt>301
+</span><span class=lnt>302
+</span><span class=lnt>303
+</span><span class=lnt>304
+</span><span class=lnt>305
+</span><span class=lnt>306
+</span><span class=lnt>307
+</span><span class=lnt>308
+</span><span class=lnt>309
+</span><span class=lnt>310
+</span><span class=lnt>311
+</span><span class=lnt>312
+</span><span class=lnt>313
+</span><span class=lnt>314
+</span><span class=lnt>315
+</span><span class=lnt>316
+</span><span class=lnt>317
+</span><span class=lnt>318
+</span><span class=lnt>319
+</span><span class=lnt>320
+</span><span class=lnt>321
+</span><span class=lnt>322
+</span><span class=lnt>323
+</span><span class=lnt>324
+</span><span class=lnt>325
+</span><span class=lnt>326
+</span><span class=lnt>327
+</span><span class=lnt>328
+</span><span class=lnt>329
+</span><span class=lnt>330
+</span><span class=lnt>331
+</span><span class=lnt>332
+</span><span class=lnt>333
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=ch>#!/bin/env python3</span>
+</span></span><span class=line><span class=cl><span class=c1># coding: utf8</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;数据结构 - 对比工具
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>QA -
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>csv</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>logging</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>time</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>typing</span> <span class=kn>import</span> <span class=n>Union</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>pymssql</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>pymysql</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>logger</span> <span class=o>=</span> <span class=n>logging</span><span class=o>.</span><span class=n>getLogger</span><span class=p>(</span><span class=s1>&#39;sql.contrast&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>SqlWriteError</span><span class=p>(</span><span class=ne>Exception</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>BaseSql</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>host</span><span class=p>,</span> <span class=n>port</span><span class=p>,</span> <span class=n>user</span><span class=p>,</span> <span class=n>password</span><span class=p>,</span> <span class=n>db</span><span class=p>,</span> <span class=n>charset</span><span class=o>=</span><span class=s1>&#39;utf8&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                 <span class=n>use_unicode</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=nb>super</span><span class=p>()</span><span class=o>.</span><span class=fm>__init__</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>SQL_HOST</span> <span class=o>=</span> <span class=n>host</span>  <span class=c1># 主机</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>SQL_PORT</span> <span class=o>=</span> <span class=n>port</span>  <span class=c1># 端口</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>SQL_USER</span> <span class=o>=</span> <span class=n>user</span>  <span class=c1># 用户</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>SQL_PASSWD</span> <span class=o>=</span> <span class=n>password</span>  <span class=c1># 密码</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>SQL_DB</span> <span class=o>=</span> <span class=n>db</span>  <span class=c1># 数据库</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>SQL_CHARSET</span> <span class=o>=</span> <span class=n>charset</span>  <span class=c1># 编码</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>use_unicode</span> <span class=o>=</span> <span class=n>use_unicode</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 表前缀</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>TABLE_PREFIX</span> <span class=o>=</span> <span class=n>kwargs</span><span class=o>.</span><span class=n>pop</span><span class=p>(</span><span class=s1>&#39;prefix&#39;</span><span class=p>,</span> <span class=s1>&#39;&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>kwargs</span> <span class=o>=</span> <span class=n>kwargs</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>pooled_sql</span> <span class=o>=</span> <span class=kc>None</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nd>@property</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>_sql</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>raise</span> <span class=ne>NotImplementedError</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>set_use_db</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>db_name</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;设置当前数据库&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=bp>self</span><span class=o>.</span><span class=n>_sql</span><span class=o>.</span><span class=n>select_db</span><span class=p>(</span><span class=n>db_name</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>set_charset</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>charset</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;设置数据库链接字符集&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=bp>self</span><span class=o>.</span><span class=n>_sql</span><span class=o>.</span><span class=n>set_charset</span><span class=p>(</span><span class=n>charset</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>close</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;关闭数据库连接&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>_sql</span><span class=o>.</span><span class=n>close</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>read_db</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>command</span><span class=p>,</span> <span class=n>args</span><span class=o>=</span><span class=kc>None</span><span class=p>,</span> <span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;执行数据库读取数据， 返回结果
+</span></span></span><span class=line><span class=cl><span class=s2>        :param command
+</span></span></span><span class=line><span class=cl><span class=s2>        :param args
+</span></span></span><span class=line><span class=cl><span class=s2>        &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=bp>self</span><span class=o>.</span><span class=n>pooled_sql</span> <span class=ow>is</span> <span class=ow>not</span> <span class=kc>None</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>_sql</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>pooled_sql</span><span class=o>.</span><span class=n>connection</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>_sql</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>_sql</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>cur</span> <span class=o>=</span> <span class=n>_sql</span><span class=o>.</span><span class=n>cursor</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>cur</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=n>command</span><span class=p>,</span> <span class=n>args</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>results</span> <span class=o>=</span> <span class=n>cur</span><span class=o>.</span><span class=n>fetchall</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>cur</span><span class=o>.</span><span class=n>close</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>results</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>MySqlAPI</span><span class=p>(</span><span class=n>BaseSql</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@property</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>_sql</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>pymysql</span><span class=o>.</span><span class=n>connect</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>            <span class=n>host</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_HOST</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=n>port</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_PORT</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=n>user</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_USER</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=n>password</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_PASSWD</span><span class=p>,</span>  <span class=c1># 可以用 passwd为别名</span>
+</span></span><span class=line><span class=cl>            <span class=n>database</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_DB</span><span class=p>,</span>  <span class=c1># 可以用 db    为别名；</span>
+</span></span><span class=line><span class=cl>            <span class=n>charset</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_CHARSET</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=n>use_unicode</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>use_unicode</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=o>**</span><span class=bp>self</span><span class=o>.</span><span class=n>kwargs</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>tables_name</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=p>[</span><span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>decode</span><span class=p>()</span> <span class=k>if</span> <span class=nb>isinstance</span><span class=p>(</span><span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span> <span class=nb>bytes</span><span class=p>)</span> <span class=k>else</span> <span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=k>for</span> <span class=n>_c</span> <span class=ow>in</span> <span class=bp>self</span><span class=o>.</span><span class=n>read_db</span><span class=p>(</span><span class=s2>&#34;show tables&#34;</span><span class=p>)]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>columns</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>table</span><span class=p>,</span> <span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;返回table中列（字段）的所有信息
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>         +-------+-------+------+------+-----+---------+-------+
+</span></span></span><span class=line><span class=cl><span class=s2>         | index |   0   |  1   |   2  |  3  |    4    |   5   |
+</span></span></span><span class=line><span class=cl><span class=s2>         +-------+-------+------+------+-----+---------+-------+
+</span></span></span><span class=line><span class=cl><span class=s2>         | dict  | Field | Type | Null | Key | Default | Extra |
+</span></span></span><span class=line><span class=cl><span class=s2>         +-------+-------+------+------+-----+---------+-------+
+</span></span></span><span class=line><span class=cl><span class=s2>        &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=bp>self</span><span class=o>.</span><span class=n>read_db</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;show columns from `</span><span class=si>{</span><span class=n>table</span><span class=si>}</span><span class=s1>`&#39;</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>columns_name</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>table</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=nb>list</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;返回 table 中的 列名在一个列表中&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=p>[</span><span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>decode</span><span class=p>()</span> <span class=k>if</span> <span class=nb>isinstance</span><span class=p>(</span><span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span> <span class=nb>bytes</span><span class=p>)</span> <span class=k>else</span> <span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=k>for</span> <span class=n>_c</span> <span class=ow>in</span> <span class=bp>self</span><span class=o>.</span><span class=n>columns</span><span class=p>(</span><span class=n>table</span><span class=p>)]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>MsSqlAPI</span><span class=p>(</span><span class=n>BaseSql</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nd>@property</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>_sql</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>pymssql</span><span class=o>.</span><span class=n>connect</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>            <span class=n>host</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_HOST</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=n>port</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_PORT</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=n>user</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_USER</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=n>password</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_PASSWD</span><span class=p>,</span>  <span class=c1># 可以用 passwd为别名</span>
+</span></span><span class=line><span class=cl>            <span class=n>database</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_DB</span><span class=p>,</span>  <span class=c1># 可以用 db    为别名；</span>
+</span></span><span class=line><span class=cl>            <span class=n>charset</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>SQL_CHARSET</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=o>**</span><span class=bp>self</span><span class=o>.</span><span class=n>kwargs</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>tables_name</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>            <span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>decode</span><span class=p>()</span> <span class=k>if</span> <span class=nb>isinstance</span><span class=p>(</span><span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span> <span class=nb>bytes</span><span class=p>)</span> <span class=k>else</span> <span class=n>_c</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=n>_c</span> <span class=ow>in</span> <span class=bp>self</span><span class=o>.</span><span class=n>read_db</span><span class=p>(</span><span class=s2>&#34;select name FROM [sysobjects] where [xtype]=&#39;u&#39;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>columns</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>table</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>        :param table:
+</span></span></span><span class=line><span class=cl><span class=s2>        :return:
+</span></span></span><span class=line><span class=cl><span class=s2>        &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>            <span class=n>_c</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=n>_c</span> <span class=ow>in</span> <span class=bp>self</span><span class=o>.</span><span class=n>read_db</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;sp_columns [</span><span class=si>{</span><span class=n>table</span><span class=si>}</span><span class=s2>]&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>_c</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>==</span> <span class=s1>&#39;dbo&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>ContrastSQL</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;数据结构对比&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>sql_obj1</span><span class=p>,</span> <span class=n>sql_obj2</span><span class=p>,</span> <span class=n>attention_cols</span><span class=p>:</span> <span class=n>Union</span><span class=p>[</span><span class=nb>dict</span><span class=p>,</span> <span class=nb>list</span><span class=p>]</span> <span class=o>=</span> <span class=kc>None</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>sql_1</span><span class=p>:</span> <span class=n>MySqlAPI</span> <span class=o>=</span> <span class=n>sql_obj1</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>sql_2</span><span class=p>:</span> <span class=n>MySqlAPI</span> <span class=o>=</span> <span class=n>sql_obj2</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=nb>type</span><span class=p>(</span><span class=n>sql_obj1</span><span class=p>)</span> <span class=o>!=</span> <span class=nb>type</span><span class=p>(</span><span class=n>sql_obj2</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=k>raise</span> <span class=ne>TypeError</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=nb>type</span><span class=p>(</span><span class=n>sql_obj1</span><span class=p>)</span> <span class=o>==</span> <span class=n>MsSqlAPI</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>check_type</span> <span class=o>=</span> <span class=s1>&#39;sqlserver&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>column_name</span> <span class=o>=</span> <span class=s1>&#39;COLUMN_NAME&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>type_name_2_index</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>mssql_type_name_2_index</span>
+</span></span><span class=line><span class=cl>        <span class=k>elif</span> <span class=nb>type</span><span class=p>(</span><span class=n>sql_obj1</span><span class=p>)</span> <span class=o>==</span> <span class=n>MySqlAPI</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>check_type</span> <span class=o>=</span> <span class=s1>&#39;mysql&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>column_name</span> <span class=o>=</span> <span class=s1>&#39;Field&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>type_name_2_index</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>mysql_type_name_2_index</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>raise</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>attention_cols</span> <span class=o>=</span> <span class=nb>set</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>            <span class=n>attention_cols</span><span class=p>[</span><span class=bp>self</span><span class=o>.</span><span class=n>check_type</span><span class=p>]</span> <span class=k>if</span> <span class=nb>isinstance</span><span class=p>(</span><span class=n>attention_cols</span><span class=p>,</span> <span class=p>(</span><span class=nb>dict</span><span class=p>,))</span> <span class=k>else</span> <span class=n>attention_cols</span> <span class=ow>or</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>attention_cols</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=bp>self</span><span class=o>.</span><span class=n>check_type</span> <span class=o>==</span> <span class=s1>&#39;sqlserver&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=bp>self</span><span class=o>.</span><span class=n>attention_cols</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>mssql_all</span>
+</span></span><span class=line><span class=cl>            <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=bp>self</span><span class=o>.</span><span class=n>attention_cols</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>mysql_all</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;=&#39;</span> <span class=o>*</span> <span class=mi>20</span> <span class=o>+</span> <span class=sa>f</span><span class=s1>&#39;[</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>check_type</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s1>] QA(</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_1</span><span class=o>.</span><span class=n>SQL_DB</span><span class=si>}</span><span class=s1>) &lt;--&gt; PROD(</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_2</span><span class=o>.</span><span class=n>SQL_DB</span><span class=si>}</span><span class=s1>)&#39;</span> <span class=o>+</span> <span class=s1>&#39;=&#39;</span> <span class=o>*</span> <span class=mi>20</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>com_tables</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>tables_diff</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>t</span> <span class=ow>in</span> <span class=bp>self</span><span class=o>.</span><span class=n>com_tables</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=bp>self</span><span class=o>.</span><span class=n>columns_diff</span><span class=p>(</span><span class=n>t</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>tables_diff</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;数据表对比&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=n>tables1</span> <span class=o>=</span> <span class=nb>set</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_1</span><span class=o>.</span><span class=n>tables_name</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>        <span class=n>tables2</span> <span class=o>=</span> <span class=nb>set</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_2</span><span class=o>.</span><span class=n>tables_name</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>table_common</span> <span class=o>=</span> <span class=n>tables2</span> <span class=o>&amp;</span> <span class=n>tables1</span>
+</span></span><span class=line><span class=cl>        <span class=n>logger</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=s1>&#39;COMMON TABLE: </span><span class=si>%s</span><span class=s1>&#39;</span><span class=p>,</span> <span class=n>table_common</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>tables1</span> <span class=o>-</span> <span class=n>table_common</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;[</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>check_type</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s1>]QA_CLOUD. </span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_1</span><span class=o>.</span><span class=n>SQL_DB</span><span class=si>}</span><span class=s1> 独有的表: </span><span class=si>{</span><span class=n>tables1</span> <span class=o>-</span> <span class=n>table_common</span><span class=si>}</span><span class=s1>&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>tables2</span> <span class=o>-</span> <span class=n>table_common</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;[</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>check_type</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s1>]PROD_CLOUD </span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_2</span><span class=o>.</span><span class=n>SQL_DB</span><span class=si>}</span><span class=s1> 独有的表: </span><span class=si>{</span><span class=n>tables2</span> <span class=o>-</span> <span class=n>table_common</span><span class=si>}</span><span class=s1>&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>table_common</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>mssql_all</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;TABLE_QUALIFIER&#39;</span><span class=p>,</span> <span class=s1>&#39;TABLE_OWNER&#39;</span><span class=p>,</span> <span class=s1>&#39;TABLE_NAME&#39;</span><span class=p>,</span> <span class=s1>&#39;COLUMN_NAME&#39;</span><span class=p>,</span> <span class=s1>&#39;DATA_TYPE&#39;</span><span class=p>,</span> <span class=s1>&#39;TYPE_NAME&#39;</span><span class=p>,</span> <span class=s1>&#39;PRECISION&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;LENGTH&#39;</span><span class=p>,</span> <span class=s1>&#39;SCALE&#39;</span><span class=p>,</span> <span class=s1>&#39;RADIX&#39;</span><span class=p>,</span> <span class=s1>&#39;NULLABLE&#39;</span><span class=p>,</span> <span class=s1>&#39;REMARKS&#39;</span><span class=p>,</span> <span class=s1>&#39;COLUMN_DEF&#39;</span><span class=p>,</span> <span class=s1>&#39;SQL_DATA_TYPE&#39;</span><span class=p>,</span> <span class=s1>&#39;SQL_DATETIME_SUB&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;CHAR_OCTET_LENGTH&#39;</span><span class=p>,</span> <span class=s1>&#39;ORDINAL_POSITION&#39;</span><span class=p>,</span> <span class=s1>&#39;IS_NULLABLE&#39;</span><span class=p>,</span> <span class=s1>&#39;SS_DATA_TYPE&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>mysql_all</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;Field&#39;</span><span class=p>,</span> <span class=s1>&#39;Type&#39;</span><span class=p>,</span> <span class=s1>&#39;Null&#39;</span><span class=p>,</span> <span class=s1>&#39;Key&#39;</span><span class=p>,</span> <span class=s1>&#39;Default&#39;</span><span class=p>,</span> <span class=s1>&#39;Extra&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>mssql_type_name_2_index</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>name</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;MSSQL COL_NAME 转索引&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=bp>self</span><span class=o>.</span><span class=n>mssql_all</span><span class=o>.</span><span class=n>index</span><span class=p>(</span><span class=n>name</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>mysql_type_name_2_index</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>name</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;MYSQL COL_NAME 转索引&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=bp>self</span><span class=o>.</span><span class=n>mysql_all</span><span class=o>.</span><span class=n>index</span><span class=p>(</span><span class=n>name</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>columns_diff</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>table</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;&#34;&#34;列差异对比&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=s1>&#39;-&#39;</span> <span class=o>*</span> <span class=mi>20</span> <span class=o>+</span> <span class=sa>f</span><span class=s1>&#39;</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_2</span><span class=o>.</span><span class=n>SQL_DB</span><span class=si>}</span><span class=s1>.</span><span class=si>{</span><span class=n>table</span><span class=si>}</span><span class=s1>&#39;</span> <span class=o>+</span> <span class=s1>&#39;-&#39;</span> <span class=o>*</span> <span class=mi>20</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>def</span> <span class=nf>get_names</span><span class=p>(</span><span class=n>xs</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=p>{</span><span class=n>_</span><span class=p>[</span><span class=bp>self</span><span class=o>.</span><span class=n>type_name_2_index</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>column_name</span><span class=p>)]</span> <span class=k>for</span> <span class=n>_</span> <span class=ow>in</span> <span class=n>xs</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>def</span> <span class=nf>find_item</span><span class=p>(</span><span class=n>name</span><span class=p>,</span> <span class=n>cols</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=nb>dict</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;&#34;&#34;在列信息中查找一个元素&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=n>_c</span> <span class=ow>in</span> <span class=n>cols</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=n>_c</span><span class=p>[</span><span class=bp>self</span><span class=o>.</span><span class=n>type_name_2_index</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>column_name</span><span class=p>)]</span> <span class=o>==</span> <span class=n>name</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=p>{</span><span class=n>_</span><span class=p>:</span> <span class=n>_c</span><span class=p>[</span><span class=bp>self</span><span class=o>.</span><span class=n>type_name_2_index</span><span class=p>(</span><span class=n>_</span><span class=p>)]</span> <span class=k>for</span> <span class=n>_</span> <span class=ow>in</span> <span class=bp>self</span><span class=o>.</span><span class=n>attention_cols</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>raise</span> <span class=ne>Exception</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;</span><span class=si>{</span><span class=n>name</span><span class=si>}</span><span class=s1>, </span><span class=si>{</span><span class=n>cols</span><span class=si>}</span><span class=s1>, </span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>column_name</span><span class=si>}</span><span class=s1>, </span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>type_name_2_index</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>column_name</span><span class=p>)</span><span class=si>}</span><span class=s1>&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>def</span> <span class=nf>zip_dict</span><span class=p>(</span><span class=n>dic1</span><span class=p>:</span> <span class=nb>dict</span><span class=p>,</span> <span class=n>dic2</span><span class=p>:</span> <span class=nb>dict</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>dic1</span><span class=o>.</span><span class=n>keys</span><span class=p>()</span> <span class=o>!=</span> <span class=n>dic2</span><span class=o>.</span><span class=n>keys</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>                <span class=k>raise</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=n>key</span> <span class=ow>in</span> <span class=n>dic1</span><span class=o>.</span><span class=n>keys</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>                <span class=k>yield</span> <span class=n>key</span><span class=p>,</span> <span class=n>dic1</span><span class=p>[</span><span class=n>key</span><span class=p>],</span> <span class=n>dic2</span><span class=p>[</span><span class=n>key</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>columns1</span><span class=p>:</span> <span class=nb>list</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>sql_1</span><span class=o>.</span><span class=n>columns</span><span class=p>(</span><span class=n>table</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>columns2</span><span class=p>:</span> <span class=nb>list</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>sql_2</span><span class=o>.</span><span class=n>columns</span><span class=p>(</span><span class=n>table</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>col_name1</span> <span class=o>=</span> <span class=nb>set</span><span class=p>(</span><span class=n>get_names</span><span class=p>(</span><span class=n>columns1</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=n>col_name2</span> <span class=o>=</span> <span class=nb>set</span><span class=p>(</span><span class=n>get_names</span><span class=p>(</span><span class=n>columns2</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>col_common</span> <span class=o>=</span> <span class=n>col_name1</span> <span class=o>&amp;</span> <span class=n>col_name2</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>logger</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=s1>&#39;COMMON COLUMNS : </span><span class=si>%s</span><span class=s1>&#39;</span><span class=p>,</span> <span class=n>col_common</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>col_name1</span> <span class=o>-</span> <span class=n>col_common</span><span class=p>)</span> <span class=o>!=</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;[</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>check_type</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s1>.QA]</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_1</span><span class=o>.</span><span class=n>SQL_DB</span><span class=si>}</span><span class=s1>.</span><span class=si>{</span><span class=n>table</span><span class=si>}</span><span class=s1>独有的列: </span><span class=si>{</span><span class=n>col_name1</span> <span class=o>-</span> <span class=n>col_common</span><span class=si>}</span><span class=s1>&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>col_name2</span> <span class=o>-</span> <span class=n>col_common</span><span class=p>)</span> <span class=o>!=</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>                <span class=sa>f</span><span class=s1>&#39;[</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>check_type</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s1>.PROD].</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_2</span><span class=o>.</span><span class=n>SQL_DB</span><span class=si>}</span><span class=s1>.</span><span class=si>{</span><span class=n>table</span><span class=si>}</span><span class=s1>独有的列: </span><span class=si>{</span><span class=n>col_name2</span> <span class=o>-</span> <span class=n>col_common</span><span class=si>}</span><span class=s1>&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>_col_name</span> <span class=ow>in</span> <span class=n>col_common</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>c1</span> <span class=o>=</span> <span class=n>find_item</span><span class=p>(</span><span class=n>_col_name</span><span class=p>,</span> <span class=n>columns1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>c2</span> <span class=o>=</span> <span class=n>find_item</span><span class=p>(</span><span class=n>_col_name</span><span class=p>,</span> <span class=n>columns2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;</span><span class=si>{</span><span class=n>c1</span><span class=si>}</span><span class=s1> -- </span><span class=si>{</span><span class=n>c2</span><span class=si>}</span><span class=s1>&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>c1</span> <span class=o>==</span> <span class=n>c2</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=k>continue</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=s1>&#39;差异的列属性&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1># db.table [Field] 字段差异:  (差异字段) &lt;差异属性值QA&gt; - &lt;差异属性值PROD&gt;, &lt;差异属性值QA&gt; - &lt;差异属性值PROD&gt; ...</span>
+</span></span><span class=line><span class=cl>            <span class=n>diff_fields</span> <span class=o>=</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>                <span class=sa>f</span><span class=s1>&#39;(</span><span class=si>{</span><span class=n>key</span><span class=si>}</span><span class=s1>)&lt;</span><span class=si>{</span><span class=nb>str</span><span class=p>(</span><span class=n>field1</span><span class=p>)</span><span class=si>}</span><span class=s1>&gt;-&lt;</span><span class=si>{</span><span class=nb>str</span><span class=p>(</span><span class=n>field2</span><span class=p>)</span><span class=si>}</span><span class=s1>&gt;&#39;</span>
+</span></span><span class=line><span class=cl>                <span class=k>for</span> <span class=n>key</span><span class=p>,</span> <span class=n>field1</span><span class=p>,</span> <span class=n>field2</span> <span class=ow>in</span> <span class=n>zip_dict</span><span class=p>(</span><span class=n>c1</span><span class=p>,</span> <span class=n>c2</span><span class=p>)</span> <span class=k>if</span> <span class=n>field1</span> <span class=o>!=</span> <span class=n>field2</span>
+</span></span><span class=line><span class=cl>                <span class=c1># TODO 如有需要 后期此处判断可以使用方法做复杂校验</span>
+</span></span><span class=line><span class=cl>            <span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;[</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>check_type</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s1>]</span><span class=si>{</span><span class=bp>self</span><span class=o>.</span><span class=n>sql_2</span><span class=o>.</span><span class=n>SQL_DB</span><span class=si>}</span><span class=s1>.</span><span class=si>{</span><span class=n>table</span><span class=si>}</span><span class=s1> [</span><span class=si>{</span><span class=n>_col_name</span><span class=si>}</span><span class=s1>] 字段差异: %s&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                        <span class=s1>&#39;, &#39;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>diff_fields</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>create_sql</span><span class=p>(</span><span class=n>info</span><span class=p>,</span> <span class=n>test</span><span class=o>=</span><span class=kc>False</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>_add_host</span><span class=p>(</span><span class=n>name</span><span class=p>:</span> <span class=nb>str</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>name</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=ow>in</span> <span class=nb>map</span><span class=p>(</span><span class=nb>str</span><span class=p>,</span> <span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>6</span><span class=p>,</span> <span class=mi>7</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=mi>9</span><span class=p>,</span> <span class=mi>0</span><span class=p>}):</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>name</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>name</span><span class=o>.</span><span class=n>endswith</span><span class=p>(</span><span class=s1>&#39;.com&#39;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>name</span>
+</span></span><span class=line><span class=cl>        <span class=c1># return name</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>name</span> <span class=o>+</span> <span class=s1>&#39;.cloud.wal-mart.com&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>db_qa</span> <span class=o>=</span> <span class=n>info</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>db_prod</span> <span class=o>=</span> <span class=n>info</span><span class=p>[</span><span class=mi>8</span><span class=p>]</span> <span class=k>if</span> <span class=n>info</span><span class=p>[</span><span class=mi>8</span><span class=p>]</span> <span class=k>else</span> <span class=n>info</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>info</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>lower</span><span class=p>()</span> <span class=o>==</span> <span class=s1>&#39;mysql&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>qa</span> <span class=o>=</span> <span class=n>MySqlAPI</span><span class=p>(</span><span class=n>host</span><span class=o>=</span><span class=n>_add_host</span><span class=p>(</span><span class=n>info</span><span class=p>[</span><span class=mi>2</span><span class=p>]),</span> <span class=n>port</span><span class=o>=</span><span class=mi>3306</span><span class=p>,</span> <span class=n>user</span><span class=o>=</span><span class=n>info</span><span class=p>[</span><span class=mi>3</span><span class=p>],</span> <span class=n>password</span><span class=o>=</span><span class=n>info</span><span class=p>[</span><span class=mi>4</span><span class=p>],</span> <span class=n>db</span><span class=o>=</span><span class=n>db_qa</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>prod</span> <span class=o>=</span> <span class=n>MySqlAPI</span><span class=p>(</span><span class=n>host</span><span class=o>=</span><span class=n>_add_host</span><span class=p>(</span><span class=n>info</span><span class=p>[</span><span class=mi>5</span><span class=p>]),</span> <span class=n>port</span><span class=o>=</span><span class=mi>3306</span><span class=p>,</span> <span class=n>user</span><span class=o>=</span><span class=n>info</span><span class=p>[</span><span class=mi>6</span><span class=p>],</span> <span class=n>password</span><span class=o>=</span><span class=n>info</span><span class=p>[</span><span class=mi>7</span><span class=p>],</span> <span class=n>db</span><span class=o>=</span><span class=n>db_prod</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>elif</span> <span class=n>info</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>lower</span><span class=p>()</span> <span class=o>==</span> <span class=s1>&#39;sqlserver&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>qa</span> <span class=o>=</span> <span class=n>MsSqlAPI</span><span class=p>(</span><span class=n>host</span><span class=o>=</span><span class=n>_add_host</span><span class=p>(</span><span class=n>info</span><span class=p>[</span><span class=mi>2</span><span class=p>]),</span> <span class=n>port</span><span class=o>=</span><span class=mi>14481</span><span class=p>,</span> <span class=n>user</span><span class=o>=</span><span class=n>info</span><span class=p>[</span><span class=mi>3</span><span class=p>],</span> <span class=n>password</span><span class=o>=</span><span class=n>info</span><span class=p>[</span><span class=mi>4</span><span class=p>],</span> <span class=n>db</span><span class=o>=</span><span class=n>db_qa</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>prod</span> <span class=o>=</span> <span class=n>MsSqlAPI</span><span class=p>(</span><span class=n>host</span><span class=o>=</span><span class=n>_add_host</span><span class=p>(</span><span class=n>info</span><span class=p>[</span><span class=mi>5</span><span class=p>]),</span> <span class=n>port</span><span class=o>=</span><span class=mi>14481</span><span class=p>,</span> <span class=n>user</span><span class=o>=</span><span class=n>info</span><span class=p>[</span><span class=mi>6</span><span class=p>],</span> <span class=n>password</span><span class=o>=</span><span class=n>info</span><span class=p>[</span><span class=mi>7</span><span class=p>],</span> <span class=n>db</span><span class=o>=</span><span class=n>db_prod</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>raise</span> <span class=ne>ValueError</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;值错误: %s&#39;</span><span class=p>,</span> <span class=n>info</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>qa</span><span class=o>.</span><span class=n>zone</span><span class=p>,</span> <span class=n>prod</span><span class=o>.</span><span class=n>zone</span> <span class=o>=</span> <span class=s1>&#39;qa&#39;</span><span class=p>,</span> <span class=s1>&#39;prod&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>test</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>qa</span><span class=o>.</span><span class=n>tables_name</span><span class=p>(),</span> <span class=n>prod</span><span class=o>.</span><span class=n>tables_name</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>qa</span><span class=p>,</span> <span class=n>prod</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>(</span><span class=n>config_file</span><span class=p>:</span> <span class=nb>str</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>map_</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;mysql&#39;</span><span class=p>:</span> <span class=p>[</span><span class=s1>&#39;Field&#39;</span><span class=p>,</span> <span class=s1>&#39;Type&#39;</span><span class=p>,</span> <span class=s1>&#39;Key&#39;</span><span class=p>,</span> <span class=s1>&#39;Default&#39;</span><span class=p>,</span> <span class=s1>&#39;Extra&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>        <span class=s1>&#39;sqlserver&#39;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;TABLE_OWNER&#39;</span><span class=p>,</span> <span class=s1>&#39;TABLE_NAME&#39;</span><span class=p>,</span> <span class=s1>&#39;COLUMN_NAME&#39;</span><span class=p>,</span> <span class=s1>&#39;TYPE_NAME&#39;</span><span class=p>,</span> <span class=s1>&#39;PRECISION&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;LENGTH&#39;</span><span class=p>,</span> <span class=s1>&#39;SCALE&#39;</span><span class=p>,</span> <span class=s1>&#39;RADIX&#39;</span><span class=p>,</span> <span class=s1>&#39;NULLABLE&#39;</span><span class=p>,</span> <span class=s1>&#39;COLUMN_DEF&#39;</span><span class=p>,</span> <span class=s1>&#39;SQL_DATA_TYPE&#39;</span><span class=p>,</span> <span class=s1>&#39;SS_DATA_TYPE&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>line</span> <span class=ow>in</span> <span class=n>csv</span><span class=o>.</span><span class=n>reader</span><span class=p>(</span><span class=nb>open</span><span class=p>(</span><span class=n>config_file</span><span class=p>,</span> <span class=n>encoding</span><span class=o>=</span><span class=s1>&#39;gbk&#39;</span><span class=p>)):</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>line</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>==</span> <span class=s1>&#39;&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>break</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>line</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>lower</span><span class=p>()</span> <span class=ow>in</span> <span class=p>{</span><span class=s1>&#39;数据库类型&#39;</span><span class=p>,</span> <span class=p>}</span> <span class=ow>or</span> <span class=n>line</span><span class=p>[</span><span class=mi>0</span><span class=p>][</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span> <span class=o>==</span> <span class=s1>&#39;-&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;skip -- [</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s1>]</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=si>}</span><span class=s1>&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>continue</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>line</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=ow>not</span> <span class=ow>in</span> <span class=p>[</span><span class=s1>&#39;d_sam_logistics&#39;</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>            <span class=c1># logger.info(&#39;skip %s&#39;, line[1])</span>
+</span></span><span class=line><span class=cl>            <span class=k>continue</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>line</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span> <span class=o>==</span> <span class=s1>&#39;&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;=== Waring: (DB HOST Not Find [</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s1>]</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=si>}</span><span class=s1>)&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>continue</span>
+</span></span><span class=line><span class=cl>        <span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>ContrastSQL</span><span class=p>(</span><span class=o>*</span><span class=n>create_sql</span><span class=p>(</span><span class=n>line</span><span class=p>),</span> <span class=n>map_</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1># create_sql(line, test=True)</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=si>}</span><span class=s1> Success &#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>except</span> <span class=ne>Exception</span> <span class=k>as</span> <span class=n>_e</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>warning</span><span class=p>(</span><span class=s1>&#39;!=&#39;</span> <span class=o>*</span> <span class=mi>20</span> <span class=o>+</span> <span class=sa>f</span><span class=s2>&#34;[</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s2>]</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=si>}</span><span class=s2> Error&#34;</span> <span class=o>+</span> <span class=s1>&#39;!=&#39;</span> <span class=o>*</span> <span class=mi>10</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>warning</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;!#!# </span><span class=si>{</span><span class=n>_e</span><span class=si>}</span><span class=s1> !#!#&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>logger</span><span class=o>.</span><span class=n>warning</span><span class=p>(</span><span class=s1>&#39;!=&#39;</span> <span class=o>*</span> <span class=mi>20</span> <span class=o>+</span> <span class=sa>f</span><span class=s2>&#34;[</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span><span class=si>}</span><span class=s2>]</span><span class=si>{</span><span class=n>line</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=si>}</span><span class=s2> Error&#34;</span> <span class=o>+</span> <span class=s1>&#39;!=&#39;</span> <span class=o>*</span> <span class=mi>10</span><span class=p>,</span> <span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>logging</span><span class=o>.</span><span class=n>basicConfig</span><span class=p>(</span><span class=n>level</span><span class=o>=</span><span class=s1>&#39;DEBUG&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>logger</span><span class=o>.</span><span class=n>setLevel</span><span class=p>(</span><span class=s1>&#39;INFO&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span> <span class=o>=</span> <span class=n>logging</span><span class=o>.</span><span class=n>FileHandler</span><span class=p>(</span><span class=s1>&#39;sql-2.log&#39;</span><span class=p>,</span> <span class=s1>&#39;w&#39;</span><span class=p>,</span> <span class=n>encoding</span><span class=o>=</span><span class=s1>&#39;utf8&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>setLevel</span><span class=p>(</span><span class=s1>&#39;INFO&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>logging</span><span class=o>.</span><span class=n>getLogger</span><span class=p>()</span><span class=o>.</span><span class=n>addHandler</span><span class=p>(</span><span class=n>file</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=n>time</span><span class=o>.</span><span class=n>strftime</span><span class=p>(</span><span class=s1>&#39;=== Start Time </span><span class=si>%x</span><span class=s1> </span><span class=si>%X</span><span class=s1>&#39;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>pa</span> <span class=o>=</span> <span class=sa>r</span><span class=s1>&#39;C:\Users\vn54lnb\Desktop\WMT\bcdr_prod_qa_sql.csv&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=n>main</span><span class=p>(</span><span class=n>pa</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>logger</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=n>time</span><span class=o>.</span><span class=n>strftime</span><span class=p>(</span><span class=s1>&#39;=== End Time </span><span class=si>%x</span><span class=s1> </span><span class=si>%X</span><span class=s1>&#39;</span><span class=p>))</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/python/>Python</a>
+<a href=/tags/mysql/>MySQL</a>
+<a href=/tags/mssql/>MsSQL</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/%E6%97%A0%E5%B0%BD%E5%86%AC%E6%97%A5%E8%AE%A1%E6%97%B6%E5%99%A8%E5%B7%A5%E5%85%B7/><div class=article-details><h2 class=article-title>无尽冬日计时器工具</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=lee-cq/hugo-blog data-repo-id=R_kgDOHhaNdw data-category=Announcements data-category-id=DIC_kwDOHhaNd84CQtzr data-mapping=title data-strict=0 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=light data-lang=en data-loading crossorigin=anonymous async></script><script>function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onColorSchemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})()</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 LeeCQ小空间</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.31.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

@@ -1,0 +1,250 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="在Kubernetes中，pods是能够创建、调度、和管理的最小部署单元，是一组容器的集合，而不是单独的应用容器。同一个Pod里的容器共享同一个网络命名空间，IP地址及端口空间。"><title>Kubernetes的核心 - Pod</title><link rel=canonical href=https://blog-g.leecq.cn/p/kubernetes%E7%9A%84%E6%A0%B8%E5%BF%83-pod/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="Kubernetes的核心 - Pod"><meta property='og:description' content="在Kubernetes中，pods是能够创建、调度、和管理的最小部署单元，是一组容器的集合，而不是单独的应用容器。同一个Pod里的容器共享同一个网络命名空间，IP地址及端口空间。"><meta property='og:url' content='https://blog-g.leecq.cn/p/kubernetes%E7%9A%84%E6%A0%B8%E5%BF%83-pod/'><meta property='og:site_name' content='LeeCQ小空间'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='K8s'><meta property='article:tag' content='Kubernetes'><meta property='article:tag' content='运维'><meta property='article:tag' content='Pod'><meta property='article:tag' content='生命周期'><meta property='article:published_time' content='2024-08-05T00:00:00+00:00'><meta property='article:modified_time' content='2024-08-05T00:00:00+00:00'><meta name=twitter:title content="Kubernetes的核心 - Pod"><meta name=twitter:description content="在Kubernetes中，pods是能够创建、调度、和管理的最小部署单元，是一组容器的集合，而不是单独的应用容器。同一个Pod里的容器共享同一个网络命名空间，IP地址及端口空间。"></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_f509edb42ecc0ebd.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>LeeCQ小空间</a></h1><h2 class=site-description>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Lee-CQ/hugo-blog target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://leecq.cn target=_blank title=Home rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li><a href=/tools/><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673.0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53.0l-.563-.187a1.993 1.993.0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z" clip-rule="evenodd"/></svg>
+<span>Tools</span></a></li><li><a href=https://leecq.cn/ target=_blank><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>home</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#pod的生命周期>Pod的生命周期</a></li><li><a href=#容器的生命周期和重启策略>容器的生命周期和重启策略</a></li><li><a href=#容器>容器</a></li><li><a href=#启动命令>启动命令</a></li><li><a href=#镜像>镜像</a></li><li><a href=#外部输入>外部输入</a></li><li><a href=#探针probe>探针(Probe)</a></li><li><a href=#资源限制---limit>资源限制 - limit</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/p/kubernetes%E7%9A%84%E6%A0%B8%E5%BF%83-pod/>Kubernetes的核心 - Pod</a></h2><h3 class=article-subtitle>在Kubernetes中，pods是能够创建、调度、和管理的最小部署单元，是一组容器的集合，而不是单独的应用容器。同一个Pod里的容器共享同一个网络命名空间，IP地址及端口空间。</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Aug 05, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 6 分钟</time></div></footer></div></header><section class=article-content><h1 id=kubernetes的核心---pod>Kubernetes的核心 - Pod</h1><p>在Kubernetes中，pods是能够创建、调度、和管理的最小部署单元，是一组容器的集合，而不是单独的应用容器。</p><p>同一个Pod里的容器共享同一个网络命名空间，IP地址及端口空间。</p><p>从生命周期来说，Pod是短暂的而不是长久的应用。Pods被调度到节点，保持在这个节点上直到被销毁。</p><p>下面是一个定义Pod的基本要素：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Pod</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>redis-django</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>label</span><span class=p>:</span><span class=w> 
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>webapp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>key-value-store</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>redis</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>frontend</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>iamge</span><span class=p>:</span><span class=w> </span><span class=l>django</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=pod的生命周期>Pod的生命周期</h2><p>Pod的status字段是一个PodStatus对象，PodStatus中有一个phase字段。phase是Pod在其生命周期中的简单宏观概述。</p><p>PodStatus对象还包含一个PodCondition。数组的每个元素都有一个type字段和一个status字段。
+type字段是字符串，可能的值有</p><ul><li>PodScheduled</li><li>Ready</li><li>Initialized</li><li>Unschedulable</li><li>ContainersReady。</li></ul><p>status字段是一个字符串，可能的值有</p><ul><li>True</li><li>False</li><li>Unknown</li></ul><p><img src=/p/kubernetes%E7%9A%84%E6%A0%B8%E5%BF%83-pod/Pod%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg width=1319 height=322 srcset="/p/kubernetes%E7%9A%84%E6%A0%B8%E5%BF%83-pod/Pod%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F_hu_9e33cab73793678d.jpg 480w, /p/kubernetes%E7%9A%84%E6%A0%B8%E5%BF%83-pod/Pod%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F_hu_6fe2da89318acc46.jpg 1024w" loading=lazy alt=Pod生命周期.jpg class=gallery-image data-flex-grow=409 data-flex-basis=983px></p><h2 id=容器的生命周期和重启策略>容器的生命周期和重启策略</h2><p>一旦调度器将Pod分派给某个节点，kubelet就通过runtime为Pod创建容器。要检查Pod中容器的状态，你可以使用<code>kubectl describe pod &lt;pod 名称></code>。</p><p>容器的状态有三种：</p><ul><li>Waiting （等待）</li><li>Running（运行中）</li><li>Terminated（已终止）</li></ul><p>如果容器中的进程能够在遇到问题或不健康的情况下自行崩溃，kubelet将根据Pod的<code>restartPolicy</code>自动执行修复操作。此字段可能取值包括<code>Always</code>、<code>OnFailure</code>和<code>Never</code>，默认值是<code>Always</code>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Pod</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>command-demo</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>purpose</span><span class=p>:</span><span class=w> </span><span class=l>demonstrate-command</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>command-demo-container</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>debian</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;printenv&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>args</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;HOSTNAME&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;KUBERNETES_PORT&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>restartPolicy</span><span class=p>:</span><span class=w> </span><span class=l>Always</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=容器>容器</h2><p><strong>Infra/PauseContainer：</strong> 基础容器, pod中所有容器的父容器，为其他容器提供共享的命名空间和网络空间</p><ul><li>用户不可见，无需感知。</li></ul><p><strong>InitContainers：</strong> 初始化容器，一般用于服务等待处理以及注册Pod信息等。</p><ul><li>先于业务容器开始执行；</li><li>顺序执行，执行成功退出（exit 0），全部执行成功后开始启动业务容器。</li></ul><p><strong>Containers：</strong> 业务容器。</p><ul><li>并行启动，启动成功后一直Running。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Pod</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>myapp-pod</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>label</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>myapp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>initContainers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>init-container</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>busybox</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s1>&#39;sh&#39;</span><span class=p>,</span><span class=w> </span><span class=s1>&#39;-c&#39;</span><span class=p>,</span><span class=w> </span><span class=s1>&#39;until nslookup myservice; do echo waiting for myservice; sleep 2; done;&#39;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>init-mydb</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>busybox</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>command</span><span class=p>:</span><span class=w> 
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>sh</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- -<span class=l>c</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>until nslookup mydb; do echo waiting for mydb; sleep 2; done;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>myapp-container</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>busybox</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s1>&#39;sh&#39;</span><span class=p>,</span><span class=w> </span><span class=s1>&#39;-c&#39;</span><span class=p>,</span><span class=w> </span><span class=s1>&#39;echo The App is Running ... &amp;&amp; sleep 3600&#39;</span><span class=p>]</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=启动命令>启动命令</h2><p>在创建Pod时，可以为其下的容器设置启动时要执行的命令和参数。</p><p>启动命令：</p><ul><li><code>command</code>: 设置命令，替换镜像中的entrypoint和CMD。</li><li><code>args</code>: 设置命令的参数，作为entrypoint的入参。</li></ul><p>查看结果：
+通过Pod的日志进行查看：<code>$ kubectl logs command-demo</code></p><h2 id=镜像>镜像</h2><p>Image: 镜像名称可以包含所在仓库的主机名及指定版本的标签。若不指定仓库的主机名和标签，Kubernetes默认使用Docker公共仓库，拉取最新版本镜像（:latest）。</p><p>imagePullSecret: 若Pod创建需从私有仓库读取镜像，则可通过配置此字段提供仓库的访问凭证。为保证凭据文件的安全，可事先将其创建为Secret再进行引用。</p><p>imagePullPolicy: 镜像拉取策略。</p><ul><li>IfNotPresent：优先使用本地镜像。</li><li>Always：每次容器启动时都从镜像库拉取镜像。</li><li>Never：仅使用本地镜像。</li></ul><h2 id=外部输入>外部输入</h2><p>Pod可以接收外部输入的方式： 环境变量、配置文件和密钥。</p><p>env: 环境变量，使用简单，但一但更改容器必须重启。
+- key-value直接定义。
+- valueFrom配置文件(ConfigMap)或密钥(Secret)。</p><p>volume: 以卷形式挂载到容器内使用，权限可控。
+配置文件(ConfigMap)或密钥(Secret).</p><p>Pod配置文件的部分示例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nn>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>env</span><span class=p>:</span><span class=w> 
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>APP_NAME</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=l>test</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>USER_NAME</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>valueFrom</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>secretKey</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>username</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>secret</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumeMounts</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/config</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>cfg</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>cfg</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>configMap</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>config</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>items</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>age</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>age</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=探针probe>探针(Probe)</h2><p>探针（Probe）是由kubelet对容器执行的定期诊断。诊断方式主要有以下三种：</p><ul><li>ExecAction：在容器内执行指定命令。如果命令退出时返回码为0则认为诊断成功。</li><li>TCPSocketAction：对指定端口上的容器的IP地址进行TCP检查。如果端口打开，则诊断成功。</li><li>HTTPGetAction：对指定的端口和路径上的容器的IP地址执行HTTP Get请求。如果响应的状态码大于等于200且小于400，则诊断成功。</li></ul><p>Kubelet可以于Pod执行的两种探针类型为：</p><ul><li>存活探针（livenessProbe）：指示容器是否正在运行。如果存活探测失败，则kubelet会杀死容器，并且容器将受到其重启策略的影响。</li><li>就绪探针（readinessProbe）：指示容器是否准备好服务请求。如果就绪探测失败，Endpoint Controller将从与Pod匹配的所有Service的Endpoints中删除该Pod的IP地址。</li></ul><p>用户通过<code>spec.container.livenessProbe</code>（或<code>spec.container.readinessProbe</code>）字段设置探针。Probes涉及的字段如下：</p><ul><li>initialDelaySeconds：容器启动后要等待多少秒后存活和就绪探测器才被初始化。默认值为10。</li><li>periodSeconds：执行探测的时间间隔（单位：秒）。默认值为1。</li><li>successThreshold：探测器在失败后，被视为成功的最小连续成功数。默认值为1。</li><li>failureThreshold：当探测失败时，Kubernetes的重试次数。存活探测情况下的放弃就意味着重新启动容器。就绪探测情况下的放弃Pod会被打上未就绪的标签。默认值为3。</li></ul><p>探针的示例配置：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># 存活探针 - 检查文件/tmp/healthy 是否存在 (容器启动5s后开始，每次间隔5s)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>livenessProbe</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>exec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;cat&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;/tmp/healthy&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>initialDelaySeconds</span><span class=p>:</span><span class=w> </span><span class=m>5</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>periodSecond</span><span class=p>:</span><span class=w> </span><span class=m>5</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># 就绪探针 - 检查端口8080是否开放(容器启动后5s开始，每次间隔10s)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>readinessProbe</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>tcpSocket</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>8080</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>initialDelaySeconds</span><span class=p>:</span><span class=w> </span><span class=m>5</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>periodSecond</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># 存活探针 - 检查http://lo:8080/healthz的状态码是否在200-399之间</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>livenessProbe</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>httpGet</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/healthz</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>8080</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>httpHeaders</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Custom-Header</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=l>Awesome</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>initialDelaySeconds</span><span class=p>:</span><span class=w> </span><span class=m>3</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>periodSeconds</span><span class=p>:</span><span class=w> </span><span class=m>3</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=资源限制---limit>资源限制 - limit</h2><p>Kubernetes的资源限制是通过每个容器containerSpec的resources字段进行设置的。</p><p>CPU资源：</p><ul><li>单位：以CPU为单位，也支持带小数值的使用，如：cpu: “0.5”或cpu:500m。</li><li>CPU请求（request）：创建容器时预分配的CPU资源。</li><li>CPU限制（limit）：CPU的资源上限。</li></ul><p>内存资源：</p><ul><li>单位：以字节（byte）为单位，可表示为纯整数或定点整数：E、P、T、G、M、K或Ei、Pi、Ti、Gi、Mi、Ki。</li><li>内存请求（request）：创建容器时预分配的内存资源。</li><li>内存限制（limit）：内存的资源上限。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>requests</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;100Mi&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;250m&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>limits</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;200Mi&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;500m&#34;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/k8s/>K8s</a>
+<a href=/tags/kubernetes/>Kubernetes</a>
+<a href=/tags/%E8%BF%90%E7%BB%B4/>运维</a>
+<a href=/tags/pod/>Pod</a>
+<a href=/tags/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/>生命周期</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/kubernetes%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%8D%95%E5%85%83-%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD/><div class=article-details><h2 class=article-title>Kubernetes的服务单元 - 工作负载</h2></div></a></article><article><a href=/p/kubernetes%E7%9A%84%E5%AD%98%E5%82%A8/><div class=article-details><h2 class=article-title>Kubernetes的存储</h2></div></a></article><article><a href=/p/kubernetes%E7%9A%84%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE-ingress/><div class=article-details><h2 class=article-title>Kubernetes的服务访问-Ingress</h2></div></a></article><article><a href=/p/kubernetes%E7%9A%84%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE-service/><div class=article-details><h2 class=article-title>Kubernetes的服务访问-Service</h2></div></a></article><article><a href=/p/kubernetes%E7%9A%84%E9%85%8D%E7%BD%AE%E6%9E%B6%E6%9E%84/><div class=article-details><h2 class=article-title>Kubernetes的配置架构</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=lee-cq/hugo-blog data-repo-id=R_kgDOHhaNdw data-category=Announcements data-category-id=DIC_kwDOHhaNd84CQtzr data-mapping=title data-strict=0 data-reactions-enabled=1 data-emit-metadata=0 data-input-position=top data-theme=light data-lang=en data-loading crossorigin=anonymous async></script><script>function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onColorSchemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})()</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 LeeCQ小空间</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.31.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

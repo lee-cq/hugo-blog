@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>OS on LeeCQ小空间</title><link>https://blog-g.leecq.cn/categories/os/</link><description>Recent content in OS on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 29 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/categories/os/index.xml" rel="self" type="application/rss+xml"/><item><title>esxi snmp 配置</title><link>https://blog-g.leecq.cn/p/yujunshu-2/</link><pubDate>Sat, 29 Oct 2022 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/yujunshu-2/</guid><description>&lt;h1 id="esxi-snmp-配置"&gt;esxi snmp 配置
+&lt;/h1&gt;&lt;p&gt;esxi 详细文档设置&lt;a class="link" href="https://docs.vmware.com/cn/VMware-vSphere/index.html" target="_blank" rel="noopener"
+&gt;VMware vSphere 文档&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="开启-snmp"&gt;开启 snmp
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;esxcli system snmp set --communities public,private
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;esxcli system snmp set --enable true
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="配置轮询的-snmp-代理"&gt;配置轮询的 SNMP 代理
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;esxcli system snmp &lt;span class="nb"&gt;set&lt;/span&gt; --port &lt;span class="m"&gt;1600&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

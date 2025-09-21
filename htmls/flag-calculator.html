@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>两点间旗子数量计算器（7x7范围）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        neutral: '#64748B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .input-focus {
+                @apply focus:ring-2 focus:ring-primary/50 focus:border-primary focus:outline-none;
+            }
+            .grid-cell {
+                @apply border border-gray-200 bg-white transition-all duration-200;
+            }
+            .grid-cell-flag {
+                @apply bg-blue-50 border-blue-200;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- 页面标题 -->
+        <header class="text-center mb-10">
+            <h1 class="text-[clamp(1.8rem,5vw,2.8rem)] font-bold text-gray-800 mb-2">
+                <i class="fa fa-flag text-accent mr-3"></i>两点间旗子数量计算器
+            </h1>
+            <p class="text-neutral text-lg">基于7×7范围面积计算所需旗子数量</p>
+        </header>
+
+        <!-- 主要内容区 -->
+        <main class="grid md:grid-cols-2 gap-8">
+            <!-- 输入区域 -->
+            <div class="bg-white rounded-xl p-6 card-shadow transition-all duration-300 hover:shadow-lg">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fa fa-sliders text-primary mr-2"></i>坐标设置
+                </h2>
+                
+                <form id="calculatorForm" class="space-y-5">
+                    <!-- 点A坐标 -->
+                    <div class="space-y-2">
+                        <label for="pointA" class="block text-gray-700 font-medium">点A坐标</label>
+                        <div class="flex gap-3">
+                            <div class="flex-1">
+                                <label for="x1" class="text-sm text-gray-500 mb-1 block">X坐标</label>
+                                <input type="number" id="x1" name="x1" step="any" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus transition-all">
+                            </div>
+                            <div class="flex-1">
+                                <label for="y1" class="text-sm text-gray-500 mb-1 block">Y坐标</label>
+                                <input type="number" id="y1" name="y1" step="any" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 点B坐标 -->
+                    <div class="space-y-2">
+                        <label for="pointB" class="block text-gray-700 font-medium">点B坐标</label>
+                        <div class="flex gap-3">
+                            <div class="flex-1">
+                                <label for="x2" class="text-sm text-gray-500 mb-1 block">X坐标</label>
+                                <input type="number" id="x2" name="x2" step="any" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus transition-all">
+                            </div>
+                            <div class="flex-1">
+                                <label for="y2" class="text-sm text-gray-500 mb-1 block">Y坐标</label>
+                                <input type="number" id="y2" name="y2" step="any" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 计算按钮 -->
+                    <button type="submit" 
+                        class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center">
+                        <i class="fa fa-calculator mr-2"></i>计算旗子数量
+                    </button>
+                </form>
+
+              
+
+            <!-- 结果和可视化区域 -->
+            <div class="space-y-6">
+                <!-- 结果显示 -->
+                <div class="bg-white rounded-xl p-6 card-shadow transition-all duration-300 hover:shadow-lg">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-bar-chart text-secondary mr-2"></i>计算结果
+                    </h2>
+                    
+                    <div id="result" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <span class="text-gray-600 text-sm block mb-1">X坐标差值</span>
+                                <span class="font-medium text-lg" id="xDiffResult">- -</span>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <span class="text-gray-600 text-sm block mb-1">Y坐标差值</span>
+                                <span class="font-medium text-lg" id="yDiffResult">- -</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <span class="text-gray-600 text-sm block mb-1">最大差值</span>
+                            <span class="font-medium text-lg" id="maxDiffResult">- -</span>
+                        </div>
+                        
+                        <div class="bg-primary/5 p-4 rounded-lg border border-primary/20">
+                            <span class="text-gray-600 text-sm block mb-1">所需旗子总数</span>
+                            <span class="font-bold text-3xl text-primary" id="totalFlagsResult">- -</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>© 2023 两点间旗子数量计算器 | 基于7×7范围面积计算</p>
+        </footer>
+    </div>
+
+    <script>
+        // 等待DOM加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('calculatorForm');
+            const visualization = document.getElementById('visualization');
+            
+            // 设置默认值
+            document.getElementById('x1').value = 0;
+            document.getElementById('y1').value = 0;
+            document.getElementById('x2').value = 20;
+            document.getElementById('y2').value = 10;
+            
+            // 表单提交事件
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                calculateFlags();
+            });
+            
+            // 计算旗子数量的函数
+            function calculateFlags() {
+                // 获取输入值
+                const x1 = parseFloat(document.getElementById('x1').value);
+                const y1 = parseFloat(document.getElementById('y1').value);
+                const x2 = parseFloat(document.getElementById('x2').value);
+                const y2 = parseFloat(document.getElementById('y2').value);
+                
+                // 计算坐标差值
+                const xDiff = Math.abs(x2 - x1);
+                const yDiff = Math.abs(y2 - y1);
+                const maxDiff = Math.max(xDiff, yDiff);
+                
+                // 根据公式计算旗子数量: max(|x1-x2|, |y1-y2|) // 7 + 1
+                // 使用Math.floor实现整除效果
+                const totalFlags = Math.floor(maxDiff / 7) + 1;
+                
+                // 更新结果显示
+                document.getElementById('xDiffResult').textContent = xDiff.toFixed(1);
+                document.getElementById('yDiffResult').textContent = yDiff.toFixed(1);
+                document.getElementById('maxDiffResult').textContent = maxDiff.toFixed(1);
+                document.getElementById('totalFlagsResult').textContent = totalFlags;
+                
+                // 高亮结果区域
+                const resultElement = document.getElementById('result');
+                resultElement.classList.add('animate-pulse');
+                setTimeout(() => {
+                    resultElement.classList.remove('animate-pulse');
+                }, 1000);
+                
+                // 绘制可视化
+                drawVisualization(x1, y1, x2, y2, totalFlags);
+            }
+            
+            // 绘制可视化的函数
+            function drawVisualization(x1, y1, x2, y2, totalFlags) {
+                // 清空现有内容
+                visualization.innerHTML = '';
+                
+                // 创建网格容器
+                const gridContainer = document.createElement('div');
+                gridContainer.className = 'grid gap-1 inline-block';
+                
+                // 计算要显示的网格大小（基于旗子数量）
+                const gridSize = Math.min(totalFlags + 1, 10); // 限制最大网格大小为10x10
+                
+                // 创建网格单元格
+                for (let row = 0; row < gridSize; row++) {
+                    for (let col = 0; col < gridSize; col++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'grid-cell w-12 h-12 flex items-center justify-center relative';
+                        
+                        // 标记旗子位置
+                        if (row === 0 && col === 0) {
+                            cell.classList.add('grid-cell-flag');
+                            cell.innerHTML = `
+                                <i class="fa fa-flag text-primary"></i>
+                                <span class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-600">起点</span>
+                            `;
+                        } 
+                        // 标记最后一个旗子
+                        else if (row === totalFlags - 1 && col === totalFlags - 1) {
+                            cell.classList.add('grid-cell-flag');
+                            cell.innerHTML = `
+                                <i class="fa fa-flag text-accent"></i>
+                                <span class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-600">终点</span>
+                            `;
+                        }
+                        // 标记中间的旗子
+                        else if (row < totalFlags && col < totalFlags) {
+                            cell.classList.add('grid-cell-flag');
+                            cell.innerHTML = `<i class="fa fa-flag text-blue-400"></i>`;
+                        }
+                        
+                        gridContainer.appendChild(cell);
+                    }
+                }
+                
+                // 添加说明文本
+                const infoText = document.createElement('div');
+                infoText.className = 'mt-4 text-sm text-gray-600';
+                infoText.innerHTML = `
+                    <p>蓝色格子表示旗子覆盖的7×7区域</p>
+                    <p class="mt-1">从点A (${x1}, ${y1}) 到点B (${x2}, ${y2}) 需要 ${totalFlags} 个旗子</p>
+                `;
+                
+                visualization.appendChild(gridContainer);
+                visualization.appendChild(infoText);
+            }
+            
+            // 初始计算一次
+            calculateFlags();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>扫描 on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/%E6%89%AB%E6%8F%8F/</link><description>Recent content in 扫描 on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 10 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/%E6%89%AB%E6%8F%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>Nessus - 漏洞扫描</title><link>https://blog-g.leecq.cn/p/nessus-%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/nessus-%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/</guid><description>&lt;h2 id="安装"&gt;安装
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://www.tenable.com/downloads/nessus" target="_blank" rel="noopener"
+&gt;官方下载页面&lt;/a&gt;
+一键命令：&lt;code&gt;curl -o 'Nessus-10.8.2-ubuntu1604_amd64.deb' 'https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.8.2-ubuntu1604_amd64.deb' &amp;amp;&amp;amp; sudo apt install ./Nessus-10.8.2-ubuntu1604_amd64.deb&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://mp.weixin.qq.com/s/USzyYMAfx2IFw3vpjRA3Cg" target="_blank" rel="noopener"
+&gt;Windows破解版&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="启动"&gt;启动
+&lt;/h2&gt;&lt;h1 id="windows-版本"&gt;Windows 版本
+&lt;/h1&gt;</description></item><item><title>nmap - 网络扫描器</title><link>https://blog-g.leecq.cn/p/nmap-%E7%BD%91%E7%BB%9C%E6%89%AB%E6%8F%8F%E5%99%A8/</link><pubDate>Mon, 09 Sep 2024 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/nmap-%E7%BD%91%E7%BB%9C%E6%89%AB%E6%8F%8F%E5%99%A8/</guid><description>&lt;p&gt;nmap（Network Mapper）是一个开源的网络探测和安全审核工具，可以用来扫描网络中的主机和服务，发现它们的端口开放情况、使用的协议、操作系统类型等信息。&lt;/p&gt;
+&lt;h2 id="安装"&gt;安装
+&lt;/h2&gt;&lt;p&gt;Ubuntu &amp;amp; Debian :&lt;code&gt;sudo apt update &amp;amp;&amp;amp; sudo apt install nmap&lt;/code&gt;
+CentOS &amp;amp; RHEL : &lt;code&gt;sudo yum install nmap&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id="常用参数"&gt;常用参数
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-p 指定端口，&amp;#34;,&amp;#34;分割，&amp;#34;2-100&amp;#34;指定一个范围，&amp;#34;-&amp;#34;指定全部端口
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-v 输出详细信息
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-sP：执行Ping扫描，用于快速发现网络中的活动主机。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-sT：执行TCP连接扫描，默认的扫描方式。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-sS：执行TCP SYN扫描（半开扫描），发送SYN包而不建立完整的三次握手。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-sU：执行UDP扫描，探测开放的UDP端口。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-sA：执行ACK扫描，用于确定防火墙规则集。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-sW：执行Window扫描，用于探测防火墙规则集。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-sM：执行IP协议扫描，用于探测IP协议
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-A：执行详细的扫描，包括操作系统检测、版本检测、脚本扫描和服务识别。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-T：设置扫描速度，取值范围从T0（最慢）到T5（最快）。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-O：执行操作系统检测。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-sV：执行服务版本检测。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-oN：将扫描结果输出到普通文本文件。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-oX：将扫描结果输出到XML文件。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-oG：将扫描结果输出到Grep格式文件。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;--script：执行指定的脚本。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;--script-help：显示脚本的帮助信息。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-D：指定欺骗源地址（IP欺骗）
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-e：指定扫描时使用的接口。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-n：不执行DNS反向解析。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-R：强制执行DNS反向解析。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;-Pn：假设目标主机是在线的，即使没有回应。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;--max-retries：设置最大重试次数。
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;--host-timeout：设置主机超时时间。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="使用"&gt;使用
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;扫描指定机器的全部端口: &lt;code&gt;nmap -p- -v -A &amp;lt;host&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;扫描一个IP地址段: &lt;code&gt;nmap 192.168.1.1-255&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>

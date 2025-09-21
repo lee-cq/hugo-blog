@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nessus on LeeCQ小空间</title><link>https://blog-g.leecq.cn/tags/nessus/</link><description>Recent content in Nessus on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 10 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://blog-g.leecq.cn/tags/nessus/index.xml" rel="self" type="application/rss+xml"/><item><title>Nessus - 漏洞扫描</title><link>https://blog-g.leecq.cn/p/nessus-%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0000</pubDate><guid>https://blog-g.leecq.cn/p/nessus-%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/</guid><description>&lt;h2 id="安装"&gt;安装
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://www.tenable.com/downloads/nessus" target="_blank" rel="noopener"
+&gt;官方下载页面&lt;/a&gt;
+一键命令：&lt;code&gt;curl -o 'Nessus-10.8.2-ubuntu1604_amd64.deb' 'https://www.tenable.com/downloads/api/v2/pages/nessus/files/Nessus-10.8.2-ubuntu1604_amd64.deb' &amp;amp;&amp;amp; sudo apt install ./Nessus-10.8.2-ubuntu1604_amd64.deb&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://mp.weixin.qq.com/s/USzyYMAfx2IFw3vpjRA3Cg" target="_blank" rel="noopener"
+&gt;Windows破解版&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="启动"&gt;启动
+&lt;/h2&gt;&lt;h1 id="windows-版本"&gt;Windows 版本
+&lt;/h1&gt;</description></item></channel></rss>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>测试 on LeeCQ小空间</title><link>https://blog-g.leecq.cn/categories/%E6%B5%8B%E8%AF%95/</link><description>Recent content in 测试 on LeeCQ小空间</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 31 Jul 2021 00:33:55 +0800</lastBuildDate><atom:link href="https://blog-g.leecq.cn/categories/%E6%B5%8B%E8%AF%95/index.xml" rel="self" type="application/rss+xml"/><item><title>video-test</title><link>https://blog-g.leecq.cn/p/video-test/</link><pubDate>Sat, 31 Jul 2021 00:33:55 +0800</pubDate><guid>https://blog-g.leecq.cn/p/video-test/</guid><description>&lt;img src="https://one.p.leecq.cn/E5Drive/imgs/1.jpg" alt="Featured image of post video-test" /&gt;&lt;h1 id="video-test"&gt;video test
+&lt;/h1&gt;&lt;p&gt;支持的 Shortcodes 详见: &lt;a class="link" href="https://docs.stack.jimmycai.com/zh/writing/shortcodes" target="_blank" rel="noopener"
+&gt;https://docs.stack.jimmycai.com/zh/writing/shortcodes&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="html-code"&gt;HTML Code
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;video&lt;/span&gt; &lt;span class="na"&gt;src&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#34;https://alist.leecq.cn/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4&amp;#34;&lt;/span&gt; &lt;span class="na"&gt;controls&lt;/span&gt; &lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;video&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src="https://blog-g.leecq.cn/static/img/test.jpg"
+loading="lazy"
+&gt;&lt;/p&gt;
+&lt;h2 id="html-video-测试1"&gt;HTML video 测试1
+&lt;/h2&gt;&lt;video controls="controls" preload controls width=100%&gt;
+&lt;source src="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4" type="video/mp4" /&gt;
+Your browser does not support the video tag.
+&lt;/video&gt;
+&lt;h2 id="html-video-测试2"&gt;HTML video 测试2
+&lt;/h2&gt;&lt;p&gt;&lt;video src="https://alist.leecq.cn/d/onedrive/%E4%B8%AD%E5%9B%BD%E6%9C%BA%E9%95%BF1080P.mp4?sign=dc625e8ea4bb25a8" controls preload width=100% &gt; &lt;/video&gt;&lt;/p&gt;
+&lt;h2 id="shortcodes-bilibili-测试"&gt;Shortcodes bilibili 测试
+&lt;/h2&gt;
+&lt;div class="video-wrapper"&gt;
+&lt;iframe src="https://player.bilibili.com/player.html?as_wide=1&amp;amp;high_quality=1&amp;amp;page=1&amp;bvid=BV1Ht4y1p7aA"
+scrolling="no"
+frameborder="no"
+framespacing="0"
+allowfullscreen="true"
+&gt;
+&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;h2 id="shortcodes-腾讯视频"&gt;Shortcodes 腾讯视频
+&lt;/h2&gt;
+&lt;div class="video-wrapper"&gt;
+&lt;iframe src="https://v.qq.com/txp/iframe/player.html?vid=b31563j0jqw&amp;auto=0"
+scrolling="no"
+frameborder="no"
+framespacing="0"
+allowfullscreen="true"
+&gt;
+&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;h2 id="shortcodes-本地视频"&gt;Shortcodes 本地视频
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;&amp;lt;!-- just video src --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;div class="video-wrapper"&gt;
+&lt;video
+controls
+src="./video.mp4"
+&gt;
+&lt;p&gt;
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="./video.mp4"&gt;link to the video&lt;/a&gt; instead.
+&lt;/p&gt;
+&lt;/video&gt;
+&lt;/div&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;&amp;lt;!-- Other option --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;div class="video-wrapper"&gt;
+&lt;video
+controls
+src="./video.mp4"
+poster="./video-poster.png"
+autoplay
+&gt;
+&lt;p&gt;
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="./video.mp4"&gt;link to the video&lt;/a&gt; instead.
+&lt;/p&gt;
+&lt;/video&gt;
+&lt;/div&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class="video-wrapper"&gt;
+&lt;video
+controls
+src="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4"
+&gt;
+&lt;p&gt;
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="https://alist.leecq.cn/d/onedrive/1_1_48ed6325509e3d97c2b6eed7eabd821dc61c7518.mp4"&gt;link to the video&lt;/a&gt; instead.
+&lt;/p&gt;
+&lt;/video&gt;
+&lt;/div&gt;
+&lt;h2 id=""&gt;
+&lt;/h2&gt;</description></item></channel></rss>
